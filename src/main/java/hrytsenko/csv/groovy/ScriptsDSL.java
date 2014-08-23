@@ -3,9 +3,9 @@ package hrytsenko.csv.groovy;
 import hrytsenko.csv.Condition;
 import hrytsenko.csv.Mediator;
 import hrytsenko.csv.Record;
-import hrytsenko.csv.mediator.AggregateMediator;
-import hrytsenko.csv.mediator.FilterMediator;
-import hrytsenko.csv.mediator.SequenceMediator;
+import hrytsenko.csv.mediator.Aggregator;
+import hrytsenko.csv.mediator.Filter;
+import hrytsenko.csv.mediator.Sequence;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -14,16 +14,16 @@ import java.util.Map;
 
 public final class ScriptsDSL {
 
-    public static AggregateMediator aggregate() {
-        return new AggregateMediator();
+    public static Aggregator aggregate() {
+        return new Aggregator();
     }
 
-    public static FilterMediator filter(Condition condition) {
-        return new FilterMediator(condition);
+    public static Filter filter(Condition condition) {
+        return new Filter(condition);
     }
 
-    public static SequenceMediator sequence(Mediator... mediators) {
-        return new SequenceMediator(mediators);
+    public static Sequence sequence(Mediator... mediators) {
+        return new Sequence(mediators);
     }
 
     @SafeVarargs

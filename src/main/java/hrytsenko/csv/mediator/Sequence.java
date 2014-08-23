@@ -8,36 +8,36 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SequenceMediator extends Accumulator {
+public class Sequence extends Accumulator {
 
-    private List<Mediator> sequence;
+    private List<Mediator> descendants;
 
-    public SequenceMediator() {
+    public Sequence() {
         this(new Mediator[] {});
     }
 
-    public SequenceMediator(Mediator... mediators) {
+    public Sequence(Mediator... mediators) {
         this(asList(mediators));
     }
 
-    public SequenceMediator(Collection<Mediator> mediators) {
-        this.sequence = new ArrayList<Mediator>(mediators);
+    public Sequence(Collection<Mediator> mediators) {
+        this.descendants = new ArrayList<Mediator>(mediators);
     }
 
     public void add(Mediator mediator) {
-        sequence.add(mediator);
+        descendants.add(mediator);
     }
 
     @Override
     public void mediate(Record record) {
-        for (Mediator mediator : sequence) {
+        for (Mediator mediator : descendants) {
             mediator.mediate(record);
         }
     }
 
     @Override
-    public Collection<Mediator> children() {
-        return sequence;
+    public Collection<Mediator> descendants() {
+        return descendants;
     }
 
 }

@@ -1,23 +1,22 @@
 package hrytsenko.csv.mediator;
 
-import static java.util.Collections.singleton;
 import hrytsenko.csv.Condition;
 import hrytsenko.csv.Mediator;
 import hrytsenko.csv.Record;
 
 import java.util.Collection;
 
-public class FilterMediator extends Accumulator {
+public class Filter extends Accumulator {
 
     private Condition condition;
-    private Mediator branch;
+    private Sequence branch;
 
-    public FilterMediator(Condition condition) {
+    public Filter(Condition condition) {
         this.condition = condition;
     }
 
     public Mediator then(Mediator... mediators) {
-        this.branch = new SequenceMediator(mediators);
+        branch = new Sequence(mediators);
         return this;
     }
 
@@ -29,8 +28,8 @@ public class FilterMediator extends Accumulator {
     }
 
     @Override
-    protected Collection<Mediator> children() {
-        return singleton(branch);
+    protected Collection<Mediator> descendants() {
+        return branch.descendants();
     }
 
 }

@@ -5,11 +5,11 @@ import hrytsenko.csv.Record;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AggregateMediator extends Accumulator {
+public class Aggregator extends Accumulator {
 
     private List<Record> records;
 
-    public AggregateMediator() {
+    public Aggregator() {
         records = new ArrayList<Record>();
     }
 

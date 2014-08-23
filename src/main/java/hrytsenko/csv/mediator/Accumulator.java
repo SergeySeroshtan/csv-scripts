@@ -9,24 +9,26 @@ public abstract class Accumulator implements Mediator {
 
     private String name;
 
-    public final Mediator into(String name) {
+    public Mediator into(String name) {
         this.name = name;
         return this;
     }
 
-    public final Object valueOf(String name) {
+    public <T> T valueOf(String name) {
         if (name == null) {
             return null;
         }
 
         if (name.equals(this.name)) {
-            return value();
+            @SuppressWarnings("unchecked")
+            T value = (T) value();
+            return value;
         }
 
-        Collection<Mediator> children = children();
+        Collection<Mediator> children = descendants();
         for (Mediator child : children) {
             if (child instanceof Accumulator) {
-                Object value = ((Accumulator) child).valueOf(name);
+                T value = ((Accumulator) child).valueOf(name);
                 if (value != null) {
                     return value;
                 }
@@ -40,7 +42,7 @@ public abstract class Accumulator implements Mediator {
         return null;
     }
 
-    protected Collection<Mediator> children() {
+    protected Collection<Mediator> descendants() {
         return Collections.emptyList();
     }
 
