@@ -1,6 +1,7 @@
 package hrytsenko.csv;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -9,6 +10,10 @@ import java.util.TreeMap;
 public class Record {
 
     private Map<String, String> content;
+
+    public Record() {
+        this(new HashMap<String, String>());
+    }
 
     public Record(Map<String, String> row) {
         this.content = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
