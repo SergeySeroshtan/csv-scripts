@@ -3,6 +3,7 @@ package hrytsenko.csv.mediator;
 import hrytsenko.csv.Record;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Aggregator extends Accumulator {
@@ -19,7 +20,7 @@ public class Aggregator extends Accumulator {
     }
 
     @Override
-    protected Object value() {
+    protected Collection<Record> value() {
         return records;
     }
 
