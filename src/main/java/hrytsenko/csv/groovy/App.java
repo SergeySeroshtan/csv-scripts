@@ -37,7 +37,7 @@ public final class App {
     private static CompilerConfiguration configuration() {
         ImportCustomizer importCustomizer = new ImportCustomizer();
 
-        importCustomizer.addStarImports("hrytsenko.csv");
+        importCustomizer.addStarImports("hrytsenko.csv.core");
         importCustomizer.addStarImports("hrytsenko.csv.mediator");
 
         importCustomizer.addStaticStars(ScriptsDSL.class.getCanonicalName());

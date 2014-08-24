@@ -1,8 +1,8 @@
 package hrytsenko.csv.groovy;
 
-import hrytsenko.csv.Condition;
-import hrytsenko.csv.Mediator;
-import hrytsenko.csv.Record;
+import hrytsenko.csv.core.Condition;
+import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 import hrytsenko.csv.mediator.Aggregator;
 import hrytsenko.csv.mediator.Filter;
 import hrytsenko.csv.mediator.Sequence;

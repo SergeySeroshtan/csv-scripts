@@ -3,8 +3,8 @@ package hrytsenko.csv.mediator;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import hrytsenko.csv.Mediator;
-import hrytsenko.csv.Record;
+import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 
 import java.util.ArrayList;
 import java.util.List;

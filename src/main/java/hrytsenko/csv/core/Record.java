@@ -1,4 +1,4 @@
-package hrytsenko.csv;
+package hrytsenko.csv.core;
 
 import java.util.Collection;
 import java.util.HashMap;

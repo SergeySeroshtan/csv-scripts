@@ -1,8 +1,8 @@
 package hrytsenko.csv.mediator;
 
 import static java.util.Arrays.asList;
-import hrytsenko.csv.Mediator;
-import hrytsenko.csv.Record;
+import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 
 import java.util.ArrayList;
 import java.util.Collection;

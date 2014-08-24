@@ -1,7 +1,7 @@
 package hrytsenko.csv.groovy;
 
-import hrytsenko.csv.Mediator;
-import hrytsenko.csv.Record;
+import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 
 import java.io.IOException;
 import java.io.InputStream;

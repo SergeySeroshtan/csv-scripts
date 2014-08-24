@@ -6,9 +6,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import hrytsenko.csv.Condition;
-import hrytsenko.csv.Mediator;
-import hrytsenko.csv.Record;
+import hrytsenko.csv.core.Condition;
+import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 
 import org.junit.Before;
 import org.junit.Test;

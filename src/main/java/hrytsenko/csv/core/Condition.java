@@ -1,4 +1,4 @@
-package hrytsenko.csv;
+package hrytsenko.csv.core;
 
 public interface Condition {
 

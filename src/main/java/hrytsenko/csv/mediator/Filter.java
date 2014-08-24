@@ -1,8 +1,8 @@
 package hrytsenko.csv.mediator;
 
-import hrytsenko.csv.Condition;
-import hrytsenko.csv.Mediator;
-import hrytsenko.csv.Record;
+import hrytsenko.csv.core.Condition;
+import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 
 import java.util.Collection;
 
