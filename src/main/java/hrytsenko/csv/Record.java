@@ -27,7 +27,7 @@ public class Record {
     }
 
     public void set(String field, String value) {
-        content.put(field, value);
+        content.put(field.toLowerCase(), value);
     }
 
     public Collection<String> fields() {
