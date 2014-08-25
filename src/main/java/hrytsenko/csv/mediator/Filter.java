@@ -6,17 +6,47 @@ import hrytsenko.csv.core.Record;
 
 import java.util.Collection;
 
+/**
+ * Applies other mediators to all records that meet specified condition.
+ * 
+ * @author hrytsenko.anton
+ */
 public class Filter extends Accumulator {
 
     private Condition condition;
     private Sequence branch;
 
-    public Filter(Condition condition) {
-        this.condition = condition;
+    /**
+     * Creates filter, that ignores all records.
+     */
+    public Filter() {
+        condition = new Condition.IgnoreAll();
+        branch = new Sequence();
     }
 
-    public Mediator then(Mediator... mediators) {
-        branch = new Sequence(mediators);
+    /**
+     * Sets the condition that will be checked to filter records.
+     * 
+     * @param condition
+     *            the condition to filter records.
+     * 
+     * @return this mediator for chaining.
+     */
+    public Filter when(Condition condition) {
+        this.condition = condition;
+        return this;
+    }
+
+    /**
+     * Sets the mediators to be applied to records that meet condition.
+     * 
+     * @param mediators
+     *            the ordered set of mediators.
+     * 
+     * @return this mediator for chaining.
+     */
+    public Filter then(Mediator... mediators) {
+        branch = new Sequence().of(mediators);
         return this;
     }
 

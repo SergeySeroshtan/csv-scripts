@@ -6,12 +6,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Aggregates all incoming records.
+ * 
+ * @author hrytsenko.anton
+ */
 public class Aggregator extends Accumulator {
 
     private List<Record> records;
 
+    /**
+     * Creates empty aggregator.
+     */
     public Aggregator() {
-        records = new ArrayList<Record>();
+        records = new ArrayList<>();
     }
 
     @Override

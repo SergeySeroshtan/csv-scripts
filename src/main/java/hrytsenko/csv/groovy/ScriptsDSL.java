@@ -7,28 +7,63 @@ import hrytsenko.csv.mediator.Aggregator;
 import hrytsenko.csv.mediator.Filter;
 import hrytsenko.csv.mediator.Sequence;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Basic operations for scripts.
+ * 
+ * @author hrytsenko.anton
+ */
 public final class ScriptsDSL {
 
+    /**
+     * Creates {@link Aggregator} for records.
+     * 
+     * @return the created mediator.
+     */
     public static Aggregator aggregate() {
         return new Aggregator();
     }
 
+    /**
+     * Creates {@link Filter} with specified condition.
+     * 
+     * @param condition
+     *            the custom condition.
+     * 
+     * @return the created mediator.
+     */
     public static Filter filter(Condition condition) {
-        return new Filter(condition);
+        return new Filter().when(condition);
     }
 
+    /**
+     * Creates {@link Sequence} of mediators.
+     * 
+     * @param mediators
+     *            the mediators to be grouped into sequence.
+     * 
+     * @return the created mediator.
+     */
     public static Sequence sequence(Mediator... mediators) {
-        return new Sequence(mediators);
+        return new Sequence().of(mediators);
     }
 
+    /**
+     * Merges records from one or more sets of records.
+     * 
+     * @param idField
+     *            the name of field, which value can be used as unique identifier.
+     * @param sets
+     *            the sets of records to be merged.
+     * 
+     * @return the resulting set of records.
+     */
     @SafeVarargs
-    public static Collection<Record> merge(String idField, Collection<Record>... sets) throws IOException {
-        Map<String, Record> result = new LinkedHashMap<String, Record>();
+    public static Collection<Record> merge(String idField, Collection<Record>... sets) {
+        Map<String, Record> result = new LinkedHashMap<>();
         for (Collection<Record> set : sets) {
             for (Record record : set) {
                 String id = record.get(idField);
@@ -46,7 +81,7 @@ public final class ScriptsDSL {
         Record result = new Record(target.content());
 
         for (String field : source.fields()) {
-            result.set(field.toLowerCase(), source.get(field));
+            result.set(field, source.get(field));
         }
         return result;
     }

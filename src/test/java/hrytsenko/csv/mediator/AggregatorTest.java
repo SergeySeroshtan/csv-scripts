@@ -23,7 +23,7 @@ public class AggregatorTest {
         aggregator = new Aggregator();
         aggregator.into(NAME);
 
-        records = new ArrayList<Record>();
+        records = new ArrayList<>();
         for (int i = 0; i < RECORDS_NUM; ++i) {
             records.add(new Record());
         }

@@ -22,10 +22,26 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
+/**
+ * Basic IO operations for scripts.
+ * 
+ * @author hrytsenko.anton
+ */
 public final class ScriptsIO {
 
     public static final char DEFAULT_ESCAPE_CHAR = '"';
 
+    /**
+     * Reads the set of records from CSV file.
+     * 
+     * @param filename
+     *            the name of file to be read.
+     * 
+     * @return the ordered set of records.
+     * 
+     * @throws IOException
+     *             if file could not be read.
+     */
     public static Collection<Record> loadCsv(String filename) throws IOException {
         try (InputStream stream = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ)) {
             CsvSchema schema = CsvSchema.emptySchema().withHeader().withEscapeChar(DEFAULT_ESCAPE_CHAR);
@@ -33,7 +49,7 @@ public final class ScriptsIO {
             ObjectReader reader = mapper.reader(Map.class).with(schema);
 
             Iterator<Map<String, String>> rows = reader.readValues(stream);
-            List<Record> records = new ArrayList<Record>();
+            List<Record> records = new ArrayList<>();
             while (rows.hasNext()) {
                 Map<String, String> row = rows.next();
                 records.add(new Record(row));
@@ -42,11 +58,24 @@ public final class ScriptsIO {
         }
     }
 
+    /**
+     * Writes the set of records into CSV file.
+     * 
+     * If file already exists, then it will be overridden.
+     * 
+     * @param filename
+     *            the name of file to be written.
+     * @param records
+     *            the ordered set of records.
+     * 
+     * @throws IOException
+     *             if file could not be written.
+     */
     public static void saveCsv(String filename, Collection<Record> records) throws IOException {
         try (OutputStream stream = Files.newOutputStream(Paths.get(filename), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
-            Set<String> columns = new LinkedHashSet<String>();
-            List<Map<String, String>> rows = new ArrayList<Map<String, String>>();
+            Set<String> columns = new LinkedHashSet<>();
+            List<Map<String, String>> rows = new ArrayList<>();
             for (Record record : records) {
                 Map<String, String> row = record.content();
                 columns.addAll(row.keySet());
@@ -63,6 +92,17 @@ public final class ScriptsIO {
         }
     }
 
+    /**
+     * Applies the set of mediators to records in CSV file.
+     * 
+     * @param filename
+     *            the name of file to be processed.
+     * @param mediators
+     *            the ordered set of mediators.
+     * 
+     * @throws IOException
+     *             if file could not be read.
+     */
     public static void processCsv(String filename, Mediator... mediators) throws IOException {
         Collection<Record> records = loadCsv(filename);
         for (Record record : records) {

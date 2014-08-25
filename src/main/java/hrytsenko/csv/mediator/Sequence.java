@@ -1,31 +1,40 @@
 package hrytsenko.csv.mediator;
 
-import static java.util.Arrays.asList;
 import hrytsenko.csv.core.Mediator;
 import hrytsenko.csv.core.Record;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * Combines mediators for sequential processing of records.
+ * 
+ * @author hrytsenko.anton
+ */
 public class Sequence extends Accumulator {
 
     private List<Mediator> descendants;
 
+    /**
+     * Creates empty sequence.
+     */
     public Sequence() {
-        this(new Mediator[] {});
+        descendants = Collections.emptyList();
     }
 
-    public Sequence(Mediator... mediators) {
-        this(asList(mediators));
-    }
-
-    public Sequence(Collection<Mediator> mediators) {
-        this.descendants = new ArrayList<Mediator>(mediators);
-    }
-
-    public void add(Mediator mediator) {
-        descendants.add(mediator);
+    /**
+     * Sets the mediators to be applied to records.
+     * 
+     * @param mediators
+     *            the ordered set of mediators.
+     * 
+     * @return this mediator for chaining.
+     */
+    public Sequence of(Mediator... mediators) {
+        descendants = Arrays.asList(mediators);
+        return this;
     }
 
     @Override

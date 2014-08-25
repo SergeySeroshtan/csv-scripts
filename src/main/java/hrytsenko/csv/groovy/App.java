@@ -12,10 +12,24 @@ import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Application that executes Groovy scripts.
+ * 
+ * @author hrytsenko.anton
+ */
 public final class App {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
+    /**
+     * Creates environment and executes script.
+     * 
+     * <p>
+     * First argument is the filename of script, and all others will be passed into this script.
+     * 
+     * @param args
+     *            the command-line arguments
+     */
     public static void main(String[] args) {
         if (args.length == 0) {
             LOGGER.error("Script not defined.");

@@ -27,8 +27,8 @@ public class FilterTest {
         condition = mock(Condition.class);
         when(condition.check(any(Record.class))).thenReturn(true, false);
 
-        filter = spy(new Filter(condition));
-        filter.then(descendant);
+        filter = spy(new Filter());
+        filter.when(condition).then(descendant);
     }
 
     @Test
