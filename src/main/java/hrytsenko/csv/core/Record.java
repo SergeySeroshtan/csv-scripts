@@ -34,7 +34,7 @@ public final class Record {
      */
     public Record(Map<String, String> originalContent) {
         content = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        for (Map.Entry<String, String> entry : content.entrySet()) {
+        for (Map.Entry<String, String> entry : originalContent.entrySet()) {
             set(entry.getKey(), entry.getValue());
         }
     }
