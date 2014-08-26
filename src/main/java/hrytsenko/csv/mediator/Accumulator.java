@@ -33,7 +33,7 @@ public abstract class Accumulator implements Mediator {
     }
 
     /**
-     * Returns accumulated data bound to specified name.
+     * Pulls accumulated data bound to specified name.
      * 
      * @param name
      *            the name of accumulated data.
@@ -41,7 +41,7 @@ public abstract class Accumulator implements Mediator {
      * @return the accumulated data or <code>null</code> if data not found.
      */
     @SuppressWarnings("unchecked")
-    public <T> T valueOf(String name) {
+    public <T> T pull(String name) {
         if (name == null) {
             return null;
         }
@@ -53,7 +53,7 @@ public abstract class Accumulator implements Mediator {
         Collection<Mediator> children = descendants();
         for (Mediator child : children) {
             if (child instanceof Accumulator) {
-                T value = ((Accumulator) child).valueOf(name);
+                T value = ((Accumulator) child).pull(name);
                 if (value != null) {
                     return value;
                 }
