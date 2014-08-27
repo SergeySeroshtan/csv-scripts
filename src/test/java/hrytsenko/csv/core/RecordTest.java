@@ -20,7 +20,6 @@ public class RecordTest {
     public void test() {
         Record record = new Record(singletonMap(TICKER_FIELD, TICKER_VALUE));
 
-        assertEquals(TICKER_VALUE, record.get(TICKER_FIELD));
         assertEquals(TICKER_VALUE, record.get(TICKER_FIELD.toLowerCase()));
         assertEquals(TICKER_VALUE, record.get(TICKER_FIELD.toUpperCase()));
 
@@ -28,7 +27,7 @@ public class RecordTest {
         assertEquals(NAME_VALUE, record.get(NAME_FIELD));
 
         Collection<String> fields = record.fields();
-        assertArrayEquals(new String[] { NAME_FIELD.toLowerCase(), TICKER_FIELD.toLowerCase() }, fields.toArray());
+        assertArrayEquals(new String[] { TICKER_FIELD.toLowerCase(), NAME_FIELD.toLowerCase() }, fields.toArray());
     }
 
 }

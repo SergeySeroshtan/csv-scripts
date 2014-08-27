@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Record contains set of fields and their values.
  * 
  * <p>
- * The names of fields are considered as case insensitive. And all names are stored in lower-case.
+ * The names of fields are considered as case insensitive. All names are stored in lower-case.
  * 
  * @author hrytsenko.anton
  */
@@ -33,7 +32,7 @@ public final class Record {
      *            the initial content of record.
      */
     public Record(Map<String, String> originalContent) {
-        content = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        content = new LinkedHashMap<String, String>();
         for (Map.Entry<String, String> entry : originalContent.entrySet()) {
             set(entry.getKey(), entry.getValue());
         }
@@ -48,7 +47,7 @@ public final class Record {
      * @return the value of field.
      */
     public String get(String field) {
-        return content.get(field);
+        return content.get(field.toLowerCase());
     }
 
     /**
