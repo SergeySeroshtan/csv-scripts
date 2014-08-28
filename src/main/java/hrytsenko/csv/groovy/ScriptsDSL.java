@@ -28,6 +28,22 @@ public final class ScriptsDSL {
     }
 
     /**
+     * Allows to define the custom mediator in more natural form using Groovy.
+     * 
+     * <p>
+     * I.e., you can write: <tt>def custom = apply({ rec -> ... })</tt>; instead of:
+     * <tt>def custom = {rec -> ... } as Mediator</tt>.
+     * 
+     * @param mediator
+     *            the custom mediator.
+     * 
+     * @return the custom mediator.
+     */
+    public static Mediator apply(Mediator mediator) {
+        return mediator;
+    }
+
+    /**
      * Creates {@link Filter} with specified condition.
      * 
      * @param condition
