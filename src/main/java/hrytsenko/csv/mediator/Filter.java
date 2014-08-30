@@ -46,7 +46,7 @@ public class Filter extends Accumulator {
      * @return this mediator for chaining.
      */
     public Filter then(Mediator... mediators) {
-        branch = new Sequence().of(mediators);
+        branch = new Sequence().over(mediators);
         return this;
     }
 

@@ -1,11 +1,11 @@
 package hrytsenko.csv.mediator;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import hrytsenko.csv.core.Mediator;
 import hrytsenko.csv.core.Record;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,7 +21,7 @@ public class Sequence extends Accumulator {
      * Creates empty sequence.
      */
     public Sequence() {
-        descendants = Collections.emptyList();
+        descendants = emptyList();
     }
 
     /**
@@ -32,8 +32,8 @@ public class Sequence extends Accumulator {
      * 
      * @return this mediator for chaining.
      */
-    public Sequence of(Mediator... mediators) {
-        descendants = Arrays.asList(mediators);
+    public Sequence over(Mediator... mediators) {
+        descendants = asList(mediators);
         return this;
     }
 

@@ -60,19 +60,19 @@ public final class ScriptsDSL {
      * Creates {@link Sequence} of mediators.
      * 
      * @param mediators
-     *            the mediators to be grouped into sequence.
+     *            the set of mediators for {@link Sequence}.
      * 
      * @return the created mediator.
      */
     public static Sequence sequence(Mediator... mediators) {
-        return new Sequence().of(mediators);
+        return new Sequence().over(mediators);
     }
 
     /**
      * Creates {@link Splitter} over set of mediators.
      * 
      * @param mediators
-     *            the set of mediators for splitter.
+     *            the set of mediators for {@link Splitter}.
      * 
      * @return the created mediator.
      */

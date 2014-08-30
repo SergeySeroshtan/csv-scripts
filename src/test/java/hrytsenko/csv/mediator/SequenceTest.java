@@ -24,7 +24,7 @@ public class SequenceTest {
             descendants[i] = mock(Mediator.class);
         }
 
-        sequence = spy(new Sequence().of(descendants));
+        sequence = spy(new Sequence().over(descendants));
     }
 
     @Test
