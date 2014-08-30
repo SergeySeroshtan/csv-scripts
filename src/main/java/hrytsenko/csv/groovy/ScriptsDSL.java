@@ -6,6 +6,7 @@ import hrytsenko.csv.core.Record;
 import hrytsenko.csv.mediator.Aggregator;
 import hrytsenko.csv.mediator.Filter;
 import hrytsenko.csv.mediator.Sequence;
+import hrytsenko.csv.mediator.Splitter;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -65,6 +66,18 @@ public final class ScriptsDSL {
      */
     public static Sequence sequence(Mediator... mediators) {
         return new Sequence().of(mediators);
+    }
+
+    /**
+     * Creates {@link Splitter} over set of mediators.
+     * 
+     * @param mediators
+     *            the set of mediators for splitter.
+     * 
+     * @return the created mediator.
+     */
+    public static Splitter split(Mediator... mediators) {
+        return new Splitter().over(mediators);
     }
 
     /**
