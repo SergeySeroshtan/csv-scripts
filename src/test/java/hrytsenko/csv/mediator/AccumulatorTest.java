@@ -1,6 +1,7 @@
 package hrytsenko.csv.mediator;
 
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -17,24 +18,19 @@ public class AccumulatorTest {
     @Before
     public void init() {
         accumulator = mock(Accumulator.class, CALLS_REAL_METHODS);
+        doReturn(null).when(accumulator).value();
     }
 
     @Test
-    public void testValue() {
+    public void test() {
         accumulator.pull(NAME);
 
-        verify(accumulator).descendants();
         verify(accumulator, never()).value();
-    }
 
-    @Test
-    public void testDescendants() {
         accumulator.into(NAME);
-
         accumulator.pull(NAME);
 
         verify(accumulator).value();
-        verify(accumulator, never()).descendants();
     }
 
 }

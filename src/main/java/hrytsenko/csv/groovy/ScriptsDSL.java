@@ -65,7 +65,9 @@ public final class ScriptsDSL {
      * @return the created mediator.
      */
     public static Sequence sequence(Mediator... mediators) {
-        return new Sequence().over(mediators);
+        Sequence sequence = new Sequence();
+        sequence.over(mediators);
+        return sequence;
     }
 
     /**
@@ -77,7 +79,9 @@ public final class ScriptsDSL {
      * @return the created mediator.
      */
     public static Splitter split(Mediator... mediators) {
-        return new Splitter().over(mediators);
+        Splitter splitter = new Splitter();
+        splitter.over(mediators);
+        return splitter;
     }
 
     /**

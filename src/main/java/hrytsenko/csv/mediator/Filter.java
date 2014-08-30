@@ -4,24 +4,20 @@ import hrytsenko.csv.core.Condition;
 import hrytsenko.csv.core.Mediator;
 import hrytsenko.csv.core.Record;
 
-import java.util.Collection;
-
 /**
  * Applies other mediators to all records that meet specified condition.
  * 
  * @author hrytsenko.anton
  */
-public class Filter extends Accumulator {
+public class Filter extends Container {
 
     private Condition condition;
-    private Sequence branch;
 
     /**
      * Creates filter, that ignores all records.
      */
     public Filter() {
         condition = new Condition.IgnoreAll();
-        branch = new Sequence();
     }
 
     /**
@@ -37,29 +33,14 @@ public class Filter extends Accumulator {
         return this;
     }
 
-    /**
-     * Sets the mediators to be applied to records that meet condition.
-     * 
-     * @param mediators
-     *            the ordered set of mediators.
-     * 
-     * @return this mediator for chaining.
-     */
-    public Filter then(Mediator... mediators) {
-        branch = new Sequence().over(mediators);
-        return this;
-    }
-
     @Override
     public void mediate(Record record) {
-        if (condition.check(record)) {
-            branch.mediate(record);
+        if (!condition.check(record)) {
+            return;
         }
-    }
-
-    @Override
-    protected Collection<Mediator> descendants() {
-        return branch.descendants();
+        for (Mediator descendant : descendants()) {
+            descendant.mediate(record);
+        }
     }
 
 }

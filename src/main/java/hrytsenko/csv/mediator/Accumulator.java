@@ -1,29 +1,24 @@
 package hrytsenko.csv.mediator;
 
+import hrytsenko.csv.core.Holder;
 import hrytsenko.csv.core.Mediator;
 
-import java.util.Collection;
-import java.util.Collections;
-
 /**
- * Accumulators are intended for collecting data during processing of records.
+ * Accumulator contains data bound to name.
  * 
- * Also accumulator may just provide access to other accumulators instead of collecting data.
- * 
- * <p>
- * Accumulated data can be accessed through the assigned name.
+ * Thus this data can be accessed only through this name.
  * 
  * @author hrytsenko.anton
  */
-public abstract class Accumulator implements Mediator {
+public abstract class Accumulator implements Mediator, Holder {
 
     private String name;
 
     /**
-     * Assigns name for accumulated data.
+     * Assigns name for value.
      * 
      * @param name
-     *            the name to access data.
+     *            the name for value.
      * 
      * @return this mediator for chaining.
      */
@@ -32,53 +27,21 @@ public abstract class Accumulator implements Mediator {
         return this;
     }
 
-    /**
-     * Pulls accumulated data bound to specified name.
-     * 
-     * @param name
-     *            the name of accumulated data.
-     * 
-     * @return the accumulated data or <code>null</code> if data not found.
-     */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T pull(String name) {
         if (name == null) {
             return null;
         }
 
-        if (name.equals(this.name)) {
-            return (T) value();
-        }
-
-        Collection<Mediator> children = descendants();
-        for (Mediator child : children) {
-            if (child instanceof Accumulator) {
-                T value = ((Accumulator) child).pull(name);
-                if (value != null) {
-                    return value;
-                }
-            }
-        }
-
-        return null;
+        return name.equals(this.name) ? (T) value() : null;
     }
 
     /**
-     * Returns the accumulated value. By default returns <code>null</code>.
+     * Returns the accumulated value.
      * 
-     * @return the accumulated data.
+     * @return the accumulated value.
      */
-    protected Object value() {
-        return null;
-    }
-
-    /**
-     * Returns set of dependent mediators, that can be used for search of accumulated data.
-     * 
-     * @return the set of mediators.
-     */
-    protected Collection<Mediator> descendants() {
-        return Collections.emptyList();
-    }
+    protected abstract Object value();
 
 }

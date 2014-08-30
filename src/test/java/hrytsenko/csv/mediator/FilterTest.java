@@ -28,7 +28,8 @@ public class FilterTest {
         when(condition.check(any(Record.class))).thenReturn(true, false);
 
         filter = spy(new Filter());
-        filter.when(condition).then(descendant);
+        filter.when(condition).over(descendant);
+        ;
     }
 
     @Test

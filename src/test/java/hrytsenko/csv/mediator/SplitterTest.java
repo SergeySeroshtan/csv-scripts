@@ -26,7 +26,8 @@ public class SplitterTest {
             descendants[i] = mock(Mediator.class);
         }
 
-        splitter = spy(new Splitter().over(descendants));
+        splitter = spy(new Splitter());
+        splitter.over(descendants);
     }
 
     @Test

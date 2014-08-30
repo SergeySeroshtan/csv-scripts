@@ -1,21 +1,19 @@
 package hrytsenko.csv.mediator;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 import hrytsenko.csv.core.Mediator;
-import hrytsenko.csv.core.Record;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class SequenceTest {
-
+public class ContainerTest {
     private static final int DESCENDANTS_NUM = 3;
 
     private Mediator[] descendants;
 
-    private Sequence sequence;
+    private Container container;
 
     @Before
     public void init() {
@@ -24,19 +22,14 @@ public class SequenceTest {
             descendants[i] = mock(Mediator.class);
         }
 
-        sequence = spy(new Sequence());
-        sequence.over(descendants);
+        container = mock(Container.class, CALLS_REAL_METHODS);
     }
 
     @Test
     public void test() {
-        Record record = new Record();
+        container.over(descendants);
 
-        sequence.mediate(record);
-
-        for (Mediator descendant : descendants) {
-            verify(descendant).mediate(record);
-        }
+        assertArrayEquals(descendants, container.descendants().toArray());
     }
 
 }
