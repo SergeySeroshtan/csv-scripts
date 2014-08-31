@@ -40,6 +40,28 @@ saveCsv(args[0], merged)
 
 In this script we merge data to avoid duplicates.
 
+## DSL
+
+This application provides DSL that simplifies writing of scripts.
+
+Processing:
+
+* `aggregate` - to collect records: `aggregate().into(…)`
+* `apply` - to apply custom mediator: `apply({ rec -> … })`
+* `filter` - to filter records by condition: `filter({ rec -> … }).over(mediators)`
+* `sequence` - to combine mediators: `sequence(mediators)`
+* `split` - to split record between mediators: `split(mediators)`
+
+Input/output:
+
+* `loadCsv` - to load records from CSV file: `def records = loadCsv(filename)`
+* `saveCsv` - to save records into CSV file: `saveCsv(filename, records)`
+* `processCsv` - to process records from CSV files: `processCsv(filename, mediators)`
+
+Utilities:
+
+* `merge` - to merge several record sets: `merge("id", …)`
+
 ## Run
 
 To build executable file using Maven:
