@@ -4,13 +4,15 @@ This application was developed to help automate activities related to processing
 It's intended for execution of Groovy scripts, that are written using predefined DSL.
 Use of scripts provides good flexibility and reduces complexity of application itself.
 
-# Examples
+# Scripts
+
+## Examples
 
 This script calculates number of records, flagged as 'FOUND':
 
 ```groovy
 def seq = sequence(
-    filter({ rec -> rec.get("message") == "FOUND" }).then(aggregate().into("found")),
+    filter({ rec -> rec.get("message") == "FOUND" }).over(aggregate().into("found")),
     aggregate().into("all"))
 
 processCsv(args[0], seq)
@@ -25,7 +27,7 @@ The following script combines data from several CSV files:
 
 ```groovy
 def seq = sequence(
-    filter({ rec -> rec.get("message") == "FOUND" }).then(aggregate().into("found")),
+    filter({ rec -> rec.get("message") == "FOUND" }).over(aggregate().into("found")),
     aggregate().into("all"))
 
 (1..<args.length).each { i -> processCsv(args[i], seq) }
@@ -38,13 +40,21 @@ saveCsv(args[0], merged)
 
 In this script we merge data to avoid duplicates.
 
-To execute script, you can use next command:
+## Run
+
+To build executable file using Maven:
+
+```
+mvn clean package
+```
+
+To execute script in command-line mode:
 
 ```
 java -jar csv-scripts.jar script.groovy dataset.csv
 ```
 
-First argument - is the filename for script, and others - are arguments for this script.
+Where first argument - is the filename for script; others - are arguments to be passed to the script.
 
 # License
 
