@@ -23,7 +23,7 @@ public class RecordTest {
         assertEquals(TICKER_VALUE, record.get(TICKER_FIELD.toLowerCase()));
         assertEquals(TICKER_VALUE, record.get(TICKER_FIELD.toUpperCase()));
 
-        record.set(NAME_FIELD, NAME_VALUE);
+        record.put(NAME_FIELD, NAME_VALUE);
         assertEquals(NAME_VALUE, record.get(NAME_FIELD));
 
         Collection<String> fields = record.fields();

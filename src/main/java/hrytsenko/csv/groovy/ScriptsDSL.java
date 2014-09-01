@@ -114,7 +114,7 @@ public final class ScriptsDSL {
         Record result = new Record(target.content());
 
         for (String field : source.fields()) {
-            result.set(field, source.get(field));
+            result.put(field, source.get(field));
         }
         return result;
     }

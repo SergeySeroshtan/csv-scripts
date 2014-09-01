@@ -34,7 +34,7 @@ public final class Record {
     public Record(Map<String, String> originalContent) {
         content = new LinkedHashMap<String, String>();
         for (Map.Entry<String, String> entry : originalContent.entrySet()) {
-            set(entry.getKey(), entry.getValue());
+            put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -51,6 +51,18 @@ public final class Record {
     }
 
     /**
+     * Overloading of operator <tt>[]</tt> in Groovy.
+     * 
+     * @param field
+     *            the name of field.
+     * 
+     * @return the value of field.
+     */
+    public String getAt(String field) {
+        return get(field);
+    }
+
+    /**
      * Sets the value of field.
      * 
      * @param field
@@ -58,8 +70,20 @@ public final class Record {
      * @param value
      *            the new value for field.
      */
-    public void set(String field, String value) {
+    public void put(String field, String value) {
         content.put(field.toLowerCase(), value);
+    }
+
+    /**
+     * Overloading of operator <tt>[]</tt> in Groovy.
+     * 
+     * @param field
+     *            the name of field.
+     * @param value
+     *            the new value for field.
+     */
+    public void putAt(String field, String value) {
+        put(field, value);
     }
 
     /**

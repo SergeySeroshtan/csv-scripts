@@ -12,7 +12,7 @@ This script calculates number of records, flagged as 'FOUND':
 
 ```groovy
 def seq = sequence(
-    filter({ rec -> rec.get("message") == "FOUND" }).over(aggregate().into("found")),
+    filter({ it["message"] == "FOUND" }).over(aggregate().into("found")),
     aggregate().into("all"))
 
 processCsv(args[0], seq)
@@ -27,7 +27,7 @@ The following script combines data from several CSV files:
 
 ```groovy
 def seq = sequence(
-    filter({ rec -> rec.get("message") == "FOUND" }).over(aggregate().into("found")),
+    filter({ it["message"] == "FOUND" }).over(aggregate().into("found")),
     aggregate().into("all"))
 
 (1..<args.length).each { i -> processCsv(args[i], seq) }
@@ -47,8 +47,8 @@ This application provides DSL that simplifies writing of scripts.
 Processing:
 
 * `aggregate` - to collect records: `aggregate().into(…)`
-* `apply` - to apply custom mediator: `apply({ rec -> … })`
-* `filter` - to filter records by condition: `filter({ rec -> … }).over(mediators)`
+* `apply` - to apply custom mediator: `apply({…})`
+* `filter` - to filter records by condition: `filter({…}).over(mediators)`
 * `sequence` - to combine mediators: `sequence(mediators)`
 * `split` - to split record between mediators: `split(mediators)`
 
