@@ -17,8 +17,8 @@ def seq = sequence(
 
 processCsv(args[0], seq)
 
-def found = seq.pull("found").size()
-def all = seq.pull("all").size()
+def found = seq["found"].size()
+def all = seq["all"].size()
 
 printf "%s / %s", found, all
 ```
@@ -32,7 +32,7 @@ def seq = sequence(
 
 (1..<args.length).each { i -> processCsv(args[i], seq) }
 
-def merged = merge("id", seq.pull("all"), seq.pull("found"))
+def merged = merge("id", seq["all"], seq["found"])
 printf "total: %s", merged.size()
 
 saveCsv(args[0], merged)

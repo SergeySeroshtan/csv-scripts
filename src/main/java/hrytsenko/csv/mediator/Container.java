@@ -57,6 +57,18 @@ public abstract class Container implements Mediator, Holder {
     }
 
     /**
+     * Overloading of operator <tt>[]</tt> in Groovy.
+     * 
+     * @param name
+     *            see {@link #pull(String)}.
+     * 
+     * @return see {@link #pull(String)}.
+     */
+    public <T> T getAt(String name) {
+        return pull(name);
+    }
+
+    /**
      * Returns the set of dependent mediators.
      * 
      * @return the ordered set of mediators.
