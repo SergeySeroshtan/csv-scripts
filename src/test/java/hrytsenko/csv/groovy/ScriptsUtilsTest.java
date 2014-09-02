@@ -6,6 +6,7 @@ import hrytsenko.csv.core.Record;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -13,19 +14,19 @@ public class ScriptsUtilsTest {
 
     @Test
     public void testMerge() {
-        List<Record> recordsWithName = new ArrayList<>();
-        recordsWithName.add(createRecord("ticker", "GOOG", "name", "Google"));
-        recordsWithName.add(createRecord("ticker", "ORCL", "name", "Oracle"));
+        List<Record> setWithName = new ArrayList<>();
+        setWithName.add(createRecord("ticker", "GOOG", "name", "Google"));
+        setWithName.add(createRecord("ticker", "ORCL", "name", "Oracle"));
 
-        List<Record> recordsWithExchange = new ArrayList<>();
-        recordsWithName.add(createRecord("ticker", "GOOG", "exchange", "NASDAQ"));
-        recordsWithName.add(createRecord("ticker", "ORCL", "exchange", "NYSE"));
+        List<Record> setWithExchange = new ArrayList<>();
+        setWithExchange.add(createRecord("ticker", "GOOG", "exchange", "NASDAQ"));
+        setWithExchange.add(createRecord("ticker", "ORCL", "exchange", "NYSE"));
 
-        Collection<Record> mergedRecords = ScriptsUtils.merge("ticker", recordsWithName, recordsWithExchange);
+        Collection<Record> mergedSet = ScriptsUtils.merge("ticker", setWithName, setWithExchange);
 
-        assertEquals(2, mergedRecords.size());
+        assertEquals(2, mergedSet.size());
 
-        Record[] records = mergedRecords.toArray(new Record[mergedRecords.size()]);
+        Record[] records = mergedSet.toArray(new Record[mergedSet.size()]);
 
         Record recordForGoogle = records[0];
         assertEquals(3, recordForGoogle.fields().size());
@@ -38,6 +39,22 @@ public class ScriptsUtilsTest {
         assertEquals("ORCL", recordForOracle.get("ticker"));
         assertEquals("Oracle", recordForOracle.get("name"));
         assertEquals("NYSE", recordForOracle.get("exchange"));
+    }
+
+    @Test
+    public void testMap() {
+        List<Record> set = new ArrayList<>();
+        Record recordForGoogle = createRecord("ticker", "GOOG", "name", "Google");
+        set.add(recordForGoogle);
+        Record recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle");
+        set.add(recordForOracle);
+
+        Map<String, Record> mappedSet = ScriptsUtils.map("ticker", set);
+
+        assertEquals(2, mappedSet.size());
+
+        assertEquals(mappedSet.get("GOOG"), recordForGoogle);
+        assertEquals(mappedSet.get("ORCL"), recordForOracle);
     }
 
     private static Record createRecord(String... content) {

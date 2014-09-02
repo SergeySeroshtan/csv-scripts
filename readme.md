@@ -58,7 +58,8 @@ Input/output:
 
 Utilities:
 
-* `merge` - to merge several record sets: `merge("id", …)`
+* `merge` - to merge several sets of records: `merge("id", …)`
+* `map` - to map records by value of certain field: `map("id",` …)`
 
 ## Run
 

@@ -35,6 +35,24 @@ public final class ScriptsUtils {
         return result.values();
     }
 
+    /**
+     * Creates map of records, using value of specified field as key.
+     * 
+     * @param idField
+     *            the name of field, which value can be used as unique identifier.
+     * @param set
+     *            the set of records for mapping.
+     * 
+     * @return the mapped set of records.
+     */
+    public static Map<String, Record> map(String idField, Collection<Record> set) {
+        Map<String, Record> result = new LinkedHashMap<>();
+        for (Record record : set) {
+            result.put(record.get(idField), record);
+        }
+        return result;
+    }
+
     private static Record merge(Record source, Record target) {
         if (target == null) {
             return new Record(source.content());
