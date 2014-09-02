@@ -4,6 +4,7 @@ import hrytsenko.csv.core.Condition;
 import hrytsenko.csv.core.Mediator;
 import hrytsenko.csv.core.Record;
 import hrytsenko.csv.mediator.Aggregator;
+import hrytsenko.csv.mediator.Counter;
 import hrytsenko.csv.mediator.Filter;
 import hrytsenko.csv.mediator.Sequence;
 import hrytsenko.csv.mediator.Splitter;
@@ -42,6 +43,15 @@ public final class ScriptsDSL {
      */
     public static Mediator apply(Mediator mediator) {
         return mediator;
+    }
+
+    /**
+     * Creates {@link Counter} for records.
+     * 
+     * @return the created mediator.
+     */
+    public static Counter count() {
+        return new Counter();
     }
 
     /**

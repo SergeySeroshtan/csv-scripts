@@ -12,15 +12,12 @@ This script calculates number of records, flagged as 'FOUND':
 
 ```groovy
 def seq = sequence(
-    filter({ it["message"] == "FOUND" }).over(aggregate().into("found")),
-    aggregate().into("all"))
+    filter({ it["message"] == "FOUND" }).over(count().into("found")),
+    count().into("all"))
 
 processCsv(args[0], seq)
 
-def found = seq["found"].size()
-def all = seq["all"].size()
-
-printf "%s / %s", found, all
+printf "%s / %s", seq["found"], seq["all"]
 ```
 
 The following script combines data from several CSV files:
@@ -48,6 +45,7 @@ Processing:
 
 * `aggregate` - to collect records: `aggregate().into(…)`
 * `apply` - to apply custom mediator: `apply({…})`
+* `count` - to count records: `count().into(…)`
 * `filter` - to filter records by condition: `filter({…}).over(mediators)`
 * `sequence` - to combine mediators: `sequence(mediators)`
 * `split` - to split record between mediators: `split(mediators)`
