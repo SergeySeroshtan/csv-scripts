@@ -1,8 +1,8 @@
 # Summary
 
-This application was developed to help automate activities related to processing CSV files.
-It's intended for execution of Groovy scripts, that are written using predefined DSL.
-Use of scripts provides good flexibility and reduces complexity of application itself.
+This application was developed to help automate processing of CSV files.
+It allows execute Groovy scripts, that are written using predefined DSL.
+Use of such scripts provides good flexibility and reduces complexity of application itself.
 
 # Scripts
 
@@ -30,14 +30,11 @@ def seq = sequence(
 (1..<args.length).each { i -> processCsv(args[i], seq) }
 
 def merged = merge("id", seq["all"], seq["found"])
-printf "total: %s", merged.size()
 
 saveCsv(args[0], merged)
 ```
 
-In this script we merge data to avoid duplicates.
-
-## DSL
+## Language
 
 This application provides DSL that simplifies writing of scripts.
 
@@ -59,7 +56,7 @@ Input/output:
 Utilities:
 
 * `merge` - to merge several sets of records: `merge("id", …)`
-* `map` - to map records by value of certain field: `map("id",` …)`
+* `map` - to map records by value of certain field: `map("id", …)`
 
 ## Run
 
