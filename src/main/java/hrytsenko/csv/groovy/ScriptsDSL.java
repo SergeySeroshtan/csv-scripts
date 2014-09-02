@@ -30,6 +30,15 @@ public final class ScriptsDSL {
     }
 
     /**
+     * Creates {@link Counter} for records.
+     * 
+     * @return the created mediator.
+     */
+    public static Counter count() {
+        return new Counter();
+    }
+
+    /**
      * Allows to define the custom mediator in more natural form using Groovy.
      * 
      * <p>
@@ -43,15 +52,6 @@ public final class ScriptsDSL {
      */
     public static Mediator apply(Mediator mediator) {
         return mediator;
-    }
-
-    /**
-     * Creates {@link Counter} for records.
-     * 
-     * @return the created mediator.
-     */
-    public static Counter count() {
-        return new Counter();
     }
 
     /**
