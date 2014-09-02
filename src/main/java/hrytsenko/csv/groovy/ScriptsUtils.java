@@ -66,4 +66,7 @@ public final class ScriptsUtils {
         return result;
     }
 
+    private ScriptsUtils() {
+    }
+
 }
