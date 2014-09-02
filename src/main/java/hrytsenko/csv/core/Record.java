@@ -4,11 +4,9 @@ import static java.util.Arrays.asList;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -102,14 +100,8 @@ public final class Record {
         TreeSet<String> retainedFields = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         retainedFields.addAll(asList(fields));
 
-        Set<Entry<String, String>> entries = content.entrySet();
-        Iterator<Map.Entry<String, String>> it = entries.iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, String> entry = it.next();
-            if (!retainedFields.contains(entry.getKey())) {
-                it.remove();
-            }
-        }
+        Set<String> actualFields = content.keySet();
+        actualFields.retainAll(retainedFields);
     }
 
     /**
