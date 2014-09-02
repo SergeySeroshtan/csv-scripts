@@ -23,7 +23,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
- * Basic IO operations for scripts.
+ * Contains methods for input/output.
  * 
  * @author hrytsenko.anton
  */

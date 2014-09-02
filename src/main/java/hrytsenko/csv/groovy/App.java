@@ -56,6 +56,7 @@ public final class App {
 
         importCustomizer.addStaticStars(ScriptsDSL.class.getCanonicalName());
         importCustomizer.addStaticStars(ScriptsIO.class.getCanonicalName());
+        importCustomizer.addStaticStars(ScriptsUtils.class.getCanonicalName());
 
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.addCompilationCustomizers(importCustomizer);
