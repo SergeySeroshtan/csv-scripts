@@ -1,10 +1,16 @@
 package hrytsenko.csv.core;
 
+import static java.util.Arrays.asList;
+
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Record contains set of fields and their values.
@@ -84,6 +90,26 @@ public final class Record {
      */
     public void putAt(String field, String value) {
         put(field, value);
+    }
+
+    /**
+     * Retains only fields that are specified. I.e., removes from this record all fields that are not specified.
+     * 
+     * @param fields
+     *            the set of fields to be retained.
+     */
+    public void retain(String... fields) {
+        TreeSet<String> retainedFields = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        retainedFields.addAll(asList(fields));
+
+        Set<Entry<String, String>> entries = content.entrySet();
+        Iterator<Map.Entry<String, String>> it = entries.iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            if (!retainedFields.contains(entry.getKey())) {
+                it.remove();
+            }
+        }
     }
 
     /**
