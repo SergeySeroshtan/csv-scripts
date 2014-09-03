@@ -1,14 +1,12 @@
 package hrytsenko.csv.core;
 
-import static java.util.Arrays.asList;
-
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Record contains set of fields and their values.
@@ -91,14 +89,32 @@ public final class Record {
     }
 
     /**
-     * Retains only fields that are specified. I.e., removes from this record all fields that are not specified.
+     * Removes all specified fields.
+     * 
+     * @param fields
+     *            the set of fields to be removed.
+     */
+    public void remove(String... fields) {
+        Set<String> removedFields = new HashSet<>();
+        for (String field : fields) {
+            removedFields.add(field.toLowerCase());
+        }
+
+        Set<String> actualFields = content.keySet();
+        actualFields.removeAll(removedFields);
+    }
+
+    /**
+     * Retains only specified fields.
      * 
      * @param fields
      *            the set of fields to be retained.
      */
     public void retain(String... fields) {
-        TreeSet<String> retainedFields = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-        retainedFields.addAll(asList(fields));
+        Set<String> retainedFields = new HashSet<>();
+        for (String field : fields) {
+            retainedFields.add(field.toLowerCase());
+        }
 
         Set<String> actualFields = content.keySet();
         actualFields.retainAll(retainedFields);

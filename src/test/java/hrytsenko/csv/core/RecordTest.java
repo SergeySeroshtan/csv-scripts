@@ -48,6 +48,20 @@ public class RecordTest {
     }
 
     @Test
+    public void testRemove() {
+        Record record = new Record();
+        record.put(TICKER_FIELD, TICKER_VALUE);
+        record.put(NAME_FIELD, NAME_VALUE);
+        record.put(EXCHANGE_FIELD, EXCHANGE_VALUE);
+
+        assertFields(record, TICKER_FIELD, NAME_FIELD, EXCHANGE_FIELD);
+
+        record.remove(NAME_FIELD);
+
+        assertFields(record, TICKER_FIELD, EXCHANGE_FIELD);
+    }
+
+    @Test
     public void testRetain() {
         Record record = new Record();
         record.put(TICKER_FIELD, TICKER_VALUE);
