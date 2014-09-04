@@ -58,6 +58,11 @@ Utilities:
 * `merge` - to merge several sets of records: `merge("id", …)`
 * `map` - to map records by value of certain field: `map("id", …)`
 
+Record:
+
+* `remove` - to remove certain fields: `apply({ it.remove(…) })`
+* `retain` - to retain only certain fields: `apply({ it.retain(…) })`
+
 ## Run
 
 To build executable file using Maven:
