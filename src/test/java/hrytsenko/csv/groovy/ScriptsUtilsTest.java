@@ -5,12 +5,22 @@ import hrytsenko.csv.core.Record;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
 public class ScriptsUtilsTest {
+
+    @Test
+    public void testAppend() {
+        Collection<Record> appendedSet = ScriptsUtils.append(
+                Collections.singletonList(createRecord("ticker", "GOOG", "name", "Google")),
+                Collections.singletonList(createRecord("ticker", "ORCL", "name", "Oracle")));
+
+        assertEquals(2, appendedSet.size());
+    }
 
     @Test
     public void testMerge() {

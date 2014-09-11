@@ -2,8 +2,10 @@ package hrytsenko.csv.groovy;
 
 import hrytsenko.csv.core.Record;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +16,24 @@ import java.util.Map;
 public final class ScriptsUtils {
 
     /**
-     * Merges records from one or more sets of records.
+     * Appends records from one or more sets,
+     * 
+     * @param sets
+     *            the sets of records to be appended.
+     * 
+     * @return the resulting set of records.
+     */
+    @SafeVarargs
+    public static Collection<Record> append(Collection<Record>... sets) {
+        List<Record> result = new ArrayList<>();
+        for (Collection<Record> set : sets) {
+            result.addAll(set);
+        }
+        return result;
+    }
+
+    /**
+     * Merges records from one or more sets.
      * 
      * @param idField
      *            the name of field, which value can be used as unique identifier.
