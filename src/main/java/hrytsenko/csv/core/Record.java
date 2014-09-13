@@ -72,8 +72,8 @@ public final class Record {
      * @param value
      *            the new value for field.
      */
-    public void put(String field, String value) {
-        content.put(field.toLowerCase(), value);
+    public void put(String field, Object value) {
+        content.put(field.toLowerCase(), String.valueOf(value));
     }
 
     /**
@@ -84,7 +84,7 @@ public final class Record {
      * @param value
      *            the new value for field.
      */
-    public void putAt(String field, String value) {
+    public void putAt(String field, Object value) {
         put(field, value);
     }
 
