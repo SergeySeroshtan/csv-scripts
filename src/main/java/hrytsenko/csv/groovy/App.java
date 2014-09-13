@@ -4,7 +4,12 @@ import static java.lang.System.exit;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
-import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -39,7 +44,8 @@ public final class App {
         String scriptFilename = args[0];
         GroovyShell shell = new GroovyShell(bindings(args), configuration());
         try {
-            shell.evaluate(new File(scriptFilename));
+            InputStream scriptStream = Files.newInputStream(Paths.get(scriptFilename), StandardOpenOption.READ);
+            shell.evaluate(new InputStreamReader(scriptStream, Charset.forName("UTF-8")));
         } catch (Exception exception) {
             LOGGER.error("Could not execute script.", exception);
             exit(-1);
