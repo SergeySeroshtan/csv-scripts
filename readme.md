@@ -12,8 +12,8 @@ This script calculates number of records, flagged as 'FOUND':
 
 ```groovy
 def seq = sequence(
-    filter({ it["message"] == "FOUND" }).over(count().into("found")),
-    count().into("all"))
+    filter({ it["message"] == "FOUND" }).over(count("found")),
+    count("all"))
 
 processCsv(args[0], seq)
 
@@ -24,8 +24,8 @@ The following script combines data from several CSV files:
 
 ```groovy
 def seq = sequence(
-    filter({ it["message"] == "FOUND" }).over(aggregate().into("found")),
-    aggregate().into("all"))
+    filter({ it["message"] == "FOUND" }).over(aggregate("found")),
+    aggregate("all"))
 
 (1..<args.length).each { i -> processCsv(args[i], seq) }
 
