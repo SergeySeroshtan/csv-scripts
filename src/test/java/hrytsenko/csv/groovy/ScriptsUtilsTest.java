@@ -14,8 +14,8 @@ import org.junit.Test;
 public class ScriptsUtilsTest {
 
     @Test
-    public void testAppend() {
-        Collection<Record> appendedSet = ScriptsUtils.append(
+    public void testCombine() {
+        Collection<Record> appendedSet = ScriptsUtils.combine(
                 Collections.singletonList(createRecord("ticker", "GOOG", "name", "Google")),
                 Collections.singletonList(createRecord("ticker", "ORCL", "name", "Oracle")));
 

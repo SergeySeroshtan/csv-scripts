@@ -16,15 +16,15 @@ import java.util.Map;
 public final class ScriptsUtils {
 
     /**
-     * Appends records from one or more sets,
+     * Combines records from one or more sets,
      * 
      * @param sets
-     *            the sets of records to be appended.
+     *            the sets of records to be combined.
      * 
      * @return the resulting set of records.
      */
     @SafeVarargs
-    public static Collection<Record> append(Collection<Record>... sets) {
+    public static Collection<Record> combine(Collection<Record>... sets) {
         List<Record> result = new ArrayList<>();
         for (Collection<Record> set : sets) {
             result.addAll(set);

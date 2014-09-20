@@ -55,6 +55,7 @@ Input/output:
 
 Utilities:
 
+* `combine` - to combine several sets of records in given order: `combine(…)`
 * `merge` - to merge several sets of records: `merge("id", …)`
 * `map` - to map records by value of certain field: `map("id", …)`
 
