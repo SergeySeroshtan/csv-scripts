@@ -38,7 +38,7 @@ public abstract class Container implements Mediator, Holder {
     }
 
     @Override
-    public <T> T getAt(String name) {
+    public Object getAt(String name) {
         if (name == null) {
             return null;
         }
@@ -46,7 +46,7 @@ public abstract class Container implements Mediator, Holder {
         Collection<Mediator> mediators = descendants();
         for (Mediator mediator : mediators) {
             if (mediator instanceof Holder) {
-                T value = ((Holder) mediator).getAt(name);
+                Object value = ((Holder) mediator).getAt(name);
                 if (value != null) {
                     return value;
                 }

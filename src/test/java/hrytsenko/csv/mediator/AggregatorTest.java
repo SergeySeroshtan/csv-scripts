@@ -35,7 +35,8 @@ public class AggregatorTest {
             aggregator.mediate(record);
         }
 
-        Collection<Record> aggregated = aggregator.getAt(NAME);
+        @SuppressWarnings("unchecked")
+        Collection<Record> aggregated = (Collection<Record>) aggregator.getAt(NAME);
         assertArrayEquals(records.toArray(), aggregated.toArray());
     }
 

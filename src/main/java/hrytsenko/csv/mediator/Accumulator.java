@@ -28,13 +28,12 @@ public abstract class Accumulator implements Mediator, Holder {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T getAt(String name) {
+    public Object getAt(String name) {
         if (name == null) {
             return null;
         }
 
-        return name.equals(this.name) ? (T) value() : null;
+        return name.equals(this.name) ? value() : null;
     }
 
     /**

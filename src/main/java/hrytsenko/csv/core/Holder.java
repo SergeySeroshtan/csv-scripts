@@ -20,6 +20,6 @@ public interface Holder {
      * 
      * @return the value or <code>null</code> if nothing found.
      */
-    <T> T getAt(String name);
+    Object getAt(String name);
 
 }
