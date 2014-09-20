@@ -47,7 +47,7 @@ public final class ScriptsUtils {
         Map<String, Record> result = new LinkedHashMap<>();
         for (Collection<Record> set : sets) {
             for (Record record : set) {
-                String id = record.get(idField);
+                String id = record.getAt(idField);
                 result.put(id, merge(record, result.get(id)));
             }
         }
@@ -67,7 +67,7 @@ public final class ScriptsUtils {
     public static Map<String, Record> map(String idField, Collection<Record> set) {
         Map<String, Record> result = new LinkedHashMap<>();
         for (Record record : set) {
-            result.put(record.get(idField), record);
+            result.put(record.getAt(idField), record);
         }
         return result;
     }
@@ -80,7 +80,7 @@ public final class ScriptsUtils {
         Record result = new Record(target.content());
 
         for (String field : source.fields()) {
-            result.put(field, source.get(field));
+            result.putAt(field, source.getAt(field));
         }
         return result;
     }

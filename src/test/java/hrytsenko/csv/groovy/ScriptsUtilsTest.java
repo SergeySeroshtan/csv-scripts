@@ -40,15 +40,15 @@ public class ScriptsUtilsTest {
 
         Record recordForGoogle = records[0];
         assertEquals(3, recordForGoogle.fields().size());
-        assertEquals("GOOG", recordForGoogle.get("ticker"));
-        assertEquals("Google", recordForGoogle.get("name"));
-        assertEquals("NASDAQ", recordForGoogle.get("exchange"));
+        assertEquals("GOOG", recordForGoogle.getAt("ticker"));
+        assertEquals("Google", recordForGoogle.getAt("name"));
+        assertEquals("NASDAQ", recordForGoogle.getAt("exchange"));
 
         Record recordForOracle = records[1];
         assertEquals(3, recordForOracle.fields().size());
-        assertEquals("ORCL", recordForOracle.get("ticker"));
-        assertEquals("Oracle", recordForOracle.get("name"));
-        assertEquals("NYSE", recordForOracle.get("exchange"));
+        assertEquals("ORCL", recordForOracle.getAt("ticker"));
+        assertEquals("Oracle", recordForOracle.getAt("name"));
+        assertEquals("NYSE", recordForOracle.getAt("exchange"));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class ScriptsUtilsTest {
     private static Record createRecord(String... content) {
         Record record = new Record();
         for (int i = 0; i < content.length; i += 2) {
-            record.put(content[i], content[i + 1]);
+            record.putAt(content[i], content[i + 1]);
         }
         return record;
     }

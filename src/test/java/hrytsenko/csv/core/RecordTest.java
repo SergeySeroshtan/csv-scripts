@@ -35,24 +35,24 @@ public class RecordTest {
     public void testModify() {
         Record record = new Record();
 
-        record.put(TICKER_FIELD, TICKER_VALUE);
+        record.putAt(TICKER_FIELD, TICKER_VALUE);
 
-        assertEquals(TICKER_VALUE, record.get(TICKER_FIELD.toLowerCase()));
-        assertEquals(TICKER_VALUE, record.get(TICKER_FIELD.toUpperCase()));
+        assertEquals(TICKER_VALUE, record.getAt(TICKER_FIELD.toLowerCase()));
+        assertEquals(TICKER_VALUE, record.getAt(TICKER_FIELD.toUpperCase()));
         assertFields(record, TICKER_FIELD);
 
-        record.put(NAME_FIELD, NAME_VALUE);
+        record.putAt(NAME_FIELD, NAME_VALUE);
 
-        assertEquals(NAME_VALUE, record.get(NAME_FIELD));
+        assertEquals(NAME_VALUE, record.getAt(NAME_FIELD));
         assertFields(record, TICKER_FIELD, NAME_FIELD);
     }
 
     @Test
     public void testRemove() {
         Record record = new Record();
-        record.put(TICKER_FIELD, TICKER_VALUE);
-        record.put(NAME_FIELD, NAME_VALUE);
-        record.put(EXCHANGE_FIELD, EXCHANGE_VALUE);
+        record.putAt(TICKER_FIELD, TICKER_VALUE);
+        record.putAt(NAME_FIELD, NAME_VALUE);
+        record.putAt(EXCHANGE_FIELD, EXCHANGE_VALUE);
 
         assertFields(record, TICKER_FIELD, NAME_FIELD, EXCHANGE_FIELD);
 
@@ -64,9 +64,9 @@ public class RecordTest {
     @Test
     public void testRetain() {
         Record record = new Record();
-        record.put(TICKER_FIELD, TICKER_VALUE);
-        record.put(NAME_FIELD, NAME_VALUE);
-        record.put(EXCHANGE_FIELD, EXCHANGE_VALUE);
+        record.putAt(TICKER_FIELD, TICKER_VALUE);
+        record.putAt(NAME_FIELD, NAME_VALUE);
+        record.putAt(EXCHANGE_FIELD, EXCHANGE_VALUE);
 
         assertFields(record, TICKER_FIELD, NAME_FIELD, EXCHANGE_FIELD);
 

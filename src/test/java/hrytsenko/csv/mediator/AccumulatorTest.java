@@ -23,12 +23,12 @@ public class AccumulatorTest {
 
     @Test
     public void test() {
-        accumulator.pull(NAME);
+        accumulator.getAt(NAME);
 
         verify(accumulator, never()).value();
 
         accumulator.into(NAME);
-        accumulator.pull(NAME);
+        accumulator.getAt(NAME);
 
         verify(accumulator).value();
     }

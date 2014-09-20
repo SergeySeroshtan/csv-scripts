@@ -38,7 +38,7 @@ public abstract class Container implements Mediator, Holder {
     }
 
     @Override
-    public <T> T pull(String name) {
+    public <T> T getAt(String name) {
         if (name == null) {
             return null;
         }
@@ -46,7 +46,7 @@ public abstract class Container implements Mediator, Holder {
         Collection<Mediator> mediators = descendants();
         for (Mediator mediator : mediators) {
             if (mediator instanceof Holder) {
-                T value = ((Holder) mediator).pull(name);
+                T value = ((Holder) mediator).getAt(name);
                 if (value != null) {
                     return value;
                 }
@@ -54,18 +54,6 @@ public abstract class Container implements Mediator, Holder {
         }
 
         return null;
-    }
-
-    /**
-     * Overloading of operator <tt>[]</tt> in Groovy.
-     * 
-     * @param name
-     *            see {@link #pull(String)}.
-     * 
-     * @return see {@link #pull(String)}.
-     */
-    public <T> T getAt(String name) {
-        return pull(name);
     }
 
     /**

@@ -29,7 +29,7 @@ public abstract class Accumulator implements Mediator, Holder {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T pull(String name) {
+    public <T> T getAt(String name) {
         if (name == null) {
             return null;
         }

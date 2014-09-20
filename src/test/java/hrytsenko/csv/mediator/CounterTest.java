@@ -26,7 +26,7 @@ public class CounterTest {
             counter.mediate(new Record());
         }
 
-        assertEquals(RECORDS_NUM, counter.pull(NAME));
+        assertEquals(RECORDS_NUM, counter.getAt(NAME));
     }
 
 }

@@ -18,6 +18,10 @@ import java.util.Set;
  */
 public final class Record {
 
+    private static String toName(String field) {
+        return field.toLowerCase();
+    }
+
     private Map<String, String> content;
 
     /**
@@ -36,24 +40,15 @@ public final class Record {
     public Record(Map<String, String> originalContent) {
         content = new LinkedHashMap<String, String>();
         for (Map.Entry<String, String> entry : originalContent.entrySet()) {
-            put(entry.getKey(), entry.getValue());
+            putAt(entry.getKey(), entry.getValue());
         }
     }
 
     /**
      * Returns value of field.
-     * 
-     * @param field
-     *            the name of field.
-     * 
-     * @return the value of field.
-     */
-    public String get(String field) {
-        return content.get(field.toLowerCase());
-    }
-
-    /**
-     * Overloading of operator <tt>[]</tt> in Groovy.
+     *
+     * <p>
+     * Also overloads operator <tt>[]</tt> in Groovy.
      * 
      * @param field
      *            the name of field.
@@ -61,23 +56,14 @@ public final class Record {
      * @return the value of field.
      */
     public String getAt(String field) {
-        return get(field);
+        return content.get(toName(field));
     }
 
     /**
      * Sets the value of field.
-     * 
-     * @param field
-     *            the name of field.
-     * @param value
-     *            the new value for field.
-     */
-    public void put(String field, Object value) {
-        content.put(field.toLowerCase(), String.valueOf(value));
-    }
-
-    /**
-     * Overloading of operator <tt>[]</tt> in Groovy.
+     *
+     * <p>
+     * Also overloads operator <tt>[]</tt> in Groovy.
      * 
      * @param field
      *            the name of field.
@@ -85,7 +71,7 @@ public final class Record {
      *            the new value for field.
      */
     public void putAt(String field, Object value) {
-        put(field, value);
+        content.put(toName(field), String.valueOf(value));
     }
 
     /**
@@ -97,7 +83,7 @@ public final class Record {
     public void remove(String... fields) {
         Set<String> removedFields = new HashSet<>();
         for (String field : fields) {
-            removedFields.add(field.toLowerCase());
+            removedFields.add(toName(field));
         }
 
         Set<String> actualFields = content.keySet();
@@ -113,7 +99,7 @@ public final class Record {
     public void retain(String... fields) {
         Set<String> retainedFields = new HashSet<>();
         for (String field : fields) {
-            retainedFields.add(field.toLowerCase());
+            retainedFields.add(toName(field));
         }
 
         Set<String> actualFields = content.keySet();

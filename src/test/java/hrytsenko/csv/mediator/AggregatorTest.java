@@ -35,7 +35,7 @@ public class AggregatorTest {
             aggregator.mediate(record);
         }
 
-        Collection<Record> aggregated = aggregator.pull(NAME);
+        Collection<Record> aggregated = aggregator.getAt(NAME);
         assertArrayEquals(records.toArray(), aggregated.toArray());
     }
 

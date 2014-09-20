@@ -10,13 +10,16 @@ package hrytsenko.csv.core;
 public interface Holder {
 
     /**
-     * Pulls value from mediator.
+     * Gets value from mediator.
+     * 
+     * <p>
+     * Also overloads operator <tt>[]</tt> in Groovy.
      * 
      * @param name
-     *            the name associated with value..
+     *            the name associated with value.
      * 
      * @return the value or <code>null</code> if nothing found.
      */
-    <T> T pull(String name);
+    <T> T getAt(String name);
 
 }
