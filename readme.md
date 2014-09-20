@@ -40,9 +40,9 @@ This application provides DSL that simplifies writing of scripts.
 
 Processing:
 
-* `aggregate` - to collect records: `aggregate().into(…)`
+* `aggregate` - to collect records: `aggregate(…)`
 * `apply` - to apply custom mediator: `apply({…})`
-* `count` - to count records: `count().into(…)`
+* `count` - to count records: `count(…)`
 * `filter` - to filter records by condition: `filter({…}).over(mediators)`
 * `sequence` - to combine mediators: `sequence(mediators)`
 * `split` - to split record between mediators: `split(mediators)`

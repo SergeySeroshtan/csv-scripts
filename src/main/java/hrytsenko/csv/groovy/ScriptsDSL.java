@@ -18,19 +18,29 @@ public final class ScriptsDSL {
     /**
      * Creates {@link Aggregator} for records.
      * 
+     * @param name
+     *            the name for resulting value.
+     * 
      * @return the created mediator.
      */
-    public static Aggregator aggregate() {
-        return new Aggregator();
+    public static Aggregator aggregate(String name) {
+        Aggregator aggregator = new Aggregator();
+        aggregator.into(name);
+        return aggregator;
     }
 
     /**
      * Creates {@link Counter} for records.
      * 
+     * @param name
+     *            the name for resulting value.
+     * 
      * @return the created mediator.
      */
-    public static Counter count() {
-        return new Counter();
+    public static Counter count(String name) {
+        Counter counter = new Counter();
+        counter.into(name);
+        return counter;
     }
 
     /**
