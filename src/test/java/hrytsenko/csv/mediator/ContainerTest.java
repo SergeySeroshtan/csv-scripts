@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ContainerTest {
+
     private static final int DESCENDANTS_NUM = 3;
 
     private Mediator[] descendants;

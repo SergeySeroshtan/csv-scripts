@@ -1,9 +1,9 @@
 package hrytsenko.csv.core;
 
+import static hrytsenko.csv.core.Records.assertFields;
+import static hrytsenko.csv.core.Records.createRecord;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -11,76 +11,47 @@ import org.junit.Test;
 
 public class RecordTest {
 
-    private static final String TICKER_FIELD = "Ticker";
-    private static final String TICKER_VALUE = "ORCL";
-
-    private static final String NAME_FIELD = "Name";
-    private static final String NAME_VALUE = "Oracle";
-
-    private static final String EXCHANGE_FIELD = "Exchange";
-    private static final String EXCHANGE_VALUE = "NYSE";
-
     @Test
     public void testCreate() {
         Map<String, String> content = new LinkedHashMap<>();
-        content.put(TICKER_FIELD, TICKER_VALUE);
-        content.put(NAME_FIELD, NAME_VALUE);
+        content.put("ticker", "ORCL");
+        content.put("name", "Oracle");
 
         Record record = new Record(content);
-
-        assertFields(record, TICKER_FIELD, NAME_FIELD);
+        assertFields(record, "ticker", "name");
     }
 
     @Test
-    public void testModify() {
-        Record record = new Record();
+    public void testGet() {
+        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        assertEquals("NYSE", record.getAt("Exchange"));
+    }
 
-        record.putAt(TICKER_FIELD, TICKER_VALUE);
+    @Test
+    public void testPut() {
+        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        assertEquals("NYSE", record.getAt("exchange"));
 
-        assertEquals(TICKER_VALUE, record.getAt(TICKER_FIELD.toLowerCase()));
-        assertEquals(TICKER_VALUE, record.getAt(TICKER_FIELD.toUpperCase()));
-        assertFields(record, TICKER_FIELD);
-
-        record.putAt(NAME_FIELD, NAME_VALUE);
-
-        assertEquals(NAME_VALUE, record.getAt(NAME_FIELD));
-        assertFields(record, TICKER_FIELD, NAME_FIELD);
+        record.putAt("exchange", "NASDAQ");
+        assertEquals("NASDAQ", record.getAt("exchange"));
     }
 
     @Test
     public void testRemove() {
-        Record record = new Record();
-        record.putAt(TICKER_FIELD, TICKER_VALUE);
-        record.putAt(NAME_FIELD, NAME_VALUE);
-        record.putAt(EXCHANGE_FIELD, EXCHANGE_VALUE);
+        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        assertFields(record, "ticker", "name", "exchange");
 
-        assertFields(record, TICKER_FIELD, NAME_FIELD, EXCHANGE_FIELD);
-
-        record.remove(NAME_FIELD);
-
-        assertFields(record, TICKER_FIELD, EXCHANGE_FIELD);
+        record.remove("name");
+        assertFields(record, "ticker", "exchange");
     }
 
     @Test
     public void testRetain() {
-        Record record = new Record();
-        record.putAt(TICKER_FIELD, TICKER_VALUE);
-        record.putAt(NAME_FIELD, NAME_VALUE);
-        record.putAt(EXCHANGE_FIELD, EXCHANGE_VALUE);
+        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        assertFields(record, "ticker", "name", "exchange");
 
-        assertFields(record, TICKER_FIELD, NAME_FIELD, EXCHANGE_FIELD);
-
-        record.retain(TICKER_FIELD, EXCHANGE_FIELD);
-
-        assertFields(record, TICKER_FIELD, EXCHANGE_FIELD);
-    }
-
-    private static void assertFields(Record record, String... expecteds) {
-        Collection<String> actuals = record.fields();
-        assertEquals(expecteds.length, actuals.size());
-        for (String expected : expecteds) {
-            assertTrue(actuals.contains(expected.toLowerCase()));
-        }
+        record.retain("ticker", "exchange");
+        assertFields(record, "ticker", "exchange");
     }
 
 }

@@ -1,11 +1,12 @@
 package hrytsenko.csv.groovy;
 
+import static hrytsenko.csv.core.Records.createRecord;
+import static hrytsenko.csv.groovy.ScriptsUtils.combine;
 import static org.junit.Assert.assertEquals;
 import hrytsenko.csv.core.Record;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +16,15 @@ public class ScriptsUtilsTest {
 
     @Test
     public void testCombine() {
-        Collection<Record> appendedSet = ScriptsUtils.combine(
-                Collections.singletonList(createRecord("ticker", "GOOG", "name", "Google")),
-                Collections.singletonList(createRecord("ticker", "ORCL", "name", "Oracle")));
+        List<Record> setForNYSE = new ArrayList<>();
+        setForNYSE.add(createRecord("ticker", "GOOG", "name", "Google"));
 
-        assertEquals(2, appendedSet.size());
+        List<Record> setForNASDAQ = new ArrayList<>();
+        setForNASDAQ.add(createRecord("ticker", "GOOG", "name", "Google"));
+        setForNASDAQ.add(createRecord("ticker", "ORCL", "name", "Oracle"));
+
+        Collection<Record> result = combine(setForNYSE, setForNASDAQ);
+        assertEquals(3, result.size());
     }
 
     @Test
@@ -32,11 +37,10 @@ public class ScriptsUtilsTest {
         setWithExchange.add(createRecord("ticker", "GOOG", "exchange", "NASDAQ"));
         setWithExchange.add(createRecord("ticker", "ORCL", "exchange", "NYSE"));
 
-        Collection<Record> mergedSet = ScriptsUtils.merge("ticker", setWithName, setWithExchange);
+        Collection<Record> result = ScriptsUtils.merge("ticker", setWithName, setWithExchange);
+        assertEquals(2, result.size());
 
-        assertEquals(2, mergedSet.size());
-
-        Record[] records = mergedSet.toArray(new Record[mergedSet.size()]);
+        Record[] records = result.toArray(new Record[result.size()]);
 
         Record recordForGoogle = records[0];
         assertEquals(3, recordForGoogle.fields().size());
@@ -65,14 +69,6 @@ public class ScriptsUtilsTest {
 
         assertEquals(mappedSet.get("GOOG"), recordForGoogle);
         assertEquals(mappedSet.get("ORCL"), recordForOracle);
-    }
-
-    private static Record createRecord(String... content) {
-        Record record = new Record();
-        for (int i = 0; i < content.length; i += 2) {
-            record.putAt(content[i], content[i + 1]);
-        }
-        return record;
     }
 
 }
