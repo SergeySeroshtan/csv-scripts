@@ -44,7 +44,6 @@ public class FilterTest {
 
         filter = spy(new Filter());
         filter.when(condition).over(descendant);
-        ;
     }
 
     @Test
