@@ -8,7 +8,32 @@
     <artifactId>csv-scripts</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
+    <name>CSV Scripts</name>
+    <description>Scripting in Groovy for processing CSV files.</description>
+
+    <url>https://github.com/hrytsenko/csv-scripts</url>
     <inceptionYear>2014</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/hrytsenko/csv-scripts</url>
+        <connection>scm:git:https://github.com/hrytsenko/csv-scripts.git</connection>
+        <developerConnection>scm:git:https://github.com/hrytsenko/csv-scripts.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/hrytsenko/csv-scripts/issues</url>
+    </issueManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -136,5 +161,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
