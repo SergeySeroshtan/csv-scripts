@@ -15,7 +15,7 @@ def seq = sequence(
     filter({ it["message"] == "FOUND" }).over(count("found")),
     count("all"))
 
-processCsv(args[0], seq)
+process(args[0], seq)
 
 printf "%s / %s", seq["found"], seq["all"]
 ```
@@ -27,11 +27,11 @@ def seq = sequence(
     filter({ it["message"] == "FOUND" }).over(aggregate("found")),
     aggregate("all"))
 
-(1..<args.length).each { i -> processCsv(args[i], seq) }
+(1..<args.length).each { i -> process(args[i], seq) }
 
 def merged = merge("id", seq["all"], seq["found"])
 
-saveCsv(args[0], merged)
+save(args[0], merged)
 ```
 
 ## Language
@@ -51,9 +51,9 @@ Processing:
 
 Input/output:
 
-* `loadCsv` - to load records from CSV file: `def records = loadCsv(filename)`
-* `saveCsv` - to save records into CSV file: `saveCsv(filename, records)`
-* `processCsv` - to process records from CSV files: `processCsv(filename, mediators)`
+* `load` - to load records from CSV file: `def records = loadCsv(filename)`
+* `save` - to save records into CSV file: `saveCsv(filename, records)`
+* `process` - to process records from CSV files: `processCsv(filename, mediators)`
 
 Utilities:
 

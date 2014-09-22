@@ -60,7 +60,7 @@ public final class ScriptsIO {
      * @throws IOException
      *             if file could not be read.
      */
-    public static Collection<Record> loadCsv(String filename) throws IOException {
+    public static Collection<Record> load(String filename) throws IOException {
         try (InputStream stream = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ)) {
             CsvSchema schema = CsvSchema.emptySchema().withHeader().withEscapeChar(DEFAULT_ESCAPE_CHAR);
             CsvMapper mapper = new CsvMapper();
@@ -89,7 +89,7 @@ public final class ScriptsIO {
      * @throws IOException
      *             if file could not be written.
      */
-    public static void saveCsv(String filename, Collection<Record> records) throws IOException {
+    public static void save(String filename, Collection<Record> records) throws IOException {
         try (OutputStream stream = Files.newOutputStream(Paths.get(filename), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
             Set<String> columns = new LinkedHashSet<>();
@@ -121,8 +121,8 @@ public final class ScriptsIO {
      * @throws IOException
      *             if file could not be read.
      */
-    public static void processCsv(String filename, Mediator... mediators) throws IOException {
-        Collection<Record> records = loadCsv(filename);
+    public static void process(String filename, Mediator... mediators) throws IOException {
+        Collection<Record> records = load(filename);
         for (Record record : records) {
             for (Mediator mediator : mediators) {
                 mediator.mediate(record);
