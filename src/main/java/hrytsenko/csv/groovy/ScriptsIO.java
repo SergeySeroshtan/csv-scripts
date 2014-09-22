@@ -46,6 +46,9 @@ public final class ScriptsIO {
 
     public static final char DEFAULT_ESCAPE_CHAR = '"';
 
+    private ScriptsIO() {
+    }
+
     /**
      * Reads the set of records from CSV file.
      * 
@@ -125,9 +128,6 @@ public final class ScriptsIO {
                 mediator.mediate(record);
             }
         }
-    }
-
-    private ScriptsIO() {
     }
 
 }

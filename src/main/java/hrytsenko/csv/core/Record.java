@@ -33,10 +33,6 @@ import java.util.Set;
  */
 public final class Record {
 
-    private static String toName(String field) {
-        return field.toLowerCase();
-    }
-
     private Map<String, String> content;
 
     /**
@@ -137,6 +133,10 @@ public final class Record {
      */
     public Map<String, String> content() {
         return new LinkedHashMap<>(content);
+    }
+
+    private static String toName(String field) {
+        return field.toLowerCase();
     }
 
 }

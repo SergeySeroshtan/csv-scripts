@@ -30,6 +30,9 @@ import hrytsenko.csv.mediator.Splitter;
  */
 public final class ScriptsDSL {
 
+    private ScriptsDSL() {
+    }
+
     /**
      * Creates {@link Aggregator} for records.
      * 
@@ -112,9 +115,6 @@ public final class ScriptsDSL {
         Splitter splitter = new Splitter();
         splitter.over(mediators);
         return splitter;
-    }
-
-    private ScriptsDSL() {
     }
 
 }

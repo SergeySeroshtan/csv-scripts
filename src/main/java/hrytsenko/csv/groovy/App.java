@@ -41,6 +41,9 @@ public final class App {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
+    private App() {
+    }
+
     /**
      * Creates environment and executes script.
      * 
@@ -89,9 +92,6 @@ public final class App {
         String[] scriptArgs = Arrays.copyOfRange(args, 1, args.length);
         binding.setVariable("args", scriptArgs);
         return binding;
-    }
-
-    private App() {
     }
 
 }

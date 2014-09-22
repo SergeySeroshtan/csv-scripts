@@ -30,6 +30,9 @@ import java.util.Map;
  */
 public final class ScriptsUtils {
 
+    private ScriptsUtils() {
+    }
+
     /**
      * Combines records from one or more sets,
      * 
@@ -98,9 +101,6 @@ public final class ScriptsUtils {
             result.putAt(field, source.getAt(field));
         }
         return result;
-    }
-
-    private ScriptsUtils() {
     }
 
 }
