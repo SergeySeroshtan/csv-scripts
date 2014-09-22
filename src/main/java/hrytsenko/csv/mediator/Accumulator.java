@@ -19,9 +19,7 @@ import hrytsenko.csv.core.Holder;
 import hrytsenko.csv.core.Mediator;
 
 /**
- * Accumulator contains data bound to name.
- * 
- * Thus this data can be accessed only through this name.
+ * Accumulates results of processing of records.
  * 
  * @author hrytsenko.anton
  */

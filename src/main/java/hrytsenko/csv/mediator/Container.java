@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Container is intended to combining other mediators.
+ * Combines other mediators.
  * 
  * @author hrytsenko.anton
  */
@@ -40,10 +40,10 @@ public abstract class Container implements Mediator, Holder {
     }
 
     /**
-     * Updates the set of dependent mediators.
+     * Replaces mediators in container.
      * 
      * @param mediators
-     *            the ordered set of mediators.
+     *            the set of mediators to be added to container.
      * 
      * @return this mediator for chaining.
      */
@@ -72,7 +72,7 @@ public abstract class Container implements Mediator, Holder {
     }
 
     /**
-     * Returns the set of dependent mediators.
+     * Returns the set from mediators that are present in container.
      * 
      * @return the ordered set of mediators.
      */

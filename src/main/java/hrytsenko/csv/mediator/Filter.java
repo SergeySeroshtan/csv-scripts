@@ -20,7 +20,7 @@ import hrytsenko.csv.core.Mediator;
 import hrytsenko.csv.core.Record;
 
 /**
- * Applies other mediators to all records that meet specified condition.
+ * Applies mediators to all records that meet specified condition.
  * 
  * @author hrytsenko.anton
  */
@@ -36,7 +36,7 @@ public class Filter extends Container {
     }
 
     /**
-     * Sets the condition that will be checked to filter records.
+     * Sets the condition that will be used to filter records.
      * 
      * @param condition
      *            the condition to filter records.

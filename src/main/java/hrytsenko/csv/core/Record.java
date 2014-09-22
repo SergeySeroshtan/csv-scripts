@@ -43,14 +43,14 @@ public final class Record {
     }
 
     /**
-     * Creates the record with specified content.
+     * Creates the record with given content.
      * 
-     * @param originalContent
+     * @param initialContent
      *            the initial content of record.
      */
-    public Record(Map<String, String> originalContent) {
+    public Record(Map<String, String> initialContent) {
         content = new LinkedHashMap<String, String>();
-        for (Map.Entry<String, String> entry : originalContent.entrySet()) {
+        for (Map.Entry<String, String> entry : initialContent.entrySet()) {
             putAt(entry.getKey(), entry.getValue());
         }
     }
@@ -64,14 +64,14 @@ public final class Record {
      * @param field
      *            the name of field.
      * 
-     * @return the value of field.
+     * @return the value of field of <code>null</code> if such field not found.
      */
     public String getAt(String field) {
         return content.get(toName(field));
     }
 
     /**
-     * Sets the value of field.
+     * Sets the value of field. The value is the string representation of given object.
      *
      * <p>
      * Also overloads operator <tt>[]</tt> in Groovy.
@@ -86,7 +86,7 @@ public final class Record {
     }
 
     /**
-     * Removes all specified fields.
+     * Removes all given fields.
      * 
      * @param fields
      *            the set of fields to be removed.
@@ -102,7 +102,7 @@ public final class Record {
     }
 
     /**
-     * Retains only specified fields.
+     * Retains only given fields.
      * 
      * @param fields
      *            the set of fields to be retained.
@@ -127,9 +127,9 @@ public final class Record {
     }
 
     /**
-     * Returns the content.
+     * Returns the copy of content.
      * 
-     * @return the content.
+     * @return the content of record.
      */
     public Map<String, String> content() {
         return new LinkedHashMap<>(content);

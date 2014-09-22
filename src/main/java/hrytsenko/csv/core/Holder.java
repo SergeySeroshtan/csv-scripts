@@ -16,22 +16,20 @@
 package hrytsenko.csv.core;
 
 /**
- * Some mediators may collect data during processing of records.
- * 
- * This interface allow to access such data.
+ * If mediator contains one or more values it should implement this interface.
  * 
  * @author hrytsenko.anton
  */
 public interface Holder {
 
     /**
-     * Gets value from mediator.
+     * Gets value by its name.
      * 
      * <p>
-     * Also overloads operator <tt>[]</tt> in Groovy.
+     * In Groovy you can use overloaded operator <tt>[]</tt>.
      * 
      * @param name
-     *            the name associated with value.
+     *            the name of required value.
      * 
      * @return the value or <code>null</code> if nothing found.
      */

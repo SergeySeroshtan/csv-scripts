@@ -18,7 +18,7 @@ package hrytsenko.csv.mediator;
 import hrytsenko.csv.core.Record;
 
 /**
- * Counts number of records.
+ * Counts number of processed records.
  * 
  * @author hrytsenko.anton
  */

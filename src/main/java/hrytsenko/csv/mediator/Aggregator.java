@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Aggregates all incoming records.
+ * Aggregates all processed records.
  * 
  * @author hrytsenko.anton
  */
