@@ -46,6 +46,8 @@ Processing:
 * `filter` - to filter records by condition: `filter({…}).over(mediators)`
 * `sequence` - to combine mediators: `sequence(mediators)`
 * `split` - to split record between mediators: `split(mediators)`
+* `check` - to apply custom condition: `check({…})`
+* `not` - to get the logical negation of condition: `not(condition)`
 
 Input/output:
 

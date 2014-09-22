@@ -17,6 +17,7 @@ package hrytsenko.csv.groovy;
 
 import hrytsenko.csv.core.Condition;
 import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 import hrytsenko.csv.mediator.Aggregator;
 import hrytsenko.csv.mediator.Counter;
 import hrytsenko.csv.mediator.Filter;
@@ -62,22 +63,6 @@ public final class ScriptsDSL {
     }
 
     /**
-     * Allows to define the custom mediator in more natural form using Groovy.
-     * 
-     * <p>
-     * I.e., you can write: <tt>def custom = apply({ rec -> ... })</tt>; instead of:
-     * <tt>def custom = {rec -> ... } as Mediator</tt>.
-     * 
-     * @param mediator
-     *            the custom mediator.
-     * 
-     * @return the custom mediator.
-     */
-    public static Mediator apply(Mediator mediator) {
-        return mediator;
-    }
-
-    /**
      * Creates {@link Filter} with specified condition.
      * 
      * @param condition
@@ -115,6 +100,55 @@ public final class ScriptsDSL {
         Splitter splitter = new Splitter();
         splitter.over(mediators);
         return splitter;
+    }
+
+    /**
+     * Allows to define custom mediator using closure in Groovy.
+     * 
+     * <p>
+     * I.e., you can write: <tt>def custom = apply({…})</tt>; instead of: <tt>def custom = {…} as Mediator</tt>.
+     * 
+     * @param mediator
+     *            the custom mediator.
+     * 
+     * @return the custom mediator.
+     */
+    public static Mediator apply(Mediator mediator) {
+        return mediator;
+    }
+
+    /**
+     * Allows to define custom condition using closure in Groovy.
+     * 
+     * <p>
+     * I.e., you can write: <tt>def custom = check({…})</tt>; instead of: <tt>def custom = {…} as Condition</tt>.
+     * 
+     * @param mediator
+     *            the custom condition.
+     * 
+     * @return the custom condition.
+     */
+    public static Condition check(Condition condition) {
+        return condition;
+    }
+
+    /**
+     * Returns the logical negation of given condition.
+     * 
+     * @param condition
+     *            the original condition.
+     * 
+     * @return the condition that represents the logical negation of given condition.
+     */
+    public static Condition not(final Condition condition) {
+        return new Condition() {
+
+            @Override
+            public boolean check(Record record) {
+                return !condition.check(record);
+            }
+
+        };
     }
 
 }
