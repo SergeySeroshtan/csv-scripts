@@ -34,7 +34,8 @@ public class Splitter extends Container {
     @Override
     public void mediate(Record record) {
         for (Mediator descendant : descendants()) {
-            Record copy = new Record(record.content());
+            Record copy = new Record();
+            copy.putAll(record.content());
             descendant.mediate(copy);
         }
     }

@@ -27,16 +27,6 @@ import org.junit.Test;
 public class RecordTest {
 
     @Test
-    public void testCreate() {
-        Map<String, String> content = new LinkedHashMap<>();
-        content.put("ticker", "ORCL");
-        content.put("name", "Oracle");
-
-        Record record = new Record(content);
-        assertFields(record, "ticker", "name");
-    }
-
-    @Test
     public void testGet() {
         Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
         assertEquals("NYSE", record.getAt("Exchange"));
@@ -49,6 +39,17 @@ public class RecordTest {
 
         record.putAt("exchange", "NASDAQ");
         assertEquals("NASDAQ", record.getAt("exchange"));
+    }
+
+    @Test
+    public void testPutAll() {
+        Map<String, String> content = new LinkedHashMap<>();
+        content.put("ticker", "ORCL");
+        content.put("name", "Oracle");
+
+        Record record = new Record();
+        record.putAll(content);
+        assertFields(record, "ticker", "name");
     }
 
     @Test

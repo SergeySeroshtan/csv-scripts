@@ -16,7 +16,6 @@
 package hrytsenko.csv.core;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -39,20 +38,7 @@ public final class Record {
      * Creates an empty record.
      */
     public Record() {
-        this(new HashMap<String, String>());
-    }
-
-    /**
-     * Creates the record with given content.
-     * 
-     * @param initialContent
-     *            the initial content of record.
-     */
-    public Record(Map<String, String> initialContent) {
-        content = new LinkedHashMap<String, String>();
-        for (Map.Entry<String, String> entry : initialContent.entrySet()) {
-            putAt(entry.getKey(), entry.getValue());
-        }
+        content = new LinkedHashMap<>();
     }
 
     /**
@@ -83,6 +69,18 @@ public final class Record {
      */
     public void putAt(String field, Object value) {
         content.put(toName(field), String.valueOf(value));
+    }
+
+    /**
+     * Copies all of the fields and values from given {@link Map}.
+     * 
+     * @param content
+     *            the fields and values to be copied.
+     */
+    public void putAll(Map<String, ?> content) {
+        for (Map.Entry<String, ?> entry : content.entrySet()) {
+            putAt(entry.getKey(), entry.getValue());
+        }
     }
 
     /**

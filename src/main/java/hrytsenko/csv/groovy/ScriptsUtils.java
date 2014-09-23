@@ -91,14 +91,12 @@ public final class ScriptsUtils {
     }
 
     private static Record merge(Record source, Record target) {
-        if (target == null) {
-            return new Record(source.content());
+        Record result = new Record();
+        if (target != null) {
+            result.putAll(target.content());
         }
-
-        Record result = new Record(target.content());
-
-        for (String field : source.fields()) {
-            result.putAt(field, source.getAt(field));
+        if (source != null) {
+            result.putAll(source.content());
         }
         return result;
     }

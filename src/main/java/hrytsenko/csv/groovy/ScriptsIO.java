@@ -70,7 +70,9 @@ public final class ScriptsIO {
             List<Record> records = new ArrayList<>();
             while (rows.hasNext()) {
                 Map<String, String> row = rows.next();
-                records.add(new Record(row));
+                Record record = new Record();
+                record.putAll(row);
+                records.add(record);
             }
             return records;
         }
