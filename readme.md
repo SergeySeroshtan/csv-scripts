@@ -17,7 +17,7 @@ def seq = sequence(
 
 process(args[0], seq)
 
-printf "%s / %s", seq["found"], seq["all"]
+println "${seq["found"]} / ${seq["all"]}"
 ```
 
 The following script combines data from several CSV files:
