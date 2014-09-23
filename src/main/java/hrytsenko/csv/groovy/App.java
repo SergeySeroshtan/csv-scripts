@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class App {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("APP");
 
     private App() {
     }
@@ -81,6 +81,7 @@ public final class App {
         importCustomizer.addStaticStars(Conditions.class.getCanonicalName());
         importCustomizer.addStaticStars(Mediators.class.getCanonicalName());
         importCustomizer.addStaticStars(Records.class.getCanonicalName());
+        importCustomizer.addStaticStars(Logs.class.getCanonicalName());
 
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.addCompilationCustomizers(importCustomizer);

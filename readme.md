@@ -32,6 +32,10 @@ For work with conditional logic:
 * `check` - to apply custom condition: `check({…})`
 * `not` - to get the logical negation of condition: `not(condition)`
 
+For work with log:
+
+* `info` - add message to log: `info "message"`
+
 Also class `Record` provides some methods to work with fields:
 
 * `remove` - to remove certain fields: `apply({ it.remove(…) })`
@@ -48,7 +52,7 @@ def seq = sequence(
 
 process(args[0], seq)
 
-println "${seq["updated"]} / ${seq["total"]}"
+info "${seq["updated"]} / ${seq["total"]}."
 ```
 
 Merge records from several CSV files where different records were updated:
