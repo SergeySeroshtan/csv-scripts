@@ -66,7 +66,10 @@ public final class ScriptsUtils {
         for (Collection<Record> set : sets) {
             for (Record record : set) {
                 String id = record.getAt(idField);
-                result.put(id, merge(record, result.get(id)));
+                if (!result.containsKey(id)) {
+                    result.put(id, new Record());
+                }
+                result.get(id).putAll(record.content());
             }
         }
         return result.values();
@@ -86,17 +89,6 @@ public final class ScriptsUtils {
         Map<String, Record> result = new LinkedHashMap<>();
         for (Record record : set) {
             result.put(record.getAt(idField), record);
-        }
-        return result;
-    }
-
-    private static Record merge(Record source, Record target) {
-        Record result = new Record();
-        if (target != null) {
-            result.putAll(target.content());
-        }
-        if (source != null) {
-            result.putAll(source.content());
         }
         return result;
     }
