@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>CSV Scripts</name>
-    <description>Scripting in Groovy for processing CSV files.</description>
+    <description>Application for processing CSV files via Groovy scripts.</description>
 
     <url>https://github.com/hrytsenko/csv-scripts</url>
     <inceptionYear>2014</inceptionYear>
