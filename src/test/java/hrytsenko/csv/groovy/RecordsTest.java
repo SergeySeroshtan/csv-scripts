@@ -16,7 +16,9 @@
 package hrytsenko.csv.groovy;
 
 import static hrytsenko.csv.core.Records.createRecord;
-import static hrytsenko.csv.groovy.ScriptsUtils.combine;
+import static hrytsenko.csv.groovy.Records.combine;
+import static hrytsenko.csv.groovy.Records.map;
+import static hrytsenko.csv.groovy.Records.merge;
 import static org.junit.Assert.assertEquals;
 import hrytsenko.csv.core.Record;
 
@@ -27,7 +29,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class ScriptsUtilsTest {
+public class RecordsTest {
 
     @Test
     public void testCombine() {
@@ -52,7 +54,7 @@ public class ScriptsUtilsTest {
         setWithExchange.add(createRecord("ticker", "GOOG", "exchange", "NASDAQ"));
         setWithExchange.add(createRecord("ticker", "ORCL", "exchange", "NYSE"));
 
-        Collection<Record> result = ScriptsUtils.merge("ticker", setWithName, setWithExchange);
+        Collection<Record> result = merge("ticker", setWithName, setWithExchange);
         assertEquals(2, result.size());
 
         Record[] records = result.toArray(new Record[result.size()]);
@@ -78,7 +80,7 @@ public class ScriptsUtilsTest {
         Record recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle");
         set.add(recordForOracle);
 
-        Map<String, Record> mappedSet = ScriptsUtils.map("ticker", set);
+        Map<String, Record> mappedSet = map("ticker", set);
 
         assertEquals(2, mappedSet.size());
 

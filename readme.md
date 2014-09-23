@@ -37,29 +37,30 @@ save(args[0], merged)
 ## Language
 
 This application provides DSL that simplifies writing of scripts.
+Technically it's set of static methods.
 
-Processing:
+Records:
 
-* `aggregate` - to collect records: `aggregate(…)`
-* `apply` - to apply custom mediator: `apply({…})`
-* `count` - to count records: `count(…)`
-* `filter` - to filter records by condition: `filter({…}).over(mediators)`
-* `sequence` - to combine mediators: `sequence(mediators)`
-* `split` - to split record between mediators: `split(mediators)`
-* `check` - to apply custom condition: `check({…})`
-* `not` - to get the logical negation of condition: `not(condition)`
-
-Input/output:
-
-* `load` - to load records from CSV file: `def records = loadCsv(filename)`
-* `save` - to save records into CSV file: `saveCsv(filename, records)`
-* `process` - to process records from CSV files: `processCsv(filename, mediators)`
-
-Utilities:
-
+* `load` - to load set of records from CSV file: `def records = load(filename)`
+* `save` - to save set of records into CSV file: `save(filename, records)`
+* `process` - to process set of records from CSV files: `process(filename, mediators)`
 * `combine` - to combine several sets of records in given order: `combine(…)`
 * `merge` - to merge several sets of records: `merge("id", …)`
 * `map` - to map records by value of certain field: `map("id", …)`
+
+Mediators:
+
+* `apply` - to apply custom mediator: `apply({…})`
+* `aggregate` - to collect records: `aggregate(name)`
+* `count` - to count records: `count(name)`
+* `filter` - to filter by condition: `filter(condition).over(mediators)`
+* `sequence` - to combine mediators: `sequence(mediators)`
+* `split` - to split copies of record between mediators: `split(mediators)`
+
+Conditions:
+
+* `check` - to apply custom condition: `check({…})`
+* `not` - to get the logical negation of condition: `not(condition)`
 
 Record:
 

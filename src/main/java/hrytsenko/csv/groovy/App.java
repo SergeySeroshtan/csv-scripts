@@ -78,9 +78,9 @@ public final class App {
         importCustomizer.addStarImports("hrytsenko.csv.core");
         importCustomizer.addStarImports("hrytsenko.csv.mediator");
 
-        importCustomizer.addStaticStars(ScriptsDSL.class.getCanonicalName());
-        importCustomizer.addStaticStars(ScriptsIO.class.getCanonicalName());
-        importCustomizer.addStaticStars(ScriptsUtils.class.getCanonicalName());
+        importCustomizer.addStaticStars(Conditions.class.getCanonicalName());
+        importCustomizer.addStaticStars(Mediators.class.getCanonicalName());
+        importCustomizer.addStaticStars(Records.class.getCanonicalName());
 
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.addCompilationCustomizers(importCustomizer);

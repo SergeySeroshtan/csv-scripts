@@ -27,6 +27,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +39,13 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
- * Contains methods for input/output.
+ * The methods to be used in scripts to work with records.
  * 
  * @author hrytsenko.anton
  */
-public final class ScriptsIO {
+public final class Records {
 
-    public static final char DEFAULT_ESCAPE_CHAR = '"';
-
-    private ScriptsIO() {
+    private Records() {
     }
 
     /**
@@ -62,7 +61,7 @@ public final class ScriptsIO {
      */
     public static Collection<Record> load(String filename) throws IOException {
         try (InputStream stream = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ)) {
-            CsvSchema schema = CsvSchema.emptySchema().withHeader().withEscapeChar(DEFAULT_ESCAPE_CHAR);
+            CsvSchema schema = CsvSchema.emptySchema().withHeader();
             CsvMapper mapper = new CsvMapper();
             ObjectReader reader = mapper.reader(Map.class).with(schema);
 
@@ -102,7 +101,7 @@ public final class ScriptsIO {
                 rows.add(row);
             }
 
-            CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true).setEscapeChar(DEFAULT_ESCAPE_CHAR);
+            CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true);
             for (String column : columns) {
                 schema.addColumn(column);
             }
@@ -130,6 +129,66 @@ public final class ScriptsIO {
                 mediator.mediate(record);
             }
         }
+    }
+
+    /**
+     * Combines records from one or more sets,
+     * 
+     * @param sets
+     *            the sets of records to be combined.
+     * 
+     * @return the resulting set of records.
+     */
+    @SafeVarargs
+    public static Collection<Record> combine(Collection<Record>... sets) {
+        List<Record> result = new ArrayList<>();
+        for (Collection<Record> set : sets) {
+            result.addAll(set);
+        }
+        return result;
+    }
+
+    /**
+     * Merges records from one or more sets.
+     * 
+     * @param idField
+     *            the name of field, which value can be used as unique identifier.
+     * @param sets
+     *            the sets of records to be merged.
+     * 
+     * @return the resulting set of records.
+     */
+    @SafeVarargs
+    public static Collection<Record> merge(String idField, Collection<Record>... sets) {
+        Map<String, Record> result = new LinkedHashMap<>();
+        for (Collection<Record> set : sets) {
+            for (Record record : set) {
+                String id = record.getAt(idField);
+                if (!result.containsKey(id)) {
+                    result.put(id, new Record());
+                }
+                result.get(id).putAll(record.content());
+            }
+        }
+        return result.values();
+    }
+
+    /**
+     * Creates map of records, using value of specified field as key.
+     * 
+     * @param idField
+     *            the name of field, which value can be used as unique identifier.
+     * @param set
+     *            the set of records for mapping.
+     * 
+     * @return the mapped set of records.
+     */
+    public static Map<String, Record> map(String idField, Collection<Record> set) {
+        Map<String, Record> result = new LinkedHashMap<>();
+        for (Record record : set) {
+            result.put(record.getAt(idField), record);
+        }
+        return result;
     }
 
 }
