@@ -9,7 +9,7 @@ Use of these scripts provides flexibility and reusability.
 This application provides set of constructs that simplifies writing of scripts.
 Technically it's embedded classes and static methods that are imported into the Groovy shell.
 
-For work with record sets:
+For processing records:
 
 * `load` - to load  record set from CSV file: `def records = load(filename)`
 * `save` - to save record set into CSV file: `save(filename, records)`
@@ -17,8 +17,10 @@ For work with record sets:
 * `combine` - to combine several record sets: `combine(…)`
 * `merge` - to merge several record sets: `merge("id", …)`
 * `map` - to map records by value of field: `map("id", …)`
+* `remove` - to remove certain fields from record: `apply({ it.remove(…) })`
+* `retain` - to retain certain fields in record: `apply({ it.retain(…) })`
 
-For building processing flows:
+For building flows:
 
 * `apply` - to apply custom logic: `apply({…})`
 * `aggregate` - to collect records: `aggregate(name)`
@@ -26,20 +28,12 @@ For building processing flows:
 * `filter` - to filter by condition: `filter(condition).over(mediators)`
 * `sequence` - to combine mediators: `sequence(mediators)`
 * `split` - to split copies of record between mediators: `split(mediators)`
-
-For work with conditional logic:
-
 * `check` - to apply custom condition: `check({…})`
 * `not` - to get the logical negation of condition: `not(condition)`
 
-For work with log:
+For logging:
 
 * `info` - add message to log: `info "message"`
-
-Also class `Record` provides some methods to work with fields:
-
-* `remove` - to remove certain fields: `apply({ it.remove(…) })`
-* `retain` - to retain only certain fields: `apply({ it.retain(…) })`
 
 ## Examples
 

@@ -15,7 +15,7 @@
  */
 package hrytsenko.csv.groovy;
 
-import static hrytsenko.csv.groovy.Conditions.not;
+import static hrytsenko.csv.groovy.Flows.not;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import hrytsenko.csv.core.Condition;
@@ -23,7 +23,7 @@ import hrytsenko.csv.core.Record;
 
 import org.junit.Test;
 
-public class ConditionsTest {
+public class FlowsTest {
 
     @Test
     public void testNot() {

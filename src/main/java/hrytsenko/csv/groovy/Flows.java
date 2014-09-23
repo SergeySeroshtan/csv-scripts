@@ -17,6 +17,7 @@ package hrytsenko.csv.groovy;
 
 import hrytsenko.csv.core.Condition;
 import hrytsenko.csv.core.Mediator;
+import hrytsenko.csv.core.Record;
 import hrytsenko.csv.mediator.Aggregator;
 import hrytsenko.csv.mediator.Counter;
 import hrytsenko.csv.mediator.Filter;
@@ -28,9 +29,9 @@ import hrytsenko.csv.mediator.Splitter;
  * 
  * @author hrytsenko.anton
  */
-public final class Mediators {
+public final class Flows {
 
-    private Mediators() {
+    private Flows() {
     }
 
     /**
@@ -114,6 +115,40 @@ public final class Mediators {
         Splitter splitter = new Splitter();
         splitter.over(mediators);
         return splitter;
+    }
+
+    /**
+     * Allows to define custom condition using closure in Groovy.
+     * 
+     * <p>
+     * I.e., you can write: <tt>def custom = check({…})</tt>; instead of: <tt>def custom = {…} as Condition</tt>.
+     * 
+     * @param mediator
+     *            the custom condition.
+     * 
+     * @return the custom condition.
+     */
+    public static Condition check(Condition condition) {
+        return condition;
+    }
+
+    /**
+     * Returns the logical negation of given condition.
+     * 
+     * @param condition
+     *            the original condition.
+     * 
+     * @return the condition that represents the logical negation of given condition.
+     */
+    public static Condition not(final Condition condition) {
+        return new Condition() {
+
+            @Override
+            public boolean check(Record record) {
+                return !condition.check(record);
+            }
+
+        };
     }
 
 }
