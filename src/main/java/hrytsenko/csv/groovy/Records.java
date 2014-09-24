@@ -112,18 +112,14 @@ public final class Records {
     }
 
     /**
-     * Applies the set of mediators to records in CSV file.
+     * Applies the given mediators to records.
      * 
-     * @param filename
-     *            the name of file to be processed.
+     * @param records
+     *            the records to be processed.
      * @param mediators
-     *            the ordered set of mediators.
-     * 
-     * @throws IOException
-     *             if file could not be read.
+     *            the mediators to be applied.
      */
-    public static void process(String filename, Mediator... mediators) throws IOException {
-        Collection<Record> records = load(filename);
+    public static void process(Collection<Record> records, Mediator... mediators) {
         for (Record record : records) {
             for (Mediator mediator : mediators) {
                 mediator.mediate(record);

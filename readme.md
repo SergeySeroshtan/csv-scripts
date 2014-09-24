@@ -13,7 +13,7 @@ For processing records:
 
 * `load` - to load  record set from CSV file: `def records = load(filename)`
 * `save` - to save record set into CSV file: `save(filename, records)`
-* `process` - to process record set from CSV files: `process(filename, mediators)`
+* `process` - to process record set: `process(records, mediators)`
 * `combine` - to combine several record sets: `combine(…)`
 * `merge` - to merge several record sets: `merge("id", …)`
 * `map` - to map records by value of field: `map("id", …)`
@@ -44,7 +44,7 @@ def seq = sequence(
     filter({ it["status"] == "UPDATED" }).over(count("updated")),
     count("total"))
 
-process(args[0], seq)
+process(load(args[0]), seq)
 
 info "${seq["updated"]} / ${seq["total"]}."
 ```
@@ -56,7 +56,7 @@ def seq = sequence(
     filter({ it["status"] == "UPDATED" }).over(aggregate("updated")),
     aggregate("all"))
 
-(1..<args.length).each { i -> process(args[i], seq) }
+(1..<args.length).each { i -> process(load(args[i]), seq) }
 
 def merged = merge("id", seq["all"], seq["updated"])
 save(args[0], merged)
@@ -70,7 +70,7 @@ def old = map("id", load(args[0]))
 def seq = sequence(
     filter({ old.contains(it["id"]) }).over(aggregate("diff")))
 
-process(args[1], seq)
+process(load(args[1]), seq)
 save(args[2], seq["diff"])
 ```
 
