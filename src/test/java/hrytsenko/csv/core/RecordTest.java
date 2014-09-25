@@ -62,6 +62,15 @@ public class RecordTest {
     }
 
     @Test
+    public void testRename() {
+        Record record = createRecord("ticker", "ORCL", "name", "Oracle");
+        assertFields(record, "ticker", "name");
+
+        record.rename("ticker", "symbol");
+        assertFields(record, "symbol", "name");
+    }
+
+    @Test
     public void testRetain() {
         Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
         assertFields(record, "ticker", "name", "exchange");

@@ -104,6 +104,29 @@ public final class Record {
     }
 
     /**
+     * Changes the name of field. The order of fields will not be changed.
+     * 
+     * @param field
+     *            the name of field.
+     * @param name
+     *            the new name for field.
+     */
+    public void rename(String field, String name) {
+        String oldField = normalize(field);
+        int pos = fields.indexOf(oldField);
+        if (pos == -1) {
+            return;
+        }
+
+        String newField = normalize(name);
+        fields.set(pos, newField);
+
+        String value = values.get(oldField);
+        values.remove(oldField);
+        values.put(newField, value);
+    }
+
+    /**
      * Retains only given fields.
      * 
      * @param retainedFields

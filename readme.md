@@ -17,8 +17,9 @@ For processing records:
 * `combine` - to combine several record sets: `combine(…)`
 * `merge` - to merge several record sets: `merge("id", …)`
 * `map` - to map records by value of field: `map("id", …)`
-* `remove` - to remove certain fields from record: `apply({ it.remove(…) })`
-* `retain` - to retain certain fields in record: `apply({ it.retain(…) })`
+* `remove` - to remove fields from record: `apply({ it.remove(fields) })`
+* `rename` - to rename field: `apply({ it.rename(field, name) })`
+* `retain` - to retain fields in record: `apply({ it.retain(fields) })`
 
 For building flows:
 
