@@ -18,7 +18,6 @@ package hrytsenko.csv.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -164,7 +163,7 @@ public final class Record {
     }
 
     private static Set<String> normalize(String... fields) {
-        Set<String> normalizedFields = new HashSet<>();
+        Set<String> normalizedFields = new LinkedHashSet<>();
         for (String field : fields) {
             normalizedFields.add(normalize(field));
         }
