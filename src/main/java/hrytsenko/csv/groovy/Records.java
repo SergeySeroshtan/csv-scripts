@@ -96,9 +96,9 @@ public final class Records {
             Set<String> columns = new LinkedHashSet<>();
             List<Map<String, String>> rows = new ArrayList<>();
             for (Record record : records) {
-                Map<String, String> row = record.content();
-                columns.addAll(row.keySet());
-                rows.add(row);
+                Map<String, String> values = record.values();
+                columns.addAll(values.keySet());
+                rows.add(values);
             }
 
             CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true);
@@ -163,7 +163,7 @@ public final class Records {
                 if (!result.containsKey(id)) {
                     result.put(id, new Record());
                 }
-                result.get(id).putAll(record.content());
+                result.get(id).putAll(record.values());
             }
         }
         return result.values();

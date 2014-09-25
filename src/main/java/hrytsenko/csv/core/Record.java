@@ -15,10 +15,13 @@
  */
 package hrytsenko.csv.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,13 +35,15 @@ import java.util.Set;
  */
 public final class Record {
 
-    private Map<String, String> content;
+    private List<String> fields;
+    private Map<String, String> values;
 
     /**
      * Creates an empty record.
      */
     public Record() {
-        content = new LinkedHashMap<>();
+        fields = new ArrayList<>();
+        values = new HashMap<>();
     }
 
     /**
@@ -53,7 +58,7 @@ public final class Record {
      * @return the value of field of <code>null</code> if such field not found.
      */
     public String getAt(String field) {
-        return content.get(toName(field));
+        return values.get(normalize(field));
     }
 
     /**
@@ -68,51 +73,45 @@ public final class Record {
      *            the new value for field.
      */
     public void putAt(String field, Object value) {
-        content.put(toName(field), String.valueOf(value));
+        String updatedField = normalize(field);
+        if (!fields.contains(updatedField)) {
+            fields.add(updatedField);
+        }
+        values.put(updatedField, String.valueOf(value));
     }
 
     /**
      * Copies all of the fields and values from given {@link Map}.
      * 
-     * @param content
+     * @param values
      *            the fields and values to be copied.
      */
-    public void putAll(Map<String, ?> content) {
-        for (Map.Entry<String, ?> entry : content.entrySet()) {
-            putAt(entry.getKey(), entry.getValue());
+    public void putAll(Map<String, ?> values) {
+        for (Map.Entry<String, ?> value : values.entrySet()) {
+            putAt(value.getKey(), value.getValue());
         }
     }
 
     /**
      * Removes all given fields.
      * 
-     * @param fields
+     * @param removedFields
      *            the set of fields to be removed.
      */
-    public void remove(String... fields) {
-        Set<String> removedFields = new HashSet<>();
-        for (String field : fields) {
-            removedFields.add(toName(field));
-        }
-
-        Set<String> actualFields = content.keySet();
-        actualFields.removeAll(removedFields);
+    public void remove(String... removedFields) {
+        fields.removeAll(normalize(removedFields));
+        values.keySet().retainAll(fields);
     }
 
     /**
      * Retains only given fields.
      * 
-     * @param fields
+     * @param retainedFields
      *            the set of fields to be retained.
      */
-    public void retain(String... fields) {
-        Set<String> retainedFields = new HashSet<>();
-        for (String field : fields) {
-            retainedFields.add(toName(field));
-        }
-
-        Set<String> actualFields = content.keySet();
-        actualFields.retainAll(retainedFields);
+    public void retain(String... retainedFields) {
+        fields.retainAll(normalize(retainedFields));
+        values.keySet().retainAll(fields);
     }
 
     /**
@@ -121,20 +120,32 @@ public final class Record {
      * @return the names of fields.
      */
     public Collection<String> fields() {
-        return new LinkedHashSet<>(content.keySet());
+        return new LinkedHashSet<>(fields);
     }
 
     /**
-     * Returns the copy of content.
+     * Returns the values of all fields.
      * 
-     * @return the content of record.
+     * @return the values of all fields.
      */
-    public Map<String, String> content() {
-        return new LinkedHashMap<>(content);
+    public Map<String, String> values() {
+        Map<String, String> orderedValues = new LinkedHashMap<>();
+        for (String field : fields) {
+            orderedValues.put(field, values.get(field));
+        }
+        return orderedValues;
     }
 
-    private static String toName(String field) {
+    private static String normalize(String field) {
         return field.toLowerCase();
+    }
+
+    private static Set<String> normalize(String... fields) {
+        Set<String> normalizedFields = new HashSet<>();
+        for (String field : fields) {
+            normalizedFields.add(normalize(field));
+        }
+        return normalizedFields;
     }
 
 }
