@@ -94,6 +94,24 @@ def seq = sequence(
 process(load(args[1]), seq)
 save(args[2], seq["diff"])
 ```
+Get temperature using REST service from OpenWeatherMap:
+
+```groovy
+import groovyx.net.http.RESTClient
+
+def client = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
+
+def seq = sequence(
+    apply({
+        def resp = client.get(query : [q : "${it['city']},${it['country']}", units : "metric"])
+        it["temp"] = resp.data.main.temp
+    }),
+    aggregate("results")
+)
+
+process(load(args[0]), seq)
+save(args[1], seq["results"])
+```
 
 # License
 

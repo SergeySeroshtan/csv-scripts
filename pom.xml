@@ -39,6 +39,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <groovy.version>2.3.6</groovy.version>
+        <groovy.http.version>0.7.1</groovy.http.version>
 
         <jackson.csv.version>2.4.0</jackson.csv.version>
 
@@ -53,6 +54,11 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy.modules.http-builder</groupId>
+            <artifactId>http-builder</artifactId>
+            <version>${groovy.http.version}</version>
         </dependency>
 
         <!-- CSV -->
