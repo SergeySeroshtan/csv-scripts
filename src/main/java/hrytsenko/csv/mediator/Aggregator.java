@@ -44,7 +44,7 @@ public class Aggregator extends Accumulator {
 
     @Override
     protected Collection<Record> value() {
-        return records;
+        return new ArrayList<>(records);
     }
 
 }
