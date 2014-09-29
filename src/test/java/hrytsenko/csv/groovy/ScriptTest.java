@@ -27,9 +27,8 @@ import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GroovyTest {
+public class ScriptTest {
 
-    private static final Charset UTF_8 = Charset.forName("UTF-8");
     private GroovyShell shell;
 
     @Before
@@ -38,13 +37,13 @@ public class GroovyTest {
     }
 
     @Test
-    public void testRecord() throws Exception {
-        doTest("RecordTests.groovy");
+    public void testFilterByExchange() throws Exception {
+        doTest("FilterByExchange.groovy");
     }
 
     private void doTest(String filename) throws URISyntaxException, IOException {
         URL script = Thread.currentThread().getContextClassLoader().getResource(filename);
-        shell.evaluate(Files.newBufferedReader(Paths.get(script.toURI()), UTF_8));
+        shell.evaluate(Files.newBufferedReader(Paths.get(script.toURI()), Charset.forName("UTF-8")));
     }
 
 }
