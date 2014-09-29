@@ -16,6 +16,8 @@
 package hrytsenko.csv.groovy;
 
 import static java.lang.System.exit;
+import static java.util.Arrays.copyOfRange;
+import static java.util.Collections.singletonMap;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
@@ -25,7 +27,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
@@ -60,7 +61,7 @@ public final class App {
         }
 
         String scriptFilename = args[0];
-        GroovyShell shell = new GroovyShell(bindings(args), configuration());
+        GroovyShell shell = createShell(copyOfRange(args, 1, args.length));
         try {
             InputStream scriptStream = Files.newInputStream(Paths.get(scriptFilename), StandardOpenOption.READ);
             shell.evaluate(new InputStreamReader(scriptStream, Charset.forName("UTF-8")));
@@ -70,6 +71,19 @@ public final class App {
         }
 
         exit(0);
+    }
+
+    /**
+     * Creates and configures shell for executing scripts.
+     * 
+     * @param args
+     *            the command-line arguments to be passed into script.
+     * 
+     * @return the created script.
+     */
+    public static GroovyShell createShell(String[] args) {
+        Binding binding = new Binding(singletonMap("args", args));
+        return new GroovyShell(binding, configuration());
     }
 
     private static CompilerConfiguration configuration() {
@@ -85,13 +99,6 @@ public final class App {
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.addCompilationCustomizers(importCustomizer);
         return configuration;
-    }
-
-    private static Binding bindings(String[] args) {
-        Binding binding = new Binding();
-        String[] scriptArgs = Arrays.copyOfRange(args, 1, args.length);
-        binding.setVariable("args", scriptArgs);
-        return binding;
     }
 
 }
