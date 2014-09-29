@@ -86,6 +86,10 @@ public final class Record {
      *            the fields and values to be copied.
      */
     public void putAll(Map<String, ?> values) {
+        if (values == null) {
+            return;
+        }
+
         for (Map.Entry<String, ?> value : values.entrySet()) {
             putAt(value.getKey(), value.getValue());
         }

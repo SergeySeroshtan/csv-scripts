@@ -187,4 +187,18 @@ public final class Records {
         return result;
     }
 
+    /**
+     * Creates record with given values.
+     * 
+     * @param values
+     *            the values to be added into record.
+     * 
+     * @return the created record.
+     */
+    public static Record record(Map<String, ?> values) {
+        Record record = new Record();
+        record.putAll(values);
+        return record;
+    }
+
 }
