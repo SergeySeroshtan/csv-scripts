@@ -158,6 +158,17 @@ public final class Record {
         return orderedValues;
     }
 
+    /**
+     * Creates copy of this record.
+     * 
+     * @return the copy of record.
+     */
+    public Record copy() {
+        Record copy = new Record();
+        copy.putAll(values());
+        return copy;
+    }
+
     private static String normalize(String field) {
         return field.toLowerCase();
     }

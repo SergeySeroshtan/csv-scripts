@@ -18,6 +18,7 @@ package hrytsenko.csv.core;
 import static hrytsenko.csv.core.Records.assertFields;
 import static hrytsenko.csv.core.Records.createRecord;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -77,6 +78,15 @@ public class RecordTest {
 
         record.retain("ticker", "exchange");
         assertFields(record, "ticker", "exchange");
+    }
+
+    @Test
+    public void testCopy() {
+        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        Record copy = record.copy();
+
+        assertNotSame(record, copy);
+        assertEquals(record.values(), copy.values());
     }
 
 }
