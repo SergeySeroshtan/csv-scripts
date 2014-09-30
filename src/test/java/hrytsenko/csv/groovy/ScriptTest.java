@@ -41,6 +41,11 @@ public class ScriptTest {
         doTest("FilterByExchange.groovy");
     }
 
+    @Test
+    public void testUpdateUsingREST() throws Exception {
+        doTest("UpdateUsingREST.groovy");
+    }
+
     private void doTest(String filename) throws URISyntaxException, IOException {
         URL script = Thread.currentThread().getContextClassLoader().getResource(filename);
         shell.evaluate(Files.newBufferedReader(Paths.get(script.toURI()), Charset.forName("UTF-8")));
