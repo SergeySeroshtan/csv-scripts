@@ -1,3 +1,5 @@
+// Description of API: http://openweathermap.org/current.
+
 import groovyx.net.http.*
 
 def records = [
