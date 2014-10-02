@@ -170,6 +170,24 @@ public final class Records {
     }
 
     /**
+     * Gets distinct values of field.
+     * 
+     * @param field
+     *            the name of field.
+     * @param set
+     *            the distinct values of field.
+     * 
+     * @return the distinct values of field.
+     */
+    public static Collection<String> distinct(String field, Collection<Record> set) {
+        Set<String> values = new LinkedHashSet<>();
+        for (Record record : set) {
+            values.add(record.getAt(field));
+        }
+        return values;
+    }
+
+    /**
      * Creates map of records, using value of specified field as key.
      * 
      * @param idField

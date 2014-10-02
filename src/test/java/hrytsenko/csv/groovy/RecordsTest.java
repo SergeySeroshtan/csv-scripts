@@ -19,6 +19,7 @@ import static hrytsenko.csv.core.Records.createRecord;
 import static hrytsenko.csv.groovy.Records.combine;
 import static hrytsenko.csv.groovy.Records.map;
 import static hrytsenko.csv.groovy.Records.merge;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import hrytsenko.csv.core.Record;
 
@@ -70,6 +71,17 @@ public class RecordsTest {
         assertEquals("ORCL", recordForOracle.getAt("ticker"));
         assertEquals("Oracle", recordForOracle.getAt("name"));
         assertEquals("NYSE", recordForOracle.getAt("exchange"));
+    }
+
+    @Test
+    public void testDistinct() {
+        List<Record> records = new ArrayList<>();
+        records.add(createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ"));
+        records.add(createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE"));
+        records.add(createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ"));
+
+        Collection<String> exchanges = Records.distinct("exchange", records);
+        assertArrayEquals(exchanges.toArray(), new String[] { "NASDAQ", "NYSE" });
     }
 
     @Test

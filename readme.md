@@ -16,6 +16,7 @@ For work with records:
 * `process` - to process records.
 * `combine` - to combine records.
 * `merge` - to merge records by value of field.
+* `distinct` - to get distinct values of field.
 * `map` - to map records by value of field.
 * `remove` - to remove fields from record.
 * `rename` - to rename field in record.
