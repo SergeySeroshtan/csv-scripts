@@ -17,6 +17,7 @@ package hrytsenko.csv.mediator;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableCollection;
 import hrytsenko.csv.core.Holder;
 import hrytsenko.csv.core.Mediator;
 
@@ -77,7 +78,7 @@ public abstract class Container implements Mediator, Holder {
      * @return the ordered set of mediators.
      */
     protected Collection<Mediator> descendants() {
-        return descendants;
+        return unmodifiableCollection(descendants);
     }
 
 }
