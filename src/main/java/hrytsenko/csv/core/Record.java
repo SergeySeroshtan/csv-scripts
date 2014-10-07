@@ -15,6 +15,8 @@
  */
 package hrytsenko.csv.core;
 
+import groovy.lang.GroovyObjectSupport;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,7 +34,7 @@ import java.util.Set;
  * 
  * @author hrytsenko.anton
  */
-public final class Record {
+public final class Record extends GroovyObjectSupport {
 
     private List<String> fields;
     private Map<String, String> values;
@@ -43,6 +45,16 @@ public final class Record {
     public Record() {
         fields = new ArrayList<>();
         values = new HashMap<>();
+    }
+
+    @Override
+    public Object getProperty(String propertyName) {
+        return getAt(propertyName);
+    }
+
+    @Override
+    public void setProperty(String propertyName, Object newValue) {
+        putAt(propertyName, newValue);
     }
 
     /**

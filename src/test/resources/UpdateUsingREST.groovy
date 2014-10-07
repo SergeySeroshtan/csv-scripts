@@ -12,7 +12,7 @@ def client = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
 def seq = sequence(
     apply({
         def resp = client.get(query : [q : "${it['city']},${it['country']}", units : "metric"])
-        it["temp"] = resp.data.main.temp
+        it.temp = resp.data.main.temp
     }),
     aggregate("results")
 )
@@ -20,5 +20,5 @@ def seq = sequence(
 process(records, seq)
 
 seq["results"].each {
-    assert it["temp"].isNumber()
+    assert it.temp.isNumber()
 }

@@ -5,8 +5,8 @@ def records = [
 ]
 
 def seq = sequence(
-    filter({ it["exchange"] == "NYSE" }).over(count("NYSE")),
-    filter({ it["exchange"] == "NASDAQ" }).over(count("NASDAQ"))
+    filter({ it.exchange == "NYSE" }).over(count("NYSE")),
+    filter({ it.exchange == "NASDAQ" }).over(count("NASDAQ"))
 )
 
 process(records, seq)
