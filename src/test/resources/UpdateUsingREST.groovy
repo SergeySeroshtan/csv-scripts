@@ -9,16 +9,13 @@ def records = [
 
 def client = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
 
-def seq = sequence(
+process(records,
     apply({
         def resp = client.get(query : [q : "${it['city']},${it['country']}", units : "metric"])
         it.temp = resp.data.main.temp
-    }),
-    aggregate("results")
+    })
 )
 
-process(records, seq)
-
-seq["results"].each {
+records.each {
     assert it.temp.isNumber()
 }

@@ -35,8 +35,6 @@ The following operations are useful to create mediators:
 Operation   | Usage
 ------------|------------------------------------------
 `apply`     | To apply custom logic to record.
-`aggregate` | To aggregate all processed records.
-`count`     | To count the number of records.
 `filter`    | To filter records by condition.
 `sequence`  | To combine other mediators into sequence.
 `split`     | To split record between other mediators.
@@ -57,48 +55,52 @@ They can be accessed through variable `args`, as `args[0]` and `args[1]` respect
 
 # Examples
 
-Merge records from several CSV files where different records were updated:
+To merge data from several CSV files:
 
 ```groovy
-def seq = sequence(
-    filter({ it["status"] == "UPDATED" }).over(aggregate("updated")),
-    aggregate("all"))
+def all = []
 
-(1..<args.length).each { process(load(args[it]), seq) }
+(1..<args.length).each {
+    def filename = args[it]
+    def current = load(filename)
+    info "Merge ${current.size()} records from ${filename}."
+    all = merge("id", all, current)
+}
 
-def merged = merge("id", seq["all"], seq["updated"])
-save(args[0], merged)
+info "Save ${all.size()} records into ${args[0]}."
+save(args[0], all)
 ```
 
-Find records that were added in new version of CSV file:
+To find records that were added in new version of CSV file:
 
 ```groovy
-def ids = map("id", load(args[0]))
+def old = distinct("id", load(args[0]))
 
-def seq = sequence(
-    filter({ !ids.contains(it["id"]) }).over(aggregate("diff")))
-
-process(load(args[1]), seq)
-save(args[2], seq["diff"])
-```
-
-Get temperature using REST service from OpenWeatherMap:
-
-```groovy
-import groovyx.net.http.RESTClient
-
-def client = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
-
-def seq = sequence(
-    apply({
-        def resp = client.get(query : [q : "${it['city']},${it['country']}", units : "metric"])
-        it["temp"] = resp.data.main.temp
-    }),
-    aggregate("results")
+def diff = []
+process(load(args[1]),
+    filter({ !old.contains(it.id) }).over(apply({ diff.add(it) }))
 )
 
-process(load(args[0]), seq)
-save(args[1], seq["results"])
+info "Found ${diff.size()} new records."
+save(args[2], diff)
+```
+
+Get temperature from OpenWeatherMap using REST API:
+
+```groovy
+import groovyx.net.http.*
+
+def records = args[0]
+
+def client = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
+process(records,
+    apply({
+        def resp = client.get(query : [q : "${it['city']},${it['country']}", units : "metric"])
+        it.temp = resp.data.main.temp
+    })
+)
+
+save(args[1], records)
 ```
 
 # Build

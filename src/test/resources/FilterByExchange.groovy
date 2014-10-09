@@ -4,12 +4,14 @@ def records = [
     record(ticker : "MSFT", name : "Microsoft", exchange : "NASDAQ")
 ]
 
+def NYSE = 0
+def NASDAQ = 0
+
 def seq = sequence(
-    filter({ it.exchange == "NYSE" }).over(count("NYSE")),
-    filter({ it.exchange == "NASDAQ" }).over(count("NASDAQ"))
+    filter({ it.exchange == "NYSE" }).over(apply({ ++NYSE })),
+    filter({ it.exchange == "NASDAQ" }).over(apply({ ++NASDAQ }))
 )
 
 process(records, seq)
 
-assert seq["NYSE"] == 1
-assert seq["NASDAQ"] == 2
+assert NYSE == 1 && NASDAQ == 2

@@ -18,7 +18,6 @@ package hrytsenko.csv.mediator;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableCollection;
-import hrytsenko.csv.core.Holder;
 import hrytsenko.csv.core.Mediator;
 
 import java.util.Collection;
@@ -29,7 +28,7 @@ import java.util.List;
  * 
  * @author hrytsenko.anton
  */
-public abstract class Container implements Mediator, Holder {
+public abstract class Container implements Mediator {
 
     private List<Mediator> descendants;
 
@@ -51,25 +50,6 @@ public abstract class Container implements Mediator, Holder {
     public Mediator over(Mediator... mediators) {
         descendants = asList(mediators);
         return this;
-    }
-
-    @Override
-    public Object getAt(String name) {
-        if (name == null) {
-            return null;
-        }
-
-        Collection<Mediator> mediators = descendants();
-        for (Mediator mediator : mediators) {
-            if (mediator instanceof Holder) {
-                Object value = ((Holder) mediator).getAt(name);
-                if (value != null) {
-                    return value;
-                }
-            }
-        }
-
-        return null;
     }
 
     /**

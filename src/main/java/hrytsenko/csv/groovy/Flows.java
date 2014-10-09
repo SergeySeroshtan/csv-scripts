@@ -18,8 +18,6 @@ package hrytsenko.csv.groovy;
 import hrytsenko.csv.core.Condition;
 import hrytsenko.csv.core.Mediator;
 import hrytsenko.csv.core.Record;
-import hrytsenko.csv.mediator.Aggregator;
-import hrytsenko.csv.mediator.Counter;
 import hrytsenko.csv.mediator.Filter;
 import hrytsenko.csv.mediator.Sequence;
 import hrytsenko.csv.mediator.Splitter;
@@ -47,34 +45,6 @@ public final class Flows {
      */
     public static Mediator apply(Mediator mediator) {
         return mediator;
-    }
-
-    /**
-     * Creates {@link Aggregator} for records.
-     * 
-     * @param name
-     *            the name for resulting value.
-     * 
-     * @return the created mediator.
-     */
-    public static Aggregator aggregate(String name) {
-        Aggregator aggregator = new Aggregator();
-        aggregator.into(name);
-        return aggregator;
-    }
-
-    /**
-     * Creates {@link Counter} for records.
-     * 
-     * @param name
-     *            the name for resulting value.
-     * 
-     * @return the created mediator.
-     */
-    public static Counter count(String name) {
-        Counter counter = new Counter();
-        counter.into(name);
-        return counter;
     }
 
     /**
