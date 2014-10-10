@@ -37,13 +37,18 @@ public class ScriptTest {
     }
 
     @Test
-    public void testFilterByExchange() throws Exception {
-        doTest("FilterByExchange.groovy");
+    public void testRecord() throws Exception {
+        doTest("Record.groovy");
     }
 
     @Test
-    public void testUpdateUsingREST() throws Exception {
-        doTest("UpdateUsingREST.groovy");
+    public void testFilter() throws Exception {
+        doTest("Filter.groovy");
+    }
+
+    @Test
+    public void testREST() throws Exception {
+        doTest("REST.groovy");
     }
 
     private void doTest(String filename) throws URISyntaxException, IOException {

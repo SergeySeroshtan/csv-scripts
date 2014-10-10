@@ -11,6 +11,14 @@ This application uses Groovy as scripting language.
 We consider that CSV file contains ordered set of records.
 And each record contains ordered set of fields and their values.
 
+To access fields of record you can use overloaded operator [] or properties:
+
+```groovy
+def record = record( ticker : "ORCL", name : "Oracle" )
+
+assert record.ticker == record["ticker"]
+```
+
 The following operations are useful to work with records:
 
 Operation   | Usage
