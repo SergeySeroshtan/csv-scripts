@@ -93,24 +93,6 @@ info "Found ${diff.size()} new records."
 save(args[2], diff)
 ```
 
-Get temperature from OpenWeatherMap using REST API:
-
-```groovy
-import groovyx.net.http.*
-
-def records = args[0]
-
-def client = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
-process(records,
-    apply({
-        def resp = client.get(query : [q : "${it['city']},${it['country']}", units : "metric"])
-        it.temp = resp.data.main.temp
-    })
-)
-
-save(args[1], records)
-```
-
 # Build
 
 To build executable file using Maven:
