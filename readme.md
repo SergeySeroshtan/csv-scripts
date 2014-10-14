@@ -14,9 +14,27 @@ And each record contains ordered set of fields and their values.
 To access fields of record you can use overloaded operator [] or properties:
 
 ```groovy
-def record = record( ticker : "ORCL", name : "Oracle" )
+def record = record(ticker : "ORCL", name : "Oracle")
 
 assert record.ticker == record["ticker"]
+```
+
+You can use any object to update value of field.
+As a result, field will contain the string representation of this object.
+
+```groovy
+def record = record(ticker : "ORCL", name : "Oracle")
+
+assert record.exchange == null
+
+record.exchange = "NYSE"
+assert record.exchange == "NYSE"
+
+record.exchange = null
+assert record.exchange == "null"
+
+record.remove("exchange")
+assert record.exchange == null
 ```
 
 The following operations are useful to work with records:
