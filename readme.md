@@ -43,11 +43,12 @@ Operation   | Usage
 ------------|---------------------------------
 `load`      | To load records from CSV file.
 `save`      | To save records into CSV file.
-`process`   | To apply mediators to records.
 `distinct`  | To get distinct values of field.
-`combine`   | To combine records.
-`merge`     | To merge records by key.
-`map`       | To map records by key.
+`combine`   | To combine records from different sets into one.
+`merge`     | To merge records from different sets using the value of field as unique key.
+`map`       | To get mapping of records using the value of field as unique key.
+`group`     | To split records into groups using the value of field as key.
+`process`   | To apply specified mediators to all records in set.
 `remove`    | To remove fields from record.
 `rename`    | To rename field in record.
 `retain`    | To retain fields in record.

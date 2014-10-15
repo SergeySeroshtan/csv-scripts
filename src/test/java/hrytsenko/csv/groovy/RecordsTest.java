@@ -75,12 +75,12 @@ public class RecordsTest {
 
     @Test
     public void testDistinct() {
-        List<Record> records = new ArrayList<>();
-        records.add(createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ"));
-        records.add(createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE"));
-        records.add(createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ"));
+        List<Record> set = new ArrayList<>();
+        set.add(createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ"));
+        set.add(createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE"));
+        set.add(createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ"));
 
-        Collection<String> exchanges = Records.distinct("exchange", records);
+        Collection<String> exchanges = Records.distinct("exchange", set);
         assertArrayEquals(exchanges.toArray(), new String[] { "NASDAQ", "NYSE" });
     }
 
@@ -98,6 +98,24 @@ public class RecordsTest {
 
         assertEquals(mappedSet.get("GOOG"), recordForGoogle);
         assertEquals(mappedSet.get("ORCL"), recordForOracle);
+    }
+
+    @Test
+    public void testGroup() {
+        List<Record> set = new ArrayList<>();
+        Record recordForGoogle = createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
+        set.add(recordForGoogle);
+        Record recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        set.add(recordForOracle);
+        Record recordForMicrosoft = createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
+        set.add(recordForMicrosoft);
+
+        Map<String, List<Record>> groupedSet = Records.group("exchange", set);
+
+        assertEquals(2, groupedSet.size());
+
+        assertArrayEquals(new Object[] { recordForGoogle, recordForMicrosoft }, groupedSet.get("NASDAQ").toArray());
+        assertArrayEquals(new Object[] { recordForOracle }, groupedSet.get("NYSE").toArray());
     }
 
 }

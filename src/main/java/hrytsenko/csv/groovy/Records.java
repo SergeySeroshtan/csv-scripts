@@ -188,19 +188,48 @@ public final class Records {
     }
 
     /**
-     * Creates map of records, using value of specified field as key.
+     * Get mapping of records with the specified unique key.
      * 
-     * @param idField
-     *            the name of field, which value can be used as unique identifier.
+     * <p>
+     * If several records has the same value of key, then the last of them will be added to mapping.
+     * 
+     * @param field
+     *            the field to be used as unique key.
      * @param set
      *            the set of records for mapping.
      * 
-     * @return the mapped set of records.
+     * @return the mapped records.
      */
-    public static Map<String, Record> map(String idField, Collection<Record> set) {
+    public static Map<String, Record> map(String field, Collection<Record> set) {
         Map<String, Record> result = new LinkedHashMap<>();
         for (Record record : set) {
-            result.put(record.getAt(idField), record);
+            result.put(record.getAt(field), record);
+        }
+        return result;
+    }
+
+    /**
+     * Splits records into groups with the specified key.
+     * 
+     * @param field
+     *            the field to be used as key.
+     * @param set
+     *            the set of records for grouping.
+     * 
+     * @return the grouped records.
+     */
+    public static Map<String, List<Record>> group(String field, Collection<Record> set) {
+        Map<String, List<Record>> result = new LinkedHashMap<>();
+        for (Record record : set) {
+            String key = record.getAt(field);
+
+            List<Record> group = result.get(key);
+            if (group == null) {
+                group = new ArrayList<>();
+                result.put(key, group);
+            }
+
+            group.add(record);
         }
         return result;
     }
