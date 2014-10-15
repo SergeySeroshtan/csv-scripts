@@ -58,12 +58,8 @@ For example, this script merges data from several CSV files:
 
 ```groovy
 def all = []
-
 (1..<args.length).each {
-    def filename = args[it]
-    def current = load(filename)
-    info "Merge ${current.size()} records from ${filename}."
-    all = merge("id", all, current)
+    all = merge("id", all, load(args[it]))
 }
 
 info "Save ${all.size()} records into ${args[0]}."
