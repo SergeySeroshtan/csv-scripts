@@ -37,7 +37,7 @@ record.remove("exchange")
 assert record.exchange == null
 ```
 
-The following operations are useful to work with records:
+The following operations are useful for work with sets of records:
 
 Operation   | Usage
 ------------|---------------------------------
@@ -53,35 +53,7 @@ Operation   | Usage
 `retain`    | To retain fields in record.
 `info`      | To add message into the log.
 
-To process records we use mediators, that implement some logic.
-Mediators can be combined to implement more complex logic.
-
-The following operations are useful to create mediators:
-
-Operation   | Usage
-------------|------------------------------------------
-`apply`     | To apply custom logic to record.
-`filter`    | To filter records by condition.
-`sequence`  | To combine other mediators into sequence.
-`split`     | To split record between other mediators.
-`check`     | To check condition.
-`not`       | To negate condition.
-
-# Execution
-
-To execute script in command-line mode:
-
-```
-java -jar csv-scripts.jar script.groovy input.csv output.csv
-```
-
-In this case `script.groovy` is the name of script to be executed.
-Arguments `input.csv` and `output.csv` will be passed into this script.
-They can be accessed through variable `args`, as `args[0]` and `args[1]` respectively.
-
-# Examples
-
-To merge data from several CSV files:
+For example, this script merges data from several CSV files:
 
 ```groovy
 def all = []
@@ -97,7 +69,22 @@ info "Save ${all.size()} records into ${args[0]}."
 save(args[0], all)
 ```
 
-To find records that were added in new version of CSV file:
+To process separate records we use mediators.
+Each mediator contains logic to be applied to records.
+Mediators can be combined to create more complex logic.
+
+The following operations are useful to create mediators:
+
+Operation   | Usage
+------------|------------------------------------------
+`apply`     | To apply custom logic to record.
+`filter`    | To filter records by condition.
+`sequence`  | To combine other mediators into sequence.
+`split`     | To split record between other mediators.
+`check`     | To check condition.
+`not`       | To negate condition.
+
+For example, this script finds records that were added in new version of CSV file:
 
 ```groovy
 def old = distinct("id", load(args[0]))
@@ -110,6 +97,18 @@ process(load(args[1]),
 info "Found ${diff.size()} new records."
 save(args[2], diff)
 ```
+
+# Execution
+
+To execute script in command-line mode:
+
+```
+java -jar csv-scripts.jar script.groovy input.csv output.csv
+```
+
+In this case `script.groovy` is the name of script to be executed.
+Arguments `input.csv` and `output.csv` will be passed into this script.
+They can be accessed through variable `args`, as `args[0]` and `args[1]` respectively.
 
 # Build
 
