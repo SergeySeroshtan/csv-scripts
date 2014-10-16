@@ -109,19 +109,11 @@ They can be accessed through variable `args`, as `args[0]` and `args[1]` respect
 
 # Build
 
-To build executable file using Maven:
+[![Build Status](https://travis-ci.org/hrytsenko/csv-scripts.svg?branch=master)](https://travis-ci.org/hrytsenko/csv-scripts)
 
-```
-mvn clean package
-```
+To build executable file from command-line, execute: `mvn clean package`.
 
-The following plugins are used to check quality:
+Also, the following plugins are configured to run during `verify`:
 
 * [FindBugs Maven Plugin](http://mojo.codehaus.org/findbugs-maven-plugin/) - for static analysis.
 * [License Maven Plugin](http://mojo.codehaus.org/license-maven-plugin/) - to check license headers.
-
-These plugins are configured to run during phase `verify`.
-
-# License
-
-[Apache Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
