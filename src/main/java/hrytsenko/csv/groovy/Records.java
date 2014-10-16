@@ -147,23 +147,27 @@ public final class Records {
     /**
      * Merges records from one or more sets.
      * 
-     * @param idField
-     *            the name of field, which value can be used as unique identifier.
+     * @param field
+     *            the field to be used as unique key.
      * @param sets
      *            the sets of records to be merged.
      * 
      * @return the resulting set of records.
      */
     @SafeVarargs
-    public static Collection<Record> merge(String idField, Collection<Record>... sets) {
+    public static Collection<Record> merge(String field, Collection<Record>... sets) {
         Map<String, Record> result = new LinkedHashMap<>();
         for (Collection<Record> set : sets) {
             for (Record record : set) {
-                String id = record.getAt(idField);
-                if (!result.containsKey(id)) {
-                    result.put(id, new Record());
+                String key = record.getAt(field);
+
+                Record mergedRecord = result.get(key);
+                if (mergedRecord == null) {
+                    mergedRecord = new Record();
+                    result.put(key, mergedRecord);
                 }
-                result.get(id).putAll(record.values());
+
+                mergedRecord.putAll(record.values());
             }
         }
         return result.values();
