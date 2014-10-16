@@ -115,12 +115,12 @@ To build executable file using Maven:
 mvn clean package
 ```
 
-The following plugins are used to improve quality:
+The following plugins are used to check quality:
 
-* [FindBugs Maven Plugin](http://mojo.codehaus.org/findbugs-maven-plugin/) - for static analysis of source code.
-* [License Maven Plugin](http://mojo.codehaus.org/license-maven-plugin/) - to validate that source files contain license.
+* [FindBugs Maven Plugin](http://mojo.codehaus.org/findbugs-maven-plugin/) - for static analysis.
+* [License Maven Plugin](http://mojo.codehaus.org/license-maven-plugin/) - to check license headers.
 
-Currently these plugins are mandatory to run during phase `package`.
+These plugins are configured to run during phase `verify`.
 
 # License
 
