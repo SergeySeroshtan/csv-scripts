@@ -19,6 +19,7 @@ import static hrytsenko.csv.core.Records.createRecord;
 import static hrytsenko.csv.groovy.Records.combine;
 import static hrytsenko.csv.groovy.Records.map;
 import static hrytsenko.csv.groovy.Records.merge;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import hrytsenko.csv.core.Record;
@@ -28,18 +29,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class RecordsTest {
 
+    private Record recordForGoogle;
+    private Record recordForOracle;
+    private Record recordForMicrosoft;
+
+    @Before
+    public void init() {
+        recordForGoogle = createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
+        recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        recordForMicrosoft = createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
+    }
+
     @Test
     public void testCombine() {
-        List<Record> setForNYSE = new ArrayList<>();
-        setForNYSE.add(createRecord("ticker", "GOOG", "name", "Google"));
-
-        List<Record> setForNASDAQ = new ArrayList<>();
-        setForNASDAQ.add(createRecord("ticker", "GOOG", "name", "Google"));
-        setForNASDAQ.add(createRecord("ticker", "ORCL", "name", "Oracle"));
+        List<Record> setForNYSE = asList(recordForGoogle);
+        List<Record> setForNASDAQ = asList(recordForOracle, recordForMicrosoft);
 
         Collection<Record> result = combine(setForNYSE, setForNASDAQ);
         assertEquals(3, result.size());
@@ -47,13 +56,11 @@ public class RecordsTest {
 
     @Test
     public void testMerge() {
-        List<Record> setWithName = new ArrayList<>();
-        setWithName.add(createRecord("ticker", "GOOG", "name", "Google"));
-        setWithName.add(createRecord("ticker", "ORCL", "name", "Oracle"));
+        List<Record> setWithName = asList(recordForGoogle, recordForOracle);
 
         List<Record> setWithExchange = new ArrayList<>();
-        setWithExchange.add(createRecord("ticker", "GOOG", "exchange", "NASDAQ"));
-        setWithExchange.add(createRecord("ticker", "ORCL", "exchange", "NYSE"));
+        setWithExchange.add(createRecord("ticker", "GOOG", "city", "Mountain View"));
+        setWithExchange.add(createRecord("ticker", "ORCL", "city", "Redwood City"));
 
         Collection<Record> result = merge("ticker", setWithName, setWithExchange);
         assertEquals(2, result.size());
@@ -61,24 +68,17 @@ public class RecordsTest {
         Record[] records = result.toArray(new Record[result.size()]);
 
         Record recordForGoogle = records[0];
-        assertEquals(3, recordForGoogle.fields().size());
-        assertEquals("GOOG", recordForGoogle.getAt("ticker"));
-        assertEquals("Google", recordForGoogle.getAt("name"));
-        assertEquals("NASDAQ", recordForGoogle.getAt("exchange"));
+        assertEquals(4, recordForGoogle.fields().size());
+        assertEquals("Mountain View", recordForGoogle.getAt("city"));
 
         Record recordForOracle = records[1];
-        assertEquals(3, recordForOracle.fields().size());
-        assertEquals("ORCL", recordForOracle.getAt("ticker"));
-        assertEquals("Oracle", recordForOracle.getAt("name"));
-        assertEquals("NYSE", recordForOracle.getAt("exchange"));
+        assertEquals(4, recordForOracle.fields().size());
+        assertEquals("Redwood City", recordForOracle.getAt("city"));
     }
 
     @Test
     public void testDistinct() {
-        List<Record> set = new ArrayList<>();
-        set.add(createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ"));
-        set.add(createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE"));
-        set.add(createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ"));
+        List<Record> set = asList(recordForGoogle, recordForOracle, recordForMicrosoft);
 
         Collection<String> exchanges = Records.distinct("exchange", set);
         assertArrayEquals(exchanges.toArray(), new String[] { "NASDAQ", "NYSE" });
@@ -86,11 +86,7 @@ public class RecordsTest {
 
     @Test
     public void testMap() {
-        List<Record> set = new ArrayList<>();
-        Record recordForGoogle = createRecord("ticker", "GOOG", "name", "Google");
-        set.add(recordForGoogle);
-        Record recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle");
-        set.add(recordForOracle);
+        List<Record> set = asList(recordForGoogle, recordForOracle);
 
         Map<String, Record> mappedSet = map("ticker", set);
 
@@ -102,13 +98,7 @@ public class RecordsTest {
 
     @Test
     public void testGroup() {
-        List<Record> set = new ArrayList<>();
-        Record recordForGoogle = createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
-        set.add(recordForGoogle);
-        Record recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-        set.add(recordForOracle);
-        Record recordForMicrosoft = createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
-        set.add(recordForMicrosoft);
+        List<Record> set = asList(recordForGoogle, recordForOracle, recordForMicrosoft);
 
         Map<String, List<Record>> groupedSet = Records.group("exchange", set);
 
