@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/hrytsenko/csv-scripts.svg?branch=master)](https://travis-ci.org/hrytsenko/csv-scripts)
+[![Coverage Status](https://coveralls.io/repos/hrytsenko/csv-scripts/badge.png?branch=master)](https://coveralls.io/r/hrytsenko/csv-scripts?branch=master)
+
 # Summary
 
 This application is intended to help automate processing of CSV files via scripts.
@@ -106,14 +109,3 @@ java -jar csv-scripts.jar script.groovy input.csv output.csv
 In this case `script.groovy` is the name of script to be executed.
 Arguments `input.csv` and `output.csv` will be passed into this script.
 They can be accessed through variable `args`, as `args[0]` and `args[1]` respectively.
-
-# Build
-
-[![Build Status](https://travis-ci.org/hrytsenko/csv-scripts.svg?branch=master)](https://travis-ci.org/hrytsenko/csv-scripts)
-
-To build executable file from command-line, execute: `mvn clean package`.
-
-Also, the following plugins are configured to run during `verify`:
-
-* [FindBugs Maven Plugin](http://mojo.codehaus.org/findbugs-maven-plugin/) - for static analysis.
-* [License Maven Plugin](http://mojo.codehaus.org/license-maven-plugin/) - to check license headers.
