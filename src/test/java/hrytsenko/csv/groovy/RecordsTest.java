@@ -21,13 +21,18 @@ package hrytsenko.csv.groovy;
 
 import static hrytsenko.csv.core.Records.createRecord;
 import static hrytsenko.csv.groovy.Records.combine;
+import static hrytsenko.csv.groovy.Records.load;
 import static hrytsenko.csv.groovy.Records.map;
 import static hrytsenko.csv.groovy.Records.merge;
+import static hrytsenko.csv.groovy.Records.save;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import hrytsenko.csv.core.Record;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,14 +44,39 @@ import org.junit.Test;
 public class RecordsTest {
 
     private Record recordForGoogle;
-    private Record recordForOracle;
     private Record recordForMicrosoft;
+    private Record recordForOracle;
+
+    private String recordsCSV;
 
     @Before
     public void init() {
         recordForGoogle = createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
-        recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
         recordForMicrosoft = createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
+        recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+
+        recordsCSV = "ticker,name,exchange\nGOOG,Google,NASDAQ\nMSFT,Microsoft,NASDAQ\nORCL,Oracle,NYSE\n";
+    }
+
+    @Test
+    public void testLoad() throws IOException {
+        List<Record> records = load(new ByteArrayInputStream(recordsCSV.getBytes("UTF-8")));
+
+        assertEquals(3, records.size());
+        assertEquals("GOOG", records.get(0).getAt("ticker"));
+        assertEquals("MSFT", records.get(1).getAt("ticker"));
+        assertEquals("ORCL", records.get(2).getAt("ticker"));
+    }
+
+    @Test
+    public void testSave() throws IOException {
+        Collection<Record> records = asList(recordForGoogle, recordForMicrosoft, recordForOracle);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        save(stream, records);
+
+        String result = new String(stream.toByteArray());
+        assertEquals(recordsCSV, result);
     }
 
     @Test

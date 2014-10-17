@@ -53,43 +53,59 @@ public final class Records {
     }
 
     /**
-     * Reads the set of records from CSV file.
+     * Gets records from file.
      * 
      * @param filename
-     *            the name of file to be read.
+     *            the path to file to be read.
      * 
-     * @return the ordered set of records.
+     * @return the loaded records.
      * 
      * @throws IOException
      *             if file could not be read.
      */
-    public static Collection<Record> load(String filename) throws IOException {
+    public static List<Record> load(String filename) throws IOException {
         try (InputStream stream = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ)) {
-            CsvSchema schema = CsvSchema.emptySchema().withHeader();
-            CsvMapper mapper = new CsvMapper();
-            ObjectReader reader = mapper.reader(Map.class).with(schema);
-
-            Iterator<Map<String, String>> rows = reader.readValues(stream);
-            List<Record> records = new ArrayList<>();
-            while (rows.hasNext()) {
-                Map<String, String> row = rows.next();
-                Record record = new Record();
-                record.putAll(row);
-                records.add(record);
-            }
-            return records;
+            return load(stream);
         }
     }
 
     /**
-     * Writes the set of records into CSV file.
+     * Gets records from stream.
      * 
+     * @param stream
+     *            the stream to be read.
+     * 
+     * @return the loaded records.
+     * 
+     * @throws IOException
+     *             if stream could not be read.
+     */
+    public static List<Record> load(InputStream stream) throws IOException {
+        CsvSchema schema = CsvSchema.emptySchema().withHeader();
+        CsvMapper mapper = new CsvMapper();
+        ObjectReader reader = mapper.reader(Map.class).with(schema);
+
+        Iterator<Map<String, String>> rows = reader.readValues(stream);
+        List<Record> records = new ArrayList<>();
+        while (rows.hasNext()) {
+            Map<String, String> row = rows.next();
+            Record record = new Record();
+            record.putAll(row);
+            records.add(record);
+        }
+        return records;
+    }
+
+    /**
+     * Saves records into CSV file.
+     * 
+     * <p>
      * If file already exists, then it will be overridden.
      * 
      * @param filename
-     *            the name of file to be written.
+     *            the path to file to be written.
      * @param records
-     *            the ordered set of records.
+     *            the records to save.
      * 
      * @throws IOException
      *             if file could not be written.
@@ -97,22 +113,37 @@ public final class Records {
     public static void save(String filename, Collection<Record> records) throws IOException {
         try (OutputStream stream = Files.newOutputStream(Paths.get(filename), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
-            Set<String> columns = new LinkedHashSet<>();
-            List<Map<String, String>> rows = new ArrayList<>();
-            for (Record record : records) {
-                Map<String, String> values = record.values();
-                columns.addAll(values.keySet());
-                rows.add(values);
-            }
-
-            CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true);
-            for (String column : columns) {
-                schema.addColumn(column);
-            }
-            CsvMapper mapper = new CsvMapper();
-            ObjectWriter writer = mapper.writer().withSchema(schema.build());
-            writer.writeValue(stream, rows);
+            save(stream, records);
         }
+    }
+
+    /**
+     * Saves records into stream.
+     * 
+     * @param stream
+     *            the stream to be written.
+     * @param records
+     *            the records to save.
+     * 
+     * @throws IOException
+     *             if stream could not be written.
+     */
+    public static void save(OutputStream stream, Collection<Record> records) throws IOException {
+        Set<String> columns = new LinkedHashSet<>();
+        List<Map<String, String>> rows = new ArrayList<>();
+        for (Record record : records) {
+            Map<String, String> values = record.values();
+            columns.addAll(values.keySet());
+            rows.add(values);
+        }
+
+        CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true);
+        for (String column : columns) {
+            schema.addColumn(column);
+        }
+        CsvMapper mapper = new CsvMapper();
+        ObjectWriter writer = mapper.writer().withSchema(schema.build());
+        writer.writeValue(stream, rows);
     }
 
     /**
