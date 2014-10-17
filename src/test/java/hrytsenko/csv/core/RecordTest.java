@@ -27,23 +27,38 @@ import static org.junit.Assert.assertNotSame;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class RecordTest {
 
+    private Record recordForOracle;
+
+    @Before
+    public void init() {
+        recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+    }
+
     @Test
     public void testGet() {
-        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-        assertEquals("NYSE", record.getAt("Exchange"));
+        assertEquals("NYSE", recordForOracle.getAt("exchange"));
+        assertEquals("NYSE", recordForOracle.getAt("EXCHANGE"));
+
+        assertEquals("ORCL", recordForOracle.getProperty("ticker"));
     }
 
     @Test
     public void testPut() {
-        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-        assertEquals("NYSE", record.getAt("exchange"));
+        assertEquals("NYSE", recordForOracle.getAt("exchange"));
 
-        record.putAt("exchange", "NASDAQ");
-        assertEquals("NASDAQ", record.getAt("exchange"));
+        recordForOracle.putAt("exchange", "NASDAQ");
+        assertEquals("NASDAQ", recordForOracle.getAt("exchange"));
+
+        recordForOracle.setProperty("name", "Oracle Corporation");
+        assertEquals("Oracle Corporation", recordForOracle.getProperty("name"));
+
+        recordForOracle.putAt("exchange", null);
+        assertEquals("null", recordForOracle.getAt("exchange"));
     }
 
     @Test
@@ -59,38 +74,28 @@ public class RecordTest {
 
     @Test
     public void testRemove() {
-        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-        assertFields(record, "ticker", "name", "exchange");
-
-        record.remove("name");
-        assertFields(record, "ticker", "exchange");
+        recordForOracle.remove("name");
+        assertFields(recordForOracle, "ticker", "exchange");
     }
 
     @Test
     public void testRename() {
-        Record record = createRecord("ticker", "ORCL", "name", "Oracle");
-        assertFields(record, "ticker", "name");
-
-        record.rename("ticker", "symbol");
-        assertFields(record, "symbol", "name");
+        recordForOracle.rename("ticker", "symbol");
+        assertFields(recordForOracle, "symbol", "name", "exchange");
     }
 
     @Test
     public void testRetain() {
-        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-        assertFields(record, "ticker", "name", "exchange");
-
-        record.retain("ticker", "exchange");
-        assertFields(record, "ticker", "exchange");
+        recordForOracle.retain("ticker", "exchange");
+        assertFields(recordForOracle, "ticker", "exchange");
     }
 
     @Test
     public void testCopy() {
-        Record record = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-        Record copy = record.copy();
+        Record copiedRecord = recordForOracle.copy();
 
-        assertNotSame(record, copy);
-        assertEquals(record.values(), copy.values());
+        assertNotSame(recordForOracle, copiedRecord);
+        assertEquals(recordForOracle.values(), copiedRecord.values());
     }
 
 }
