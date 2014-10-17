@@ -23,6 +23,7 @@ import static hrytsenko.csv.core.Records.assertFields;
 import static hrytsenko.csv.core.Records.createRecord;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -41,10 +42,24 @@ public class RecordTest {
 
     @Test
     public void testGet() {
-        assertEquals("NYSE", recordForOracle.getAt("exchange"));
-        assertEquals("NYSE", recordForOracle.getAt("EXCHANGE"));
+        assertEquals("ORCL", recordForOracle.getAt("ticker"));
+        assertEquals("ORCL", recordForOracle.getAt("TICKER"));
 
+    }
+
+    @Test
+    public void testGetUsingProperty() {
         assertEquals("ORCL", recordForOracle.getProperty("ticker"));
+        assertEquals("ORCL", recordForOracle.getProperty("TICKER"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetIfFieldNotDefined() {
+        recordForOracle.getAt(null);
+    }
+
+    public void testGetIfFieldNotFound() {
+        assertNull(recordForOracle.getAt("unknown"));
     }
 
     @Test
@@ -53,10 +68,21 @@ public class RecordTest {
 
         recordForOracle.putAt("exchange", "NASDAQ");
         assertEquals("NASDAQ", recordForOracle.getAt("exchange"));
+    }
 
-        recordForOracle.setProperty("name", "Oracle Corporation");
-        assertEquals("Oracle Corporation", recordForOracle.getProperty("name"));
+    @Test
+    public void testPutUsingProperty() {
+        recordForOracle.setProperty("exchange", "NASDAQ");
+        assertEquals("NASDAQ", recordForOracle.getAt("exchange"));
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testPutIfFieldNotDefined() {
+        recordForOracle.putAt(null, "any");
+    }
+
+    @Test
+    public void testPutIfValueIsNull() {
         recordForOracle.putAt("exchange", null);
         assertEquals("null", recordForOracle.getAt("exchange"));
     }
@@ -70,6 +96,12 @@ public class RecordTest {
         Record record = new Record();
         record.putAll(content);
         assertFields(record, "ticker", "name");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPutIfValuesNotDefined() {
+        Record record = new Record();
+        record.putAll(null);
     }
 
     @Test

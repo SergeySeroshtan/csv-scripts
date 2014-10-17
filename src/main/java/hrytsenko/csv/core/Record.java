@@ -51,16 +51,6 @@ public final class Record extends GroovyObjectSupport {
         values = new HashMap<>();
     }
 
-    @Override
-    public Object getProperty(String propertyName) {
-        return getAt(propertyName);
-    }
-
-    @Override
-    public void setProperty(String propertyName, Object newValue) {
-        putAt(propertyName, newValue);
-    }
-
     /**
      * Returns value of field.
      *
@@ -71,9 +61,17 @@ public final class Record extends GroovyObjectSupport {
      *            the name of field.
      * 
      * @return the value of field of <code>null</code> if such field not found.
+     * 
+     * @throws IllegalArgumentException
+     *             if field is not defined (i.e. <code>null</code>).
      */
     public String getAt(String field) {
         return values.get(normalize(field));
+    }
+
+    @Override
+    public Object getProperty(String propertyName) {
+        return getAt(propertyName);
     }
 
     /**
@@ -86,6 +84,9 @@ public final class Record extends GroovyObjectSupport {
      *            the name of field.
      * @param value
      *            the new value for field.
+     * 
+     * @throws IllegalArgumentException
+     *             if field is not defined (i.e. <code>null</code>).
      */
     public void putAt(String field, Object value) {
         String updatedField = normalize(field);
@@ -93,6 +94,11 @@ public final class Record extends GroovyObjectSupport {
             fields.add(updatedField);
         }
         values.put(updatedField, String.valueOf(value));
+    }
+
+    @Override
+    public void setProperty(String propertyName, Object newValue) {
+        putAt(propertyName, newValue);
     }
 
     /**
@@ -103,7 +109,7 @@ public final class Record extends GroovyObjectSupport {
      */
     public void putAll(Map<String, ?> values) {
         if (values == null) {
-            return;
+            throw new IllegalArgumentException("Values not defined.");
         }
 
         for (Map.Entry<String, ?> value : values.entrySet()) {
@@ -116,6 +122,9 @@ public final class Record extends GroovyObjectSupport {
      * 
      * @param removedFields
      *            the set of fields to be removed.
+     * 
+     * @throws IllegalArgumentException
+     *             if field is not defined (i.e. <code>null</code>).
      */
     public void remove(String... removedFields) {
         fields.removeAll(normalize(removedFields));
@@ -129,6 +138,9 @@ public final class Record extends GroovyObjectSupport {
      *            the name of field.
      * @param name
      *            the new name for field.
+     * 
+     * @throws IllegalArgumentException
+     *             if field is not defined (i.e. <code>null</code>).
      */
     public void rename(String field, String name) {
         String oldField = normalize(field);
@@ -150,6 +162,9 @@ public final class Record extends GroovyObjectSupport {
      * 
      * @param retainedFields
      *            the set of fields to be retained.
+     * 
+     * @throws IllegalArgumentException
+     *             if field is not defined (i.e. <code>null</code>).
      */
     public void retain(String... retainedFields) {
         fields.retainAll(normalize(retainedFields));
@@ -190,6 +205,10 @@ public final class Record extends GroovyObjectSupport {
     }
 
     private static String normalize(String field) {
+        if (field == null) {
+            throw new IllegalArgumentException("Field not defined.");
+        }
+
         return field.toLowerCase();
     }
 
