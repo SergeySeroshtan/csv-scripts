@@ -65,10 +65,9 @@ public final class App {
         }
 
         String scriptFilename = args[0];
-        GroovyShell shell = createShell(copyOfRange(args, 1, args.length));
         try {
             InputStream scriptStream = Files.newInputStream(Paths.get(scriptFilename), StandardOpenOption.READ);
-            shell.evaluate(new InputStreamReader(scriptStream, Charset.forName("UTF-8")));
+            execute(scriptStream, copyOfRange(args, 1, args.length));
         } catch (Exception exception) {
             LOGGER.error("Could not execute script.", exception);
             exit(-1);
@@ -78,16 +77,18 @@ public final class App {
     }
 
     /**
-     * Creates and configures shell for executing scripts.
+     * Executes script.
      * 
+     * @param scriptStream
+     *            the stream to be read.
      * @param args
-     *            the command-line arguments to be passed into script.
-     * 
-     * @return the created script.
+     *            the arguments to be passed into script.
      */
-    public static GroovyShell createShell(String[] args) {
+    public static void execute(InputStream scriptStream, String[] args) {
         Binding binding = new Binding(singletonMap("args", args));
-        return new GroovyShell(binding, configuration());
+        GroovyShell shell = new GroovyShell(binding, configuration());
+
+        shell.evaluate(new InputStreamReader(scriptStream, Charset.forName("UTF-8")));
     }
 
     private static CompilerConfiguration configuration() {

@@ -19,26 +19,13 @@
  */
 package hrytsenko.csv.groovy;
 
-import groovy.lang.GroovyShell;
+import static java.lang.Thread.currentThread;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 
-import org.junit.Before;
 import org.junit.Test;
 
-public class ScriptTest {
-
-    private GroovyShell shell;
-
-    @Before
-    public void init() {
-        shell = App.createShell(new String[] {});
-    }
+public class AppTest {
 
     @Test
     public void testRecord() throws Exception {
@@ -50,9 +37,9 @@ public class ScriptTest {
         doTest("Filter.groovy");
     }
 
-    private void doTest(String filename) throws URISyntaxException, IOException {
-        URL script = Thread.currentThread().getContextClassLoader().getResource(filename);
-        shell.evaluate(Files.newBufferedReader(Paths.get(script.toURI()), Charset.forName("UTF-8")));
+    private void doTest(String filename) {
+        InputStream scriptStream = currentThread().getContextClassLoader().getResourceAsStream(filename);
+        App.execute(scriptStream, new String[] {});
     }
 
 }
