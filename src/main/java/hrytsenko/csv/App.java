@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package hrytsenko.csv.groovy;
+package hrytsenko.csv;
 
 import static java.lang.System.exit;
 import static java.util.Arrays.copyOfRange;
@@ -94,10 +94,8 @@ public final class App {
     private static CompilerConfiguration configuration() {
         ImportCustomizer importCustomizer = new ImportCustomizer();
 
-        importCustomizer.addStarImports("hrytsenko.csv.core");
-        importCustomizer.addStarImports("hrytsenko.csv.mediator");
+        importCustomizer.addImports(Record.class.getCanonicalName());
 
-        importCustomizer.addStaticStars(Flows.class.getCanonicalName());
         importCustomizer.addStaticStars(Logs.class.getCanonicalName());
         importCustomizer.addStaticStars(Records.class.getCanonicalName());
 

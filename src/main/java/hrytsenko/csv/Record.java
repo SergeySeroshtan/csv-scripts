@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package hrytsenko.csv.core;
+package hrytsenko.csv;
 
 import groovy.lang.GroovyObjectSupport;
 

@@ -17,21 +17,31 @@
  * limitations under the License.
  * #L%
  */
-package hrytsenko.csv.core;
+package hrytsenko.csv;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Mediators are intended for processing records.
+ * The methods for logging.
  * 
  * @author hrytsenko.anton
  */
-public interface Mediator {
+public final class Logs {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("SCRIPT");
+
+    private Logs() {
+    }
 
     /**
-     * Performs processing of record.
+     * Adds message to the log.
      * 
-     * @param record
-     *            the record to be processed.
+     * @param message
+     *            the message to be added.
      */
-    void mediate(Record record);
+    public static void info(String message) {
+        LOGGER.info(message);
+    }
 
 }

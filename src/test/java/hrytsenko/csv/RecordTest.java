@@ -17,17 +17,18 @@
  * limitations under the License.
  * #L%
  */
-package hrytsenko.csv.core;
+package hrytsenko.csv;
 
-import static hrytsenko.csv.core.Records.assertFields;
-import static hrytsenko.csv.core.Records.createRecord;
+import static hrytsenko.csv.Records.record;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +38,7 @@ public class RecordTest {
 
     @Before
     public void init() {
-        recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        recordForOracle = record("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
     }
 
     @Test
@@ -128,6 +129,11 @@ public class RecordTest {
 
         assertNotSame(recordForOracle, copiedRecord);
         assertEquals(recordForOracle.values(), copiedRecord.values());
+    }
+
+    private static void assertFields(Record record, String... expectedFields) {
+        Collection<String> actualFields = record.fields();
+        Assert.assertArrayEquals(expectedFields, actualFields.toArray());
     }
 
 }

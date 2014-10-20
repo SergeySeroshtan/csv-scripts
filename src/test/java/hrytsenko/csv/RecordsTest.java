@@ -17,18 +17,19 @@
  * limitations under the License.
  * #L%
  */
-package hrytsenko.csv.groovy;
+package hrytsenko.csv;
 
-import static hrytsenko.csv.core.Records.createRecord;
-import static hrytsenko.csv.groovy.Records.combine;
-import static hrytsenko.csv.groovy.Records.load;
-import static hrytsenko.csv.groovy.Records.map;
-import static hrytsenko.csv.groovy.Records.merge;
-import static hrytsenko.csv.groovy.Records.save;
+import static hrytsenko.csv.Records.combine;
+import static hrytsenko.csv.Records.record;
+import static hrytsenko.csv.Records.load;
+import static hrytsenko.csv.Records.map;
+import static hrytsenko.csv.Records.merge;
+import static hrytsenko.csv.Records.save;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import hrytsenko.csv.core.Record;
+import hrytsenko.csv.Record;
+import hrytsenko.csv.Records;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,9 +52,9 @@ public class RecordsTest {
 
     @Before
     public void init() {
-        recordForGoogle = createRecord("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
-        recordForMicrosoft = createRecord("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
-        recordForOracle = createRecord("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+        recordForGoogle = record("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
+        recordForMicrosoft = record("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
+        recordForOracle = record("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
 
         recordsCSV = "ticker,name,exchange\nGOOG,Google,NASDAQ\nMSFT,Microsoft,NASDAQ\nORCL,Oracle,NYSE\n";
     }
@@ -93,8 +94,8 @@ public class RecordsTest {
         List<Record> setWithName = asList(recordForGoogle, recordForOracle);
 
         List<Record> setWithExchange = new ArrayList<>();
-        setWithExchange.add(createRecord("ticker", "GOOG", "city", "Mountain View"));
-        setWithExchange.add(createRecord("ticker", "ORCL", "city", "Redwood City"));
+        setWithExchange.add(record("ticker", "GOOG", "city", "Mountain View"));
+        setWithExchange.add(record("ticker", "ORCL", "city", "Redwood City"));
 
         Collection<Record> result = merge("ticker", setWithName, setWithExchange);
         assertEquals(2, result.size());

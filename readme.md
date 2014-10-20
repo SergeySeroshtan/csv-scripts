@@ -40,6 +40,15 @@ record.remove("exchange")
 assert record.exchange == null
 ```
 
+Also, record provides following operations:
+
+Operation   | Usage
+------------|---------------------------------
+`remove`    | To remove fields from record.
+`rename`    | To rename field in record.
+`retain`    | To retain fields in record.
+`copy`      | To create copy of record.
+
 The following operations are useful for work with sets of records:
 
 Operation   | Usage
@@ -51,13 +60,10 @@ Operation   | Usage
 `merge`     | To merge records from different sets using the value of field as unique key.
 `map`       | To get mapping of records using the value of field as unique key.
 `group`     | To split records into groups using the value of field as key.
-`process`   | To apply specified mediators to all records in set.
-`remove`    | To remove fields from record.
-`rename`    | To rename field in record.
-`retain`    | To retain fields in record.
-`info`      | To add message into the log.
 
-For example, this script merges data from several CSV files:
+# Examples
+
+Script that merges records from several CSV files:
 
 ```groovy
 def all = []
@@ -69,30 +75,20 @@ info "Save ${all.size()} records into ${args[0]}."
 save(args[0], all)
 ```
 
-To process separate records we use mediators.
-Each mediator contains logic to be applied to records.
-Mediators can be combined to create more complex logic.
 
-The following operations are useful to create mediators:
-
-Operation   | Usage
-------------|------------------------------------------
-`apply`     | To apply custom logic to record.
-`filter`    | To filter records by condition.
-`sequence`  | To combine other mediators into sequence.
-`split`     | To split record between other mediators.
-`check`     | To check condition.
-`not`       | To negate condition.
-
-For example, this script finds records that were added in new version of CSV file:
+Script that finds records that were added in new version of CSV file:
 
 ```groovy
 def old = distinct("id", load(args[0]))
 
 def diff = []
-process(load(args[1]),
-    filter({ !old.contains(it.id) }).over(apply({ diff.add(it) }))
-)
+
+def records = load(args[1])
+records.each {
+    if (!old.contains(it.id)) {
+        diff.add(it)
+    }
+}
 
 info "Found ${diff.size()} new records."
 save(args[2], diff)

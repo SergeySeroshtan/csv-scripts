@@ -17,29 +17,29 @@
  * limitations under the License.
  * #L%
  */
-package hrytsenko.csv.mediator;
+package hrytsenko.csv;
 
-import hrytsenko.csv.core.Mediator;
-import hrytsenko.csv.core.Record;
+import static java.lang.Thread.currentThread;
 
-/**
- * Combines mediators for sequential processing of records.
- * 
- * @author hrytsenko.anton
- */
-public class Sequence extends Container {
+import java.io.InputStream;
 
-    /**
-     * Creates empty sequence.
-     */
-    public Sequence() {
+import org.junit.Test;
+
+public class AppTest {
+
+    @Test
+    public void testRecord() throws Exception {
+        doTest("Record.groovy");
     }
 
-    @Override
-    public void mediate(Record record) {
-        for (Mediator descendant : descendants()) {
-            descendant.mediate(record);
-        }
+    @Test
+    public void testExample() throws Exception {
+        doTest("Example.groovy");
+    }
+
+    private void doTest(String filename) {
+        InputStream scriptStream = currentThread().getContextClassLoader().getResourceAsStream(filename);
+        App.execute(scriptStream, new String[] {});
     }
 
 }

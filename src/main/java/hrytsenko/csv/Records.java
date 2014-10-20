@@ -17,10 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package hrytsenko.csv.groovy;
-
-import hrytsenko.csv.core.Mediator;
-import hrytsenko.csv.core.Record;
+package hrytsenko.csv;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -147,22 +144,6 @@ public final class Records {
     }
 
     /**
-     * Applies the given mediators to records.
-     * 
-     * @param records
-     *            the records to be processed.
-     * @param mediators
-     *            the mediators to be applied.
-     */
-    public static void process(Collection<Record> records, Mediator... mediators) {
-        for (Record record : records) {
-            for (Mediator mediator : mediators) {
-                mediator.mediate(record);
-            }
-        }
-    }
-
-    /**
      * Combines records from one or more sets,
      * 
      * @param sets
@@ -284,6 +265,22 @@ public final class Records {
     public static Record record(Map<String, ?> values) {
         Record record = new Record();
         record.putAll(values);
+        return record;
+    }
+
+    /**
+     * Creates record with given content.
+     * 
+     * @param content
+     *            the list of fields and their values to be added to record.
+     * 
+     * @return the created record with given fields and values.
+     */
+    public static Record record(String... content) {
+        Record record = new Record();
+        for (int i = 0; i < content.length; i += 2) {
+            record.putAt(content[i], content[i + 1]);
+        }
         return record;
     }
 
