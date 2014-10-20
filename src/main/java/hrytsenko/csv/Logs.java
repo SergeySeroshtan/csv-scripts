@@ -35,12 +35,12 @@ public final class Logs {
     }
 
     /**
-     * Adds message to the log.
+     * Adds message to the log of script.
      * 
      * @param message
      *            the message to be added.
      */
-    public static void info(String message) {
+    public static void log(String message) {
         LOGGER.info(message);
     }
 

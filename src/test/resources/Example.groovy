@@ -8,6 +8,8 @@ def NASDAQ = 0
 
 records.each {
     if (it.exchange == "NASDAQ") {
+        log "Found ${it.ticker}."
+
         ++NASDAQ;
     }
 }

@@ -40,7 +40,7 @@ record.remove("exchange")
 assert record.exchange == null
 ```
 
-Also, record provides following operations:
+Record supports following operations:
 
 Operation   | Usage
 ------------|---------------------------------
@@ -60,6 +60,8 @@ Operation   | Usage
 `merge`     | To merge records from different sets using the value of field as unique key.
 `map`       | To get mapping of records using the value of field as unique key.
 `group`     | To split records into groups using the value of field as key.
+
+Additionally, you can use operation `log` to add custom message into the log of script.
 
 # Examples
 
