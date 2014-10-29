@@ -40,7 +40,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
- * The methods to be used in scripts to work with records.
+ * Methods for processing records.
  * 
  * @author hrytsenko.anton
  */
@@ -62,35 +62,20 @@ public final class Records {
      */
     public static List<Record> load(String filename) throws IOException {
         try (InputStream stream = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ)) {
-            return load(stream);
-        }
-    }
+            CsvSchema schema = CsvSchema.emptySchema().withHeader();
+            CsvMapper mapper = new CsvMapper();
+            ObjectReader reader = mapper.reader(Map.class).with(schema);
 
-    /**
-     * Gets records from stream.
-     * 
-     * @param stream
-     *            the stream to be read.
-     * 
-     * @return the loaded records.
-     * 
-     * @throws IOException
-     *             if stream could not be read.
-     */
-    public static List<Record> load(InputStream stream) throws IOException {
-        CsvSchema schema = CsvSchema.emptySchema().withHeader();
-        CsvMapper mapper = new CsvMapper();
-        ObjectReader reader = mapper.reader(Map.class).with(schema);
-
-        Iterator<Map<String, String>> rows = reader.readValues(stream);
-        List<Record> records = new ArrayList<>();
-        while (rows.hasNext()) {
-            Map<String, String> row = rows.next();
-            Record record = new Record();
-            record.putAll(row);
-            records.add(record);
+            Iterator<Map<String, String>> rows = reader.readValues(stream);
+            List<Record> records = new ArrayList<>();
+            while (rows.hasNext()) {
+                Map<String, String> row = rows.next();
+                Record record = new Record();
+                record.putAll(row);
+                records.add(record);
+            }
+            return records;
         }
-        return records;
     }
 
     /**
@@ -110,37 +95,22 @@ public final class Records {
     public static void save(String filename, Collection<Record> records) throws IOException {
         try (OutputStream stream = Files.newOutputStream(Paths.get(filename), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
-            save(stream, records);
-        }
-    }
+            Set<String> columns = new LinkedHashSet<>();
+            List<Map<String, String>> rows = new ArrayList<>();
+            for (Record record : records) {
+                Map<String, String> values = record.values();
+                columns.addAll(values.keySet());
+                rows.add(values);
+            }
 
-    /**
-     * Saves records into stream.
-     * 
-     * @param stream
-     *            the stream to be written.
-     * @param records
-     *            the records to save.
-     * 
-     * @throws IOException
-     *             if stream could not be written.
-     */
-    public static void save(OutputStream stream, Collection<Record> records) throws IOException {
-        Set<String> columns = new LinkedHashSet<>();
-        List<Map<String, String>> rows = new ArrayList<>();
-        for (Record record : records) {
-            Map<String, String> values = record.values();
-            columns.addAll(values.keySet());
-            rows.add(values);
+            CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true);
+            for (String column : columns) {
+                schema.addColumn(column);
+            }
+            CsvMapper mapper = new CsvMapper();
+            ObjectWriter writer = mapper.writer().withSchema(schema.build());
+            writer.writeValue(stream, rows);
         }
-
-        CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true);
-        for (String column : columns) {
-            schema.addColumn(column);
-        }
-        CsvMapper mapper = new CsvMapper();
-        ObjectWriter writer = mapper.writer().withSchema(schema.build());
-        writer.writeValue(stream, rows);
     }
 
     /**

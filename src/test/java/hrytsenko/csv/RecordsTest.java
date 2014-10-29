@@ -20,21 +20,20 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.Records.combine;
-import static hrytsenko.csv.Records.record;
 import static hrytsenko.csv.Records.load;
 import static hrytsenko.csv.Records.map;
 import static hrytsenko.csv.Records.merge;
+import static hrytsenko.csv.Records.record;
 import static hrytsenko.csv.Records.save;
+import static java.nio.file.Files.createTempFile;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import hrytsenko.csv.Record;
-import hrytsenko.csv.Records;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -48,36 +47,26 @@ public class RecordsTest {
     private Record recordForMicrosoft;
     private Record recordForOracle;
 
-    private String recordsCSV;
-
     @Before
     public void init() {
         recordForGoogle = record("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
         recordForMicrosoft = record("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
         recordForOracle = record("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-
-        recordsCSV = "ticker,name,exchange\nGOOG,Google,NASDAQ\nMSFT,Microsoft,NASDAQ\nORCL,Oracle,NYSE\n";
     }
 
     @Test
-    public void testLoad() throws IOException {
-        List<Record> records = load(new ByteArrayInputStream(recordsCSV.getBytes("UTF-8")));
+    public void testIO() throws IOException {
+        Path temp = createTempFile(null, ".csv");
+        temp.toFile().deleteOnExit();
+        String path = temp.toAbsolutePath().toString();
 
-        assertEquals(3, records.size());
+        save(path, Arrays.asList(recordForGoogle, recordForOracle));
+
+        List<Record> records = load(path);
+
+        assertEquals(2, records.size());
         assertEquals("GOOG", records.get(0).getAt("ticker"));
-        assertEquals("MSFT", records.get(1).getAt("ticker"));
-        assertEquals("ORCL", records.get(2).getAt("ticker"));
-    }
-
-    @Test
-    public void testSave() throws IOException {
-        Collection<Record> records = asList(recordForGoogle, recordForMicrosoft, recordForOracle);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        save(stream, records);
-
-        String result = new String(stream.toByteArray());
-        assertEquals(recordsCSV, result);
+        assertEquals("ORCL", records.get(1).getAt("ticker"));
     }
 
     @Test
