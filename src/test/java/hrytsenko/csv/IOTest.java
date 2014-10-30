@@ -28,7 +28,9 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,13 +52,21 @@ public class IOTest {
         temp.toFile().deleteOnExit();
         String path = temp.toAbsolutePath().toString();
 
-        save(path, Arrays.asList(recordForGoogle, recordForOracle));
+        save(toArgs("path", path, "records", Arrays.asList(recordForGoogle, recordForOracle)));
 
-        List<Record> records = load(path);
+        List<Record> records = load(toArgs("path", path));
 
         assertEquals(2, records.size());
         assertEquals("GOOG", records.get(0).getAt("ticker"));
         assertEquals("ORCL", records.get(1).getAt("ticker"));
+    }
+
+    private static Map<String, ?> toArgs(Object... args) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        for (int i = 0; i < args.length; i += 2) {
+            result.put((String) args[i], args[i + 1]);
+        }
+        return result;
     }
 
 }

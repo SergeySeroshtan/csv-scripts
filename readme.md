@@ -61,6 +61,12 @@ Operation   | Usage
 `map`       | To get mapping of records using the value of field as unique key.
 `group`     | To split records into groups using the value of field as key.
 
+Operations `load` and `save` support the following named arguments:
+
+* `path` - the path to file.
+* `charset` - the charset for file, by default it's UTF-8.
+* `records` - the list of records to be saved.
+
 Additionally, you can use operation `log` to add custom message into the log of script.
 
 # Examples
@@ -70,11 +76,11 @@ Script that merges records from several CSV files:
 ```groovy
 def all = []
 (1..<args.length).each {
-    all = merge("id", all, load(args[it]))
+    all = merge("id", all, load(path: args[it]))
 }
 
 info "Save ${all.size()} records into ${args[0]}."
-save(args[0], all)
+save(path: args[0], records: all)
 ```
 
 
@@ -85,7 +91,7 @@ def old = distinct("id", load(args[0]))
 
 def diff = []
 
-def records = load(args[1])
+def records = load(path: args[1])
 records.each {
     if (!old.contains(it.id)) {
         diff.add(it)
@@ -93,7 +99,7 @@ records.each {
 }
 
 info "Found ${diff.size()} new records."
-save(args[2], diff)
+save(path: args[2], records: diff)
 ```
 
 # Execution

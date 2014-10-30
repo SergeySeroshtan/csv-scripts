@@ -21,12 +21,15 @@ package hrytsenko.csv;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,7 +42,18 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
- * Methods to input/output from files.
+ * Methods to input/output.
+ * 
+ * <p>
+ * Supported named arguments:
+ * <dl>
+ * <dt>path</dt>
+ * <dd>Path to file.</dd>
+ * <dt>charset</dt>
+ * <dd>Charset for file, see standard charsets in {@link Charset}. The default charset is UTF-8.</dd>
+ * <dt>records</dt>
+ * <dd>The list of records to be saved.</dd>
+ * </dl>
  * 
  * @author hrytsenko.anton
  */
@@ -51,21 +65,22 @@ public final class IO {
     /**
      * Gets records from file.
      * 
-     * @param filename
-     *            the path to file to be read.
+     * @param args
+     *            the named arguments {@link IO} .
      * 
      * @return the loaded records.
      * 
      * @throws IOException
      *             if file could not be read.
      */
-    public static List<Record> load(String filename) throws IOException {
-        try (InputStream stream = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ)) {
+    public static List<Record> load(Map<String, ?> args) throws IOException {
+        try (InputStream dataStream = Files.newInputStream(getPath(args), StandardOpenOption.READ);
+                InputStreamReader dataReader = new InputStreamReader(dataStream, getCharset(args))) {
             CsvSchema schema = CsvSchema.emptySchema().withHeader();
             CsvMapper mapper = new CsvMapper();
             ObjectReader reader = mapper.reader(Map.class).with(schema);
 
-            Iterator<Map<String, String>> rows = reader.readValues(stream);
+            Iterator<Map<String, String>> rows = reader.readValues(dataReader);
             List<Record> records = new ArrayList<>();
             while (rows.hasNext()) {
                 Map<String, String> row = rows.next();
@@ -83,17 +98,19 @@ public final class IO {
      * <p>
      * If file already exists, then it will be overridden.
      * 
-     * @param filename
-     *            the path to file to be written.
-     * @param records
-     *            the records to save.
+     * @param args
+     *            the named arguments {@link IO} .
      * 
      * @throws IOException
      *             if file could not be written.
      */
-    public static void save(String filename, Collection<Record> records) throws IOException {
-        try (OutputStream stream = Files.newOutputStream(Paths.get(filename), StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING)) {
+    public static void save(Map<String, ?> args) throws IOException {
+        @SuppressWarnings("unchecked")
+        List<Record> records = (List<Record>) args.get("records");
+
+        try (OutputStream dataStream = Files.newOutputStream(getPath(args), StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING);
+                OutputStreamWriter dataWriter = new OutputStreamWriter(dataStream, getCharset(args))) {
             Set<String> columns = new LinkedHashSet<>();
             List<Map<String, String>> rows = new ArrayList<>();
             for (Record record : records) {
@@ -108,8 +125,21 @@ public final class IO {
             }
             CsvMapper mapper = new CsvMapper();
             ObjectWriter writer = mapper.writer().withSchema(schema.build());
-            writer.writeValue(stream, rows);
+            writer.writeValue(dataWriter, rows);
         }
+    }
+
+    private static Path getPath(Map<String, ?> args) {
+        String path = (String) args.get("path");
+        return Paths.get(path);
+    }
+
+    private static Charset getCharset(Map<String, ?> args) {
+        String charsetName = (String) args.get("charset");
+        if (charsetName == null) {
+            charsetName = "UTF-8";
+        }
+        return Charset.forName(charsetName);
     }
 
 }
