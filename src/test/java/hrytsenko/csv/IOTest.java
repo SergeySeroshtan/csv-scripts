@@ -26,8 +26,13 @@ import static java.nio.file.Files.createTempFile;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,28 +42,55 @@ import org.junit.Test;
 
 public class IOTest {
 
-    private Record recordForGoogle;
-    private Record recordForOracle;
+    private String tempFilePath;
 
     @Before
-    public void init() {
-        recordForGoogle = record("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
-        recordForOracle = record("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
+    public void init() throws IOException {
+        Path tempFile = createTempFile(null, ".csv");
+        tempFile.toFile().deleteOnExit();
+        tempFilePath = tempFile.toAbsolutePath().toString();
     }
 
     @Test
-    public void testIO() throws IOException {
-        Path temp = createTempFile(null, ".csv");
-        temp.toFile().deleteOnExit();
-        String path = temp.toAbsolutePath().toString();
+    public void testSave() throws IOException {
+        List<Record> records = asList(record("ticker", "GOOG", "name", "Google"),
+                record("ticker", "ORCL", "name", "Oracle"));
 
-        save(asArgs("path", path, "records", asList(recordForGoogle, recordForOracle)));
+        save(asArgs("path", tempFilePath, "records", records));
 
-        List<Record> records = load(asArgs("path", path));
+        String data = readTempFile();
+
+        assertEquals("ticker,name\nGOOG,Google\nORCL,Oracle\n", data);
+    }
+
+    @Test
+    public void testLoad() throws IOException {
+        String data = "ticker\tname\nGOOG\tGoogle\nORCL\tOracle\n";
+
+        writeTempFile(data);
+
+        List<Record> records = load(asArgs("path", tempFilePath, "fieldSeparator", "\t"));
 
         assertEquals(2, records.size());
         assertEquals("GOOG", records.get(0).getAt("ticker"));
         assertEquals("ORCL", records.get(1).getAt("ticker"));
+    }
+
+    private void writeTempFile(String data) throws IOException {
+        try (BufferedWriter dataWriter = Files.newBufferedWriter(Paths.get(tempFilePath), StandardOpenOption.WRITE)) {
+            dataWriter.append(data);
+        }
+    }
+
+    private String readTempFile() throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(tempFilePath))) {
+            StringBuilder data = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                data.append(line).append("\n");
+            }
+            return data.toString();
+        }
     }
 
     private static Map<String, ?> asArgs(Object... args) {

@@ -20,10 +20,8 @@
 package hrytsenko.csv;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -78,8 +76,7 @@ public final class IO {
      *             if file could not be read.
      */
     public static List<Record> load(Map<String, ?> args) throws IOException {
-        try (InputStream dataStream = Files.newInputStream(getPath(args), StandardOpenOption.READ);
-                InputStreamReader dataReader = new InputStreamReader(dataStream, getCharset(args))) {
+        try (Reader dataReader = Files.newBufferedReader(getPath(args), getCharset(args))) {
             CsvSchema schema = getSchema(args).setUseHeader(true).build();
             CsvMapper mapper = new CsvMapper();
             ObjectReader reader = mapper.reader(Map.class).with(schema);
@@ -112,9 +109,8 @@ public final class IO {
         @SuppressWarnings("unchecked")
         List<Record> records = (List<Record>) args.get("records");
 
-        try (OutputStream dataStream = Files.newOutputStream(getPath(args), StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING);
-                OutputStreamWriter dataWriter = new OutputStreamWriter(dataStream, getCharset(args))) {
+        try (Writer dataWriter = Files.newBufferedWriter(getPath(args), getCharset(args), StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING)) {
             Set<String> columns = new LinkedHashSet<>();
             List<Map<String, String>> rows = new ArrayList<>();
             for (Record record : records) {
