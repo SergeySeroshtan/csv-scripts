@@ -64,8 +64,10 @@ Operation   | Usage
 Operations `load` and `save` support the following named arguments:
 
 * `path` - the path to file.
-* `charset` - the charset for file, by default it's UTF-8.
 * `records` - the list of records to be saved.
+* `charset` - the charset for file, by default it's UTF-8.
+* `fieldSeparator` - the separator for fields, default: comma.
+* `fieldQualifier` - the qualifier for fields, default: double-quote.
 
 Additionally, you can use operation `log` to add custom message into the log of script.
 

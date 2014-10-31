@@ -49,10 +49,14 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
  * <dl>
  * <dt>path</dt>
  * <dd>Path to file.</dd>
- * <dt>charset</dt>
- * <dd>Charset for file, see standard charsets in {@link Charset}. The default charset is UTF-8.</dd>
  * <dt>records</dt>
  * <dd>The list of records to be saved.</dd>
+ * <dt>charset</dt>
+ * <dd>Charset for file, see standard charsets in {@link Charset}. The default charset is UTF-8.</dd>
+ * <dt>fieldSeparator</dt>
+ * <dd>Separator for values of fields, default: double-quote ('"').</dd>
+ * <dt>fieldQualifier</dt>
+ * <dd>Qualifier for values of fields, default: comma (',').</dd>
  * </dl>
  * 
  * @author hrytsenko.anton
@@ -76,7 +80,7 @@ public final class IO {
     public static List<Record> load(Map<String, ?> args) throws IOException {
         try (InputStream dataStream = Files.newInputStream(getPath(args), StandardOpenOption.READ);
                 InputStreamReader dataReader = new InputStreamReader(dataStream, getCharset(args))) {
-            CsvSchema schema = CsvSchema.emptySchema().withHeader();
+            CsvSchema schema = getSchema(args).setUseHeader(true).build();
             CsvMapper mapper = new CsvMapper();
             ObjectReader reader = mapper.reader(Map.class).with(schema);
 
@@ -119,12 +123,12 @@ public final class IO {
                 rows.add(values);
             }
 
-            CsvSchema.Builder schema = CsvSchema.builder().setUseHeader(true);
+            CsvSchema.Builder schemaBuilder = getSchema(args).setUseHeader(true);
             for (String column : columns) {
-                schema.addColumn(column);
+                schemaBuilder.addColumn(column);
             }
             CsvMapper mapper = new CsvMapper();
-            ObjectWriter writer = mapper.writer().withSchema(schema.build());
+            ObjectWriter writer = mapper.writer().withSchema(schemaBuilder.build());
             writer.writeValue(dataWriter, rows);
         }
     }
@@ -140,6 +144,29 @@ public final class IO {
             charsetName = "UTF-8";
         }
         return Charset.forName(charsetName);
+    }
+
+    private static CsvSchema.Builder getSchema(Map<String, ?> args) {
+        String fieldSeparator = (String) args.get("fieldSeparator");
+        if (fieldSeparator == null) {
+            fieldSeparator = ",";
+        }
+        if (fieldSeparator.length() > 1) {
+            throw new IllegalArgumentException("Use single character as separator for fields.");
+        }
+
+        String fieldQualifier = (String) args.get("fieldQualifier");
+        if (fieldQualifier == null) {
+            fieldQualifier = "\"";
+        }
+        if (fieldQualifier.length() > 1) {
+            throw new IllegalArgumentException("Use single character as qualifier for fields.");
+        }
+
+        CsvSchema.Builder builder = CsvSchema.builder();
+        builder.setColumnSeparator(fieldSeparator.charAt(0));
+        builder.setQuoteChar(fieldQualifier.charAt(0));
+        return builder;
     }
 
 }

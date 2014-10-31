@@ -23,11 +23,11 @@ import static hrytsenko.csv.IO.load;
 import static hrytsenko.csv.IO.save;
 import static hrytsenko.csv.Records.record;
 import static java.nio.file.Files.createTempFile;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,16 +52,16 @@ public class IOTest {
         temp.toFile().deleteOnExit();
         String path = temp.toAbsolutePath().toString();
 
-        save(toArgs("path", path, "records", Arrays.asList(recordForGoogle, recordForOracle)));
+        save(asArgs("path", path, "records", asList(recordForGoogle, recordForOracle)));
 
-        List<Record> records = load(toArgs("path", path));
+        List<Record> records = load(asArgs("path", path));
 
         assertEquals(2, records.size());
         assertEquals("GOOG", records.get(0).getAt("ticker"));
         assertEquals("ORCL", records.get(1).getAt("ticker"));
     }
 
-    private static Map<String, ?> toArgs(Object... args) {
+    private static Map<String, ?> asArgs(Object... args) {
         Map<String, Object> result = new HashMap<String, Object>();
         for (int i = 0; i < args.length; i += 2) {
             result.put((String) args[i], args[i + 1]);
