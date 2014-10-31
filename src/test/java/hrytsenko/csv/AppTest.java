@@ -22,14 +22,13 @@ package hrytsenko.csv;
 import static hrytsenko.csv.App.execute;
 import static java.lang.Thread.currentThread;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.Test;
 
 public class AppTest {
-
-    private static final String FILE_SCHEME = "file:/";
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyArgs() throws Exception {
@@ -46,9 +45,10 @@ public class AppTest {
         executeScript("Example.groovy");
     }
 
-    private void executeScript(String scriptFilename) throws IOException, URISyntaxException {
-        String scriptUrl = currentThread().getContextClassLoader().getResource(scriptFilename).toString();
-        execute(new String[] { scriptUrl.substring(FILE_SCHEME.length()) });
+    private void executeScript(String filename) throws Exception {
+        URI uri = currentThread().getContextClassLoader().getResource(filename).toURI();
+        Path path = Paths.get(uri);
+        execute(new String[] { path.toAbsolutePath().toString() });
     }
 
 }
