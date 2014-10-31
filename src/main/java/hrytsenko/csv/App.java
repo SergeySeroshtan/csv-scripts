@@ -25,12 +25,11 @@ import static java.util.Collections.singletonMap;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
@@ -59,15 +58,8 @@ public final class App {
      *            the command-line arguments
      */
     public static void main(String[] args) {
-        if (args.length == 0) {
-            LOGGER.error("Script not defined.");
-            exit(-1);
-        }
-
-        String scriptFilename = args[0];
         try {
-            InputStream scriptStream = Files.newInputStream(Paths.get(scriptFilename), StandardOpenOption.READ);
-            execute(scriptStream, copyOfRange(args, 1, args.length));
+            execute(args);
         } catch (Exception exception) {
             LOGGER.error("Could not execute script.", exception);
             exit(-1);
@@ -77,18 +69,27 @@ public final class App {
     }
 
     /**
-     * Executes script.
+     * Executes script with given arguments.
      * 
-     * @param scriptStream
-     *            the stream to be read.
+     * <p>
+     * First argument should contain path to file with script. Other arguments are optional and they will be passed into
+     * scripts as is.
+     * 
      * @param args
-     *            the arguments to be passed into script.
+     *            arguments for execution.
      */
-    public static void execute(InputStream scriptStream, String[] args) {
-        Binding binding = new Binding(singletonMap("args", args));
-        GroovyShell shell = new GroovyShell(binding, configuration());
+    protected static void execute(String[] args) throws IOException {
+        if (args.length == 0) {
+            throw new IllegalArgumentException("Path to script not defined.");
+        }
 
-        shell.evaluate(new InputStreamReader(scriptStream, Charset.forName("UTF-8")));
+        String path = args[0];
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(path), Charset.forName("UTF-8"))) {
+            Binding binding = new Binding(singletonMap("args", copyOfRange(args, 1, args.length)));
+            GroovyShell shell = new GroovyShell(binding, configuration());
+
+            shell.evaluate(reader);
+        }
     }
 
     private static CompilerConfiguration configuration() {

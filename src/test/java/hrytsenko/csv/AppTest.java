@@ -19,27 +19,36 @@
  */
 package hrytsenko.csv;
 
+import static hrytsenko.csv.App.execute;
 import static java.lang.Thread.currentThread;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.junit.Test;
 
 public class AppTest {
 
+    private static final String FILE_SCHEME = "file:/";
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptyArgs() throws Exception {
+        execute(new String[] {});
+    }
+
     @Test
     public void testRecord() throws Exception {
-        doTest("Record.groovy");
+        executeScript("Record.groovy");
     }
 
     @Test
     public void testExample() throws Exception {
-        doTest("Example.groovy");
+        executeScript("Example.groovy");
     }
 
-    private void doTest(String filename) {
-        InputStream scriptStream = currentThread().getContextClassLoader().getResourceAsStream(filename);
-        App.execute(scriptStream, new String[] {});
+    private void executeScript(String scriptFilename) throws IOException, URISyntaxException {
+        String scriptUrl = currentThread().getContextClassLoader().getResource(scriptFilename).toString();
+        execute(new String[] { scriptUrl.substring(FILE_SCHEME.length()) });
     }
 
 }
