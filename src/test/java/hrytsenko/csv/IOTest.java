@@ -22,18 +22,14 @@ package hrytsenko.csv;
 import static hrytsenko.csv.IO.load;
 import static hrytsenko.csv.IO.save;
 import static hrytsenko.csv.Records.record;
-import static java.nio.file.Files.createTempFile;
+import static hrytsenko.csv.TempFiles.UTF_8;
+import static hrytsenko.csv.TempFiles.createTempFile;
+import static hrytsenko.csv.TempFiles.readTempFile;
+import static hrytsenko.csv.TempFiles.writeTempFile;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,15 +39,11 @@ import org.junit.Test;
 
 public class IOTest {
 
-    private static final Charset UTF_8 = Charset.forName("UTF-8");
-
     private String tempFilePath;
 
     @Before
     public void init() throws IOException {
-        Path tempFile = createTempFile(null, ".csv");
-        tempFile.toFile().deleteOnExit();
-        tempFilePath = tempFile.toAbsolutePath().toString();
+        tempFilePath = createTempFile();
     }
 
     @Test
@@ -61,40 +53,22 @@ public class IOTest {
 
         save(asArgs("path", tempFilePath, "records", records));
 
-        String data = readTempFile(UTF_8);
+        String tempFileData = readTempFile(tempFilePath, UTF_8);
 
-        assertEquals("ticker,name\nGOOG,Google\nORCL,Oracle\n", data);
+        assertEquals("ticker,name\nGOOG,Google\nORCL,Oracle\n", tempFileData);
     }
 
     @Test
     public void testLoad() throws IOException {
-        String data = "ticker\tname\nGOOG\tGoogle\nORCL\tOracle\n";
+        String tempFileData = "ticker\tname\nGOOG\tGoogle\nORCL\tOracle\n";
 
-        writeTempFile(data, UTF_8);
+        writeTempFile(tempFilePath, tempFileData, UTF_8);
 
         List<Record> records = load(asArgs("path", tempFilePath, "fieldSeparator", "\t"));
 
         assertEquals(2, records.size());
         assertEquals("GOOG", records.get(0).getAt("ticker"));
         assertEquals("ORCL", records.get(1).getAt("ticker"));
-    }
-
-    private void writeTempFile(String data, Charset charset) throws IOException {
-        try (BufferedWriter dataWriter = Files.newBufferedWriter(Paths.get(tempFilePath), charset,
-                StandardOpenOption.WRITE)) {
-            dataWriter.append(data);
-        }
-    }
-
-    private String readTempFile(Charset charset) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(tempFilePath), charset)) {
-            StringBuilder data = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                data.append(line).append("\n");
-            }
-            return data.toString();
-        }
     }
 
     private static Map<String, ?> asArgs(Object... args) {

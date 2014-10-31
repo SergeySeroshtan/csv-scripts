@@ -20,6 +20,10 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.App.execute;
+import static hrytsenko.csv.TempFiles.UTF_8;
+import static hrytsenko.csv.TempFiles.createTempFile;
+import static hrytsenko.csv.TempFiles.writeTempFile;
+import static java.lang.System.arraycopy;
 import static java.lang.Thread.currentThread;
 
 import java.net.URI;
@@ -36,19 +40,27 @@ public class AppTest {
     }
 
     @Test
+    public void testArgs() throws Exception {
+        String tempFilePath = createTempFile();
+        String tempFileData = "ticker,exchange\nGOOG,NASDAQ\nORCL,NYSE\nMSFT,NASDAQ";
+        writeTempFile(tempFilePath, tempFileData, UTF_8);
+        executeScript("Args.groovy", tempFilePath, "NASDAQ", "2");
+    }
+
+    @Test
     public void testRecord() throws Exception {
         executeScript("Record.groovy");
     }
 
-    @Test
-    public void testExample() throws Exception {
-        executeScript("Example.groovy");
-    }
-
-    private void executeScript(String filename) throws Exception {
-        URI uri = currentThread().getContextClassLoader().getResource(filename).toURI();
+    private void executeScript(String scriptFilename, String... scriptArgs) throws Exception {
+        URI uri = currentThread().getContextClassLoader().getResource(scriptFilename).toURI();
         Path path = Paths.get(uri);
-        execute(new String[] { path.toAbsolutePath().toString() });
+
+        String[] args = new String[scriptArgs.length + 1];
+        args[0] = path.toAbsolutePath().toString();
+        arraycopy(scriptArgs, 0, args, 1, scriptArgs.length);
+
+        execute(args);
     }
 
 }
