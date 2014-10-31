@@ -96,6 +96,7 @@ public final class App {
 
         importCustomizer.addImports(Record.class.getCanonicalName());
 
+        importCustomizer.addStaticStars(IO.class.getCanonicalName());
         importCustomizer.addStaticStars(Logs.class.getCanonicalName());
         importCustomizer.addStaticStars(Records.class.getCanonicalName());
 
