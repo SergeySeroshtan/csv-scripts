@@ -60,13 +60,11 @@ public final class Record extends GroovyObjectSupport {
      * @param field
      *            the name of field.
      * 
-     * @return the value of field of <code>null</code> if such field not found.
-     * 
-     * @throws IllegalArgumentException
-     *             if field is not defined (i.e. <code>null</code>).
+     * @return the value of field of <code>null</code> if it not found.
      */
     public String getAt(String field) {
-        return values.get(normalize(field));
+        String fieldInner = asInner(field);
+        return values.get(fieldInner);
     }
 
     @Override
@@ -84,16 +82,13 @@ public final class Record extends GroovyObjectSupport {
      *            the name of field.
      * @param value
      *            the new value for field.
-     * 
-     * @throws IllegalArgumentException
-     *             if field is not defined (i.e. <code>null</code>).
      */
     public void putAt(String field, Object value) {
-        String updatedField = normalize(field);
-        if (!fields.contains(updatedField)) {
-            fields.add(updatedField);
+        String fieldInner = asInner(field);
+        if (!fields.contains(fieldInner)) {
+            fields.add(fieldInner);
         }
-        values.put(updatedField, String.valueOf(value));
+        values.put(fieldInner, String.valueOf(value));
     }
 
     @Override
@@ -122,39 +117,34 @@ public final class Record extends GroovyObjectSupport {
      * 
      * @param removedFields
      *            the set of fields to be removed.
-     * 
-     * @throws IllegalArgumentException
-     *             if field is not defined (i.e. <code>null</code>).
      */
     public void remove(String... removedFields) {
-        fields.removeAll(normalize(removedFields));
+        Set<String> removedFieldsInner = asInner(removedFields);
+        fields.removeAll(removedFieldsInner);
         values.keySet().retainAll(fields);
     }
 
     /**
      * Changes the name of field. The order of fields will not be changed.
      * 
-     * @param field
-     *            the name of field.
-     * @param name
+     * @param oldField
+     *            the old name of field.
+     * @param newField
      *            the new name for field.
-     * 
-     * @throws IllegalArgumentException
-     *             if field is not defined (i.e. <code>null</code>).
      */
-    public void rename(String field, String name) {
-        String oldField = normalize(field);
-        int pos = fields.indexOf(oldField);
+    public void rename(String oldField, String newField) {
+        String oldFieldInner = asInner(oldField);
+        int pos = fields.indexOf(oldFieldInner);
         if (pos == -1) {
-            return;
+            throw new IllegalArgumentException("No such field.");
         }
 
-        String newField = normalize(name);
-        fields.set(pos, newField);
+        String newFieldInner = asInner(newField);
+        fields.set(pos, newFieldInner);
 
-        String value = values.get(oldField);
-        values.remove(oldField);
-        values.put(newField, value);
+        String value = values.get(oldFieldInner);
+        values.remove(oldFieldInner);
+        values.put(newFieldInner, value);
     }
 
     /**
@@ -162,12 +152,10 @@ public final class Record extends GroovyObjectSupport {
      * 
      * @param retainedFields
      *            the set of fields to be retained.
-     * 
-     * @throws IllegalArgumentException
-     *             if field is not defined (i.e. <code>null</code>).
      */
     public void retain(String... retainedFields) {
-        fields.retainAll(normalize(retainedFields));
+        Set<String> retainedFieldsInner = asInner(retainedFields);
+        fields.retainAll(retainedFieldsInner);
         values.keySet().retainAll(fields);
     }
 
@@ -186,11 +174,11 @@ public final class Record extends GroovyObjectSupport {
      * @return the values of all fields.
      */
     public Map<String, String> values() {
-        Map<String, String> orderedValues = new LinkedHashMap<>();
+        Map<String, String> copiedValues = new LinkedHashMap<>();
         for (String field : fields) {
-            orderedValues.put(field, values.get(field));
+            copiedValues.put(field, values.get(field));
         }
-        return orderedValues;
+        return copiedValues;
     }
 
     /**
@@ -200,24 +188,26 @@ public final class Record extends GroovyObjectSupport {
      */
     public Record copy() {
         Record copy = new Record();
-        copy.putAll(values());
+        for (String field : fields) {
+            copy.putAt(field, values.get(field));
+        }
         return copy;
     }
 
-    private static String normalize(String field) {
-        if (field == null) {
-            throw new IllegalArgumentException("Field not defined.");
+    private static String asInner(String field) {
+        if (field == null || field.isEmpty()) {
+            throw new IllegalArgumentException("Invalid name of field.");
         }
 
         return field.toLowerCase();
     }
 
-    private static Set<String> normalize(String... fields) {
-        Set<String> normalizedFields = new LinkedHashSet<>();
+    private static Set<String> asInner(String... fields) {
+        Set<String> fieldsInner = new LinkedHashSet<>();
         for (String field : fields) {
-            normalizedFields.add(normalize(field));
+            fieldsInner.add(asInner(field));
         }
-        return normalizedFields;
+        return fieldsInner;
     }
 
 }

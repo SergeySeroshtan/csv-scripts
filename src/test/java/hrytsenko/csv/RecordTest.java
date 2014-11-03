@@ -20,6 +20,7 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.Records.record;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
@@ -28,7 +29,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,8 +60,13 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetIfFieldNotDefined() {
+    public void testGetIfFieldNotNull() {
         recordForOracle.getAt(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetIfFieldIsEmpty() {
+        recordForOracle.getAt("");
     }
 
     public void testGetIfFieldNotFound() {
@@ -82,11 +87,6 @@ public class RecordTest {
         assertEquals("NASDAQ", recordForOracle.getAt("exchange"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testPutIfFieldNotDefined() {
-        recordForOracle.putAt(null, "any");
-    }
-
     @Test
     public void testPutIfValueIsNull() {
         recordForOracle.putAt("exchange", null);
@@ -102,6 +102,7 @@ public class RecordTest {
         Record record = new Record();
         record.putAll(content);
         assertFields(record, "ticker", "name");
+        assertEquals("ORCL", record.getAt("ticker"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -122,6 +123,11 @@ public class RecordTest {
         assertFields(recordForOracle, "symbol", "name", "exchange");
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testRenameNotFound() {
+        recordForOracle.rename("symbol", "ticker");
+    }
+
     @Test
     public void testRetain() {
         recordForOracle.retain("ticker", "exchange");
@@ -138,7 +144,7 @@ public class RecordTest {
 
     private static void assertFields(Record record, String... expectedFields) {
         Collection<String> actualFields = record.fields();
-        Assert.assertArrayEquals(expectedFields, actualFields.toArray());
+        assertArrayEquals(expectedFields, actualFields.toArray());
     }
 
 }
