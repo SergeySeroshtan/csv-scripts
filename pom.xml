@@ -44,9 +44,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <groovy.version>2.3.7</groovy.version>
-        <groovy.http.version>0.7.1</groovy.http.version>
-
-        <commons.beanutils.version>1.9.2</commons.beanutils.version>
 
         <jackson.csv.version>2.4.3</jackson.csv.version>
 
@@ -61,24 +58,6 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy.modules.http-builder</groupId>
-            <artifactId>http-builder</artifactId>
-            <version>${groovy.http.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-beanutils</groupId>
-                    <artifactId>commons-beanutils</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- We use newer version to avoid an issue with overlapping classes. -->
-        <!-- See https://issues.apache.org/jira/browse/BEANUTILS-379. -->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${commons.beanutils.version}</version>
         </dependency>
 
         <!-- CSV -->
