@@ -37,6 +37,14 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests of methods for input/output.
+ * 
+ * <p>
+ * These tests use temporary files, see {@link TempFiles}.
+ * 
+ * @author hrytsenko.anton
+ */
 public class IOTest {
 
     private String tempFilePath;

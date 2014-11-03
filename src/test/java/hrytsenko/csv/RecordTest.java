@@ -32,6 +32,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests for methods of class {@link Record}.
+ * 
+ * @author hrytsenko.anton
+ */
 public class RecordTest {
 
     private Record recordForOracle;

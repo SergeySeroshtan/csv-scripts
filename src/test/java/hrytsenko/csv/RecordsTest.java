@@ -35,6 +35,11 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests for methods for processing records.
+ * 
+ * @author hrytsenko.anton
+ */
 public class RecordsTest {
 
     private Record recordForGoogle;

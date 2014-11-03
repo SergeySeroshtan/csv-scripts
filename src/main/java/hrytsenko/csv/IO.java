@@ -40,7 +40,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
- * Methods to input/output.
+ * Methods for input/output.
  * 
  * <p>
  * Supported named arguments:
@@ -50,11 +50,11 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
  * <dt>records</dt>
  * <dd>The list of records to be saved.</dd>
  * <dt>charset</dt>
- * <dd>Charset for file, see standard charsets in {@link Charset}. The default charset is UTF-8.</dd>
+ * <dd>Charset for file, see standard charsets in {@link Charset}, default: UTF-8.</dd>
  * <dt>fieldSeparator</dt>
- * <dd>Separator for values of fields, default: double-quote ('"').</dd>
+ * <dd>Separator for values of fields, default: comma (',').</dd>
  * <dt>fieldQualifier</dt>
- * <dd>Qualifier for values of fields, default: comma (',').</dd>
+ * <dd>Qualifier for values of fields, default: double-quote ('"').</dd>
  * </dl>
  * 
  * @author hrytsenko.anton
@@ -68,7 +68,7 @@ public final class IO {
      * Gets records from file.
      * 
      * @param args
-     *            the named arguments {@link IO} .
+     *            the named arguments {@link IO}.
      * 
      * @return the loaded records.
      * 
@@ -100,7 +100,7 @@ public final class IO {
      * If file already exists, then it will be overridden.
      * 
      * @param args
-     *            the named arguments {@link IO} .
+     *            the named arguments {@link IO}.
      * 
      * @throws IOException
      *             if file could not be written.

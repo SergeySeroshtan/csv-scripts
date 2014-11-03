@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The methods for logging.
+ * Provides ability to add custom message into log.
  * 
  * @author hrytsenko.anton
  */

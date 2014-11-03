@@ -32,6 +32,14 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
+/**
+ * Tests for application based on Groovy scripts.
+ * 
+ * <p>
+ * These tests use temporary files, see {@link TempFiles}.
+ * 
+ * @author hrytsenko.anton
+ */
 public class AppTest {
 
     @Test(expected = IllegalArgumentException.class)
