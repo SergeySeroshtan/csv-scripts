@@ -65,7 +65,7 @@ Operations `load` and `save` support the following named arguments:
 
 * `path` - the path to file.
 * `records` - the list of records to be saved.
-* `charset` - the charset for file, by default it's UTF-8.
+* `charset` - the charset for file, default: UTF-8.
 * `fieldSeparator` - the separator for fields, default: comma.
 * `fieldQualifier` - the qualifier for fields, default: double-quote.
 
@@ -81,7 +81,7 @@ def all = []
     all = merge("id", all, load(path: args[it]))
 }
 
-info "Save ${all.size()} records into ${args[0]}."
+log "Save ${all.size()} records into ${args[0]}."
 save(path: args[0], records: all)
 ```
 
@@ -89,18 +89,17 @@ save(path: args[0], records: all)
 Script that finds records that were added in new version of CSV file:
 
 ```groovy
-def old = distinct("id", load(args[0]))
-
+def previous = distinct("id", load(path: args[0]))
+def current = load(path: args[1])
 def diff = []
 
-def records = load(path: args[1])
-records.each {
-    if (!old.contains(it.id)) {
+current.each {
+    if (!previous.contains(it.id)) {
         diff.add(it)
     }
 }
 
-info "Found ${diff.size()} new records."
+log "Found ${diff.size()} new records."
 save(path: args[2], records: diff)
 ```
 
@@ -109,9 +108,10 @@ save(path: args[2], records: diff)
 To execute script in command-line mode:
 
 ```
-java -jar csv-scripts.jar script.groovy input.csv output.csv
+java -jar csv-scripts.jar filter_stocks.groovy stocks.csv NASDAQ
 ```
 
-In this case `script.groovy` is the name of script to be executed.
-Arguments `input.csv` and `output.csv` will be passed into this script.
-They can be accessed through variable `args`, as `args[0]` and `args[1]` respectively.
+In this case `filter_stocks.groovy` is the name of script to be executed.
+Arguments `stocks.csv` and `NASDAQ` will be passed into this script.
+They accessible through variable `args`, as `args[0]` and `args[1]` respectively.
+
