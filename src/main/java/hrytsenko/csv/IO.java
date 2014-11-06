@@ -19,11 +19,13 @@
  */
 package hrytsenko.csv;
 
+import static java.nio.file.Files.newBufferedReader;
+import static java.nio.file.Files.newBufferedWriter;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -76,12 +78,12 @@ public final class IO {
      *             if file could not be read.
      */
     public static List<Record> load(Map<String, ?> args) throws IOException {
-        try (Reader dataReader = Files.newBufferedReader(getPath(args), getCharset(args))) {
-            CsvSchema schema = getSchema(args).setUseHeader(true).build();
-            CsvMapper mapper = new CsvMapper();
-            ObjectReader reader = mapper.reader(Map.class).with(schema);
+        try (Reader dataReader = newBufferedReader(getPath(args), getCharset(args))) {
+            CsvSchema csvSchema = getSchema(args).setUseHeader(true).build();
+            CsvMapper csvMapper = new CsvMapper();
+            ObjectReader csvReader = csvMapper.reader(Map.class).with(csvSchema);
 
-            Iterator<Map<String, String>> rows = reader.readValues(dataReader);
+            Iterator<Map<String, String>> rows = csvReader.readValues(dataReader);
             List<Record> records = new ArrayList<>();
             while (rows.hasNext()) {
                 Map<String, String> row = rows.next();
@@ -109,7 +111,7 @@ public final class IO {
         @SuppressWarnings("unchecked")
         List<Record> records = (List<Record>) args.get("records");
 
-        try (Writer dataWriter = Files.newBufferedWriter(getPath(args), getCharset(args), StandardOpenOption.CREATE,
+        try (Writer dataWriter = newBufferedWriter(getPath(args), getCharset(args), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
             Set<String> columns = new LinkedHashSet<>();
             List<Map<String, String>> rows = new ArrayList<>();
@@ -119,13 +121,13 @@ public final class IO {
                 rows.add(values);
             }
 
-            CsvSchema.Builder schemaBuilder = getSchema(args).setUseHeader(true);
+            CsvSchema.Builder csvSchema = getSchema(args).setUseHeader(true);
             for (String column : columns) {
-                schemaBuilder.addColumn(column);
+                csvSchema.addColumn(column);
             }
-            CsvMapper mapper = new CsvMapper();
-            ObjectWriter writer = mapper.writer().withSchema(schemaBuilder.build());
-            writer.writeValue(dataWriter, rows);
+            CsvMapper csvMapper = new CsvMapper();
+            ObjectWriter csvWriter = csvMapper.writer().withSchema(csvSchema.build());
+            csvWriter.writeValue(dataWriter, rows);
         }
     }
 
@@ -159,10 +161,10 @@ public final class IO {
             throw new IllegalArgumentException("Use single character as qualifier for fields.");
         }
 
-        CsvSchema.Builder builder = CsvSchema.builder();
-        builder.setColumnSeparator(fieldSeparator.charAt(0));
-        builder.setQuoteChar(fieldQualifier.charAt(0));
-        return builder;
+        CsvSchema.Builder schema = CsvSchema.builder();
+        schema.setColumnSeparator(fieldSeparator.charAt(0));
+        schema.setQuoteChar(fieldQualifier.charAt(0));
+        return schema;
     }
 
 }

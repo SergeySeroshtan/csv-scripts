@@ -80,11 +80,11 @@ public class IOTest {
     }
 
     private static Map<String, ?> asArgs(Object... args) {
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> mappedArgs = new HashMap<>();
         for (int i = 0; i < args.length; i += 2) {
-            result.put((String) args[i], args[i + 1]);
+            mappedArgs.put((String) args[i], args[i + 1]);
         }
-        return result;
+        return mappedArgs;
     }
 
 }

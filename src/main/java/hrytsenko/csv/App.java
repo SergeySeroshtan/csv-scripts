@@ -20,6 +20,7 @@
 package hrytsenko.csv;
 
 import static java.lang.System.exit;
+import static java.nio.file.Files.newBufferedReader;
 import static java.util.Arrays.copyOfRange;
 import static java.util.Collections.singletonMap;
 import groovy.lang.Binding;
@@ -28,7 +29,6 @@ import groovy.lang.GroovyShell;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -84,7 +84,7 @@ public final class App {
         }
 
         String path = args[0];
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(path), Charset.forName("UTF-8"))) {
+        try (BufferedReader reader = newBufferedReader(Paths.get(path), Charset.forName("UTF-8"))) {
             Binding binding = new Binding(singletonMap("args", copyOfRange(args, 1, args.length)));
             GroovyShell shell = new GroovyShell(binding, configuration());
 

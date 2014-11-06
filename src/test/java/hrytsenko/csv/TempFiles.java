@@ -71,8 +71,8 @@ public final class TempFiles {
      *             if data could not be written.
      */
     public static void writeTempFile(String path, String data, Charset charset) throws IOException {
-        try (BufferedWriter dataWriter = Files.newBufferedWriter(Paths.get(path), charset, StandardOpenOption.WRITE)) {
-            dataWriter.append(data);
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), charset, StandardOpenOption.WRITE)) {
+            writer.append(data);
         }
     }
 

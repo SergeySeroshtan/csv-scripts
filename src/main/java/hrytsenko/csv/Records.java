@@ -47,11 +47,11 @@ public final class Records {
      */
     @SafeVarargs
     public static Collection<Record> combine(Collection<Record>... sets) {
-        List<Record> result = new ArrayList<>();
+        List<Record> combinedSet = new ArrayList<>();
         for (Collection<Record> set : sets) {
-            result.addAll(set);
+            combinedSet.addAll(set);
         }
-        return result;
+        return combinedSet;
     }
 
     /**
@@ -66,21 +66,21 @@ public final class Records {
      */
     @SafeVarargs
     public static Collection<Record> merge(String field, Collection<Record>... sets) {
-        Map<String, Record> result = new LinkedHashMap<>();
+        Map<String, Record> mergedSet = new LinkedHashMap<>();
         for (Collection<Record> set : sets) {
             for (Record record : set) {
                 String key = record.getAt(field);
 
-                Record mergedRecord = result.get(key);
+                Record mergedRecord = mergedSet.get(key);
                 if (mergedRecord == null) {
                     mergedRecord = new Record();
-                    result.put(key, mergedRecord);
+                    mergedSet.put(key, mergedRecord);
                 }
 
                 mergedRecord.putAll(record.values());
             }
         }
-        return result.values();
+        return mergedSet.values();
     }
 
     /**
@@ -115,11 +115,11 @@ public final class Records {
      * @return the mapped records.
      */
     public static Map<String, Record> map(String field, Collection<Record> set) {
-        Map<String, Record> result = new LinkedHashMap<>();
+        Map<String, Record> mappedSet = new LinkedHashMap<>();
         for (Record record : set) {
-            result.put(record.getAt(field), record);
+            mappedSet.put(record.getAt(field), record);
         }
-        return result;
+        return mappedSet;
     }
 
     /**
@@ -133,19 +133,19 @@ public final class Records {
      * @return the grouped records.
      */
     public static Map<String, List<Record>> group(String field, Collection<Record> set) {
-        Map<String, List<Record>> result = new LinkedHashMap<>();
+        Map<String, List<Record>> groupedSet = new LinkedHashMap<>();
         for (Record record : set) {
             String key = record.getAt(field);
 
-            List<Record> group = result.get(key);
+            List<Record> group = groupedSet.get(key);
             if (group == null) {
                 group = new ArrayList<>();
-                result.put(key, group);
+                groupedSet.put(key, group);
             }
 
             group.add(record);
         }
-        return result;
+        return groupedSet;
     }
 
     /**

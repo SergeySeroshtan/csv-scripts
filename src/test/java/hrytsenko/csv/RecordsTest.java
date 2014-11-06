@@ -20,6 +20,8 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.Records.combine;
+import static hrytsenko.csv.Records.distinct;
+import static hrytsenko.csv.Records.group;
 import static hrytsenko.csv.Records.map;
 import static hrytsenko.csv.Records.merge;
 import static hrytsenko.csv.Records.record;
@@ -59,6 +61,7 @@ public class RecordsTest {
         List<Record> setForNASDAQ = asList(recordForOracle, recordForMicrosoft);
 
         Collection<Record> result = combine(setForNYSE, setForNASDAQ);
+
         assertEquals(3, result.size());
     }
 
@@ -70,16 +73,16 @@ public class RecordsTest {
         setWithExchange.add(record("ticker", "GOOG", "city", "Mountain View"));
         setWithExchange.add(record("ticker", "ORCL", "city", "Redwood City"));
 
-        Collection<Record> result = merge("ticker", setWithName, setWithExchange);
-        assertEquals(2, result.size());
+        Collection<Record> mergedSet = merge("ticker", setWithName, setWithExchange);
+        assertEquals(2, mergedSet.size());
 
-        Record[] records = result.toArray(new Record[result.size()]);
+        Record[] mergedRecords = mergedSet.toArray(new Record[mergedSet.size()]);
 
-        Record recordForGoogle = records[0];
+        Record recordForGoogle = mergedRecords[0];
         assertEquals(4, recordForGoogle.fields().size());
         assertEquals("Mountain View", recordForGoogle.getAt("city"));
 
-        Record recordForOracle = records[1];
+        Record recordForOracle = mergedRecords[1];
         assertEquals(4, recordForOracle.fields().size());
         assertEquals("Redwood City", recordForOracle.getAt("city"));
     }
@@ -88,7 +91,7 @@ public class RecordsTest {
     public void testDistinct() {
         List<Record> set = asList(recordForGoogle, recordForOracle, recordForMicrosoft);
 
-        Collection<String> exchanges = Records.distinct("exchange", set);
+        Collection<String> exchanges = distinct("exchange", set);
         assertArrayEquals(exchanges.toArray(), new String[] { "NASDAQ", "NYSE" });
     }
 
@@ -108,7 +111,7 @@ public class RecordsTest {
     public void testGroup() {
         List<Record> set = asList(recordForGoogle, recordForOracle, recordForMicrosoft);
 
-        Map<String, List<Record>> groupedSet = Records.group("exchange", set);
+        Map<String, List<Record>> groupedSet = group("exchange", set);
 
         assertEquals(2, groupedSet.size());
 
