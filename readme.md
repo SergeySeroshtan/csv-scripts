@@ -11,13 +11,13 @@ This application uses Groovy as scripting language.
 
 # Scripts
 
-We consider that CSV file contains ordered set of records.
+Assume that CSV file contains ordered set of records.
 And each record contains ordered set of fields and their values.
 
 To access fields of record you can use overloaded operator [] or properties:
 
 ```groovy
-def record = record(ticker : "ORCL", name : "Oracle")
+def record = record(ticker: "ORCL", name: "Oracle")
 
 assert record.ticker == record["ticker"]
 ```
@@ -26,7 +26,7 @@ You can use any object to update value of field.
 As a result, field will contain the string representation of this object.
 
 ```groovy
-def record = record(ticker : "ORCL", name : "Oracle")
+def record = record(ticker: "ORCL", name: "Oracle")
 
 assert record.exchange == null
 
@@ -45,7 +45,7 @@ Record supports following operations:
 Operation   | Usage
 ------------|---------------------------------
 `remove`    | To remove fields from record.
-`rename`    | To rename field in record.
+`rename`    | To rename field in record (field should exist).
 `retain`    | To retain fields in record.
 `copy`      | To create copy of record.
 
@@ -84,7 +84,6 @@ def all = []
 log "Save ${all.size()} records into ${args[0]}."
 save(path: args[0], records: all)
 ```
-
 
 Script that finds records that were added in new version of CSV file:
 
@@ -130,7 +129,7 @@ def owmService = new RESTClient("http://api.openweathermap.org/data/2.5/weather"
 def cities = load(path: args[0])
 cities.each {
     def response = owmService.get(
-        query : [q : "${it.city}", units : "metric"] )
+        query: [q: "${it.city}", units: "metric"])
     it.temp = response.data.main.temp
 }
 
