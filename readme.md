@@ -115,3 +115,24 @@ In this case `filter_stocks.groovy` is the name of script to be executed.
 Arguments `stocks.csv` and `NASDAQ` will be passed into this script.
 They accessible through variable `args`, as `args[0]` and `args[1]` respectively.
 
+# Dependencies
+
+To add additional dependencies you can use [Grape](http://groovy.codehaus.org/Grape).
+
+For example, this script gets data from RESTful service using class `RESTClient`:
+
+```groovy
+@Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
+import groovyx.net.http.*
+
+def owmService = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
+
+def cities = load(path: args[0])
+cities.each {
+    def response = owmService.get(
+        query : [q : "${it.city}", units : "metric"] )
+    it.temp = response.data.main.temp
+}
+
+save(path: args[1], records: cities)
+```
