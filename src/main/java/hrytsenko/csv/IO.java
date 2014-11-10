@@ -109,7 +109,7 @@ public final class IO {
      */
     public static void save(Map<String, ?> args) throws IOException {
         @SuppressWarnings("unchecked")
-        List<Record> records = (List<Record>) args.get("records");
+        Iterable<Record> records = (Iterable<Record>) args.get("records");
 
         try (Writer dataWriter = newBufferedWriter(getPath(args), getCharset(args), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
@@ -137,15 +137,16 @@ public final class IO {
     }
 
     private static Charset getCharset(Map<String, ?> args) {
-        String charsetName = (String) args.get("charset");
+        CharSequence charsetName = (CharSequence) args.get("charset");
+
         if (charsetName == null) {
             charsetName = "UTF-8";
         }
-        return Charset.forName(charsetName);
+        return Charset.forName(charsetName.toString());
     }
 
     private static CsvSchema.Builder getSchema(Map<String, ?> args) {
-        String fieldSeparator = (String) args.get("fieldSeparator");
+        CharSequence fieldSeparator = (CharSequence) args.get("fieldSeparator");
         if (fieldSeparator == null) {
             fieldSeparator = ",";
         }
@@ -153,7 +154,7 @@ public final class IO {
             throw new IllegalArgumentException("Use single character as separator for fields.");
         }
 
-        String fieldQualifier = (String) args.get("fieldQualifier");
+        CharSequence fieldQualifier = (CharSequence) args.get("fieldQualifier");
         if (fieldQualifier == null) {
             fieldQualifier = "\"";
         }
