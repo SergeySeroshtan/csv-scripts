@@ -132,8 +132,8 @@ public final class IO {
     }
 
     private static Path getPath(Map<String, ?> args) {
-        String path = (String) args.get("path");
-        return Paths.get(path);
+        CharSequence path = (CharSequence) args.get("path");
+        return Paths.get(path.toString());
     }
 
     private static Charset getCharset(Map<String, ?> args) {
@@ -150,7 +150,7 @@ public final class IO {
         if (fieldSeparator == null) {
             fieldSeparator = ",";
         }
-        if (fieldSeparator.length() > 1) {
+        if (fieldSeparator.length() != 1) {
             throw new IllegalArgumentException("Use single character as separator for fields.");
         }
 
@@ -158,7 +158,7 @@ public final class IO {
         if (fieldQualifier == null) {
             fieldQualifier = "\"";
         }
-        if (fieldQualifier.length() > 1) {
+        if (fieldQualifier.length() != 1) {
             throw new IllegalArgumentException("Use single character as qualifier for fields.");
         }
 

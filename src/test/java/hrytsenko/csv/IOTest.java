@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -47,18 +46,12 @@ import org.junit.Test;
  */
 public class IOTest {
 
-    private String tempFilePath;
-
-    @Before
-    public void init() throws IOException {
-        tempFilePath = createTempFile();
-    }
-
     @Test
     public void testSave() throws IOException {
         List<Record> records = asList(record("ticker", "GOOG", "name", "Google"),
                 record("ticker", "ORCL", "name", "Oracle"));
 
+        String tempFilePath = createTempFile();
         save(asArgs("path", tempFilePath, "records", records));
 
         String tempFileData = readTempFile(tempFilePath, UTF_8);
@@ -68,6 +61,7 @@ public class IOTest {
 
     @Test
     public void testLoad() throws IOException {
+        String tempFilePath = createTempFile();
         String tempFileData = "ticker\tname\nGOOG\tGoogle\nORCL\tOracle\n";
 
         writeTempFile(tempFilePath, tempFileData, UTF_8);
