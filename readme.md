@@ -81,7 +81,7 @@ def all = []
     all = merge('id', all, load(path: args[it]))
 }
 
-log 'Save ${all.size()} records into ${args[0]}.'
+log "Save ${all.size()} records into ${args[0]}."
 save(path: args[0], records: all)
 ```
 
@@ -98,7 +98,7 @@ current.each {
     }
 }
 
-log 'Found ${diff.size()} new records.'
+log "Found ${diff.size()} new records."
 save(path: args[2], records: diff)
 ```
 

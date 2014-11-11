@@ -4,7 +4,7 @@ def total = 0
 
 records.each {
     if (it.exchange == args[1]) {
-        log 'Found ${it.ticker}.'
+        log "Found ${it.ticker}."
 
         ++total;
     }
