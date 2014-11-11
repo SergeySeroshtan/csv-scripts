@@ -17,26 +17,26 @@ And each record contains ordered set of fields and their values.
 To access fields of record you can use overloaded operator [] or properties:
 
 ```groovy
-def record = record(ticker: "ORCL", name: "Oracle")
+def record = record(ticker: 'ORCL', name: 'Oracle')
 
-assert record.ticker == record["ticker"]
+assert record.ticker == record['ticker']
 ```
 
 You can use any object to update value of field.
 As a result, field will contain the string representation of this object.
 
 ```groovy
-def record = record(ticker: "ORCL", name: "Oracle")
+def record = record(ticker: 'ORCL', name: 'Oracle')
 
 assert record.exchange == null
 
-record.exchange = "NYSE"
-assert record.exchange == "NYSE"
+record.exchange = 'NYSE'
+assert record.exchange == 'NYSE'
 
 record.exchange = null
-assert record.exchange == "null"
+assert record.exchange == 'null'
 
-record.remove("exchange")
+record.remove('exchange')
 assert record.exchange == null
 ```
 
@@ -78,17 +78,17 @@ Script that merges records from several CSV files:
 ```groovy
 def all = []
 (1..<args.length).each {
-    all = merge("id", all, load(path: args[it]))
+    all = merge('id', all, load(path: args[it]))
 }
 
-log "Save ${all.size()} records into ${args[0]}."
+log 'Save ${all.size()} records into ${args[0]}.'
 save(path: args[0], records: all)
 ```
 
 Script that finds records that were added in new version of CSV file:
 
 ```groovy
-def previous = distinct("id", load(path: args[0]))
+def previous = distinct('id', load(path: args[0]))
 def current = load(path: args[1])
 def diff = []
 
@@ -98,7 +98,7 @@ current.each {
     }
 }
 
-log "Found ${diff.size()} new records."
+log 'Found ${diff.size()} new records.'
 save(path: args[2], records: diff)
 ```
 
@@ -124,12 +124,12 @@ For example, this script gets data from RESTful service using class `RESTClient`
 @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
 import groovyx.net.http.*
 
-def owmService = new RESTClient("http://api.openweathermap.org/data/2.5/weather")
+def owmService = new RESTClient('http://api.openweathermap.org/data/2.5/weather')
 
 def cities = load(path: args[0])
 cities.each {
     def response = owmService.get(
-        query: [q: "${it.city}", units: "metric"])
+        query: [q: it.city, units: 'metric'] )
     it.temp = response.data.main.temp
 }
 
