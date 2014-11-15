@@ -34,13 +34,13 @@ record.exchange = 'NYSE'
 assert record.exchange == 'NYSE'
 
 record.exchange = null
-assert record.exchange == 'null'
+assert record.exchange == ''
 
 record.remove('exchange')
 assert record.exchange == null
 ```
 
-Record supports following operations:
+Record provides following methods:
 
 Operation   | Usage
 ------------|---------------------------------
@@ -49,7 +49,7 @@ Operation   | Usage
 `retain`    | To retain fields in record.
 `copy`      | To create copy of record.
 
-The following operations are useful for work with sets of records:
+Also, following operations are useful for work with sets of records:
 
 Operation   | Usage
 ------------|---------------------------------
@@ -94,7 +94,7 @@ def diff = []
 
 current.each {
     if (!previous.contains(it.id)) {
-        diff.add(it)
+        diff << it
     }
 }
 

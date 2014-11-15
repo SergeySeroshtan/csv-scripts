@@ -24,6 +24,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -49,14 +51,16 @@ public class RecordTest {
     @Test
     public void testGet() {
         assertEquals("ORCL", recordForOracle.getAt("ticker"));
-        assertEquals("ORCL", recordForOracle.getAt("TICKER"));
+        assertNull(recordForOracle.getAt("Ticker"));
 
     }
 
     @Test
     public void testGetUsingProperty() {
-        assertEquals("ORCL", recordForOracle.getProperty("ticker"));
-        assertEquals("ORCL", recordForOracle.getProperty("TICKER"));
+        Record record = spy(recordForOracle);
+        assertEquals("ORCL", record.getProperty("ticker"));
+
+        verify(record).getAt("ticker");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -83,14 +87,17 @@ public class RecordTest {
 
     @Test
     public void testPutUsingProperty() {
-        recordForOracle.setProperty("exchange", "NASDAQ");
-        assertEquals("NASDAQ", recordForOracle.getAt("exchange"));
+        Record record = spy(recordForOracle);
+        record.setProperty("exchange", "NASDAQ");
+        assertEquals("NASDAQ", record.getAt("exchange"));
+
+        verify(record).putAt("exchange", "NASDAQ");
     }
 
     @Test
     public void testPutIfValueIsNull() {
         recordForOracle.putAt("exchange", null);
-        assertEquals("null", recordForOracle.getAt("exchange"));
+        assertEquals("", recordForOracle.getAt("exchange"));
     }
 
     @Test
@@ -117,6 +124,11 @@ public class RecordTest {
         assertFields(recordForOracle, "ticker", "exchange");
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveNotFound() {
+        recordForOracle.remove("price");
+    }
+
     @Test
     public void testRename() {
         recordForOracle.rename("ticker", "symbol");
@@ -134,12 +146,17 @@ public class RecordTest {
         assertFields(recordForOracle, "ticker", "exchange");
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testRetainNotFound() {
+        recordForOracle.remove("ticker", "price");
+    }
+
     @Test
     public void testCopy() {
-        Record copiedRecord = recordForOracle.copy();
+        Record copy = recordForOracle.copy();
 
-        assertNotSame(recordForOracle, copiedRecord);
-        assertEquals(recordForOracle.values(), copiedRecord.values());
+        assertNotSame(recordForOracle, copy);
+        assertEquals(recordForOracle.values(), copy.values());
     }
 
     private static void assertFields(Record record, String... expectedFields) {

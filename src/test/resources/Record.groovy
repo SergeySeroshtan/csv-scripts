@@ -6,7 +6,7 @@ record.exchange = 'NYSE'
 assert record.exchange == 'NYSE'
 
 record.exchange = null
-assert record.exchange == 'null'
+assert record.exchange == ''
 
 record.remove('exchange')
 assert record.exchange == null

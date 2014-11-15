@@ -19,26 +19,33 @@
  */
 package hrytsenko.csv;
 
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import groovy.lang.GroovyObjectSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Record contains set of fields and their values.
  * 
  * <p>
- * The names of fields are considered as case insensitive. All names are stored in lower-case.
+ * Name of field could not be <code>null</code> or empty.
+ * 
+ * <p>
+ * Names of field are case-sensitive. I.e. script should take care of naming of fields.
  * 
  * @author hrytsenko.anton
  */
-public final class Record extends GroovyObjectSupport {
+public class Record extends GroovyObjectSupport {
 
     private List<String> fields;
     private Map<String, String> values;
@@ -53,9 +60,6 @@ public final class Record extends GroovyObjectSupport {
 
     /**
      * Returns value of field.
-     *
-     * <p>
-     * Also overloads operator <tt>[]</tt> in Groovy.
      * 
      * @param field
      *            the name of field.
@@ -63,8 +67,9 @@ public final class Record extends GroovyObjectSupport {
      * @return the value of field of <code>null</code> if it not found.
      */
     public String getAt(String field) {
-        String fieldInner = asInner(field);
-        return values.get(fieldInner);
+        validateNotEmpty(field);
+
+        return values.get(field);
     }
 
     @Override
@@ -74,9 +79,9 @@ public final class Record extends GroovyObjectSupport {
 
     /**
      * Sets the value of field. The value is the string representation of given object.
-     *
+     * 
      * <p>
-     * Also overloads operator <tt>[]</tt> in Groovy.
+     * If value is <code>null</code>, then {@link StringUtils#EMPTY} used.
      * 
      * @param field
      *            the name of field.
@@ -84,11 +89,12 @@ public final class Record extends GroovyObjectSupport {
      *            the new value for field.
      */
     public void putAt(String field, Object value) {
-        String fieldInner = asInner(field);
-        if (!fields.contains(fieldInner)) {
-            fields.add(fieldInner);
+        validateNotEmpty(field);
+
+        if (!fields.contains(field)) {
+            fields.add(field);
         }
-        values.put(fieldInner, String.valueOf(value));
+        values.put(field, value == null ? EMPTY : value.toString());
     }
 
     @Override
@@ -119,8 +125,9 @@ public final class Record extends GroovyObjectSupport {
      *            the set of fields to be removed.
      */
     public void remove(String... removedFields) {
-        Set<String> removedFieldsInner = asInner(removedFields);
-        fields.removeAll(removedFieldsInner);
+        validateContains(removedFields);
+
+        fields.removeAll(asList(removedFields));
         values.keySet().retainAll(fields);
     }
 
@@ -133,18 +140,14 @@ public final class Record extends GroovyObjectSupport {
      *            the new name for field.
      */
     public void rename(String oldField, String newField) {
-        String oldFieldInner = asInner(oldField);
-        int pos = fields.indexOf(oldFieldInner);
-        if (pos == -1) {
-            throw new IllegalArgumentException("No such field.");
-        }
+        validateContains(oldField);
 
-        String newFieldInner = asInner(newField);
-        fields.set(pos, newFieldInner);
+        int pos = fields.indexOf(oldField);
+        fields.set(pos, newField);
 
-        String value = values.get(oldFieldInner);
-        values.remove(oldFieldInner);
-        values.put(newFieldInner, value);
+        String value = values.get(oldField);
+        values.remove(oldField);
+        values.put(newField, value);
     }
 
     /**
@@ -154,8 +157,9 @@ public final class Record extends GroovyObjectSupport {
      *            the set of fields to be retained.
      */
     public void retain(String... retainedFields) {
-        Set<String> retainedFieldsInner = asInner(retainedFields);
-        fields.retainAll(retainedFieldsInner);
+        validateContains(retainedFields);
+
+        fields.retainAll(asList(retainedFields));
         values.keySet().retainAll(fields);
     }
 
@@ -165,7 +169,7 @@ public final class Record extends GroovyObjectSupport {
      * @return the names of fields.
      */
     public Collection<String> fields() {
-        return new LinkedHashSet<>(fields);
+        return new ArrayList<>(fields);
     }
 
     /**
@@ -194,20 +198,20 @@ public final class Record extends GroovyObjectSupport {
         return copy;
     }
 
-    private static String asInner(String field) {
-        if (field == null || field.isEmpty()) {
-            throw new IllegalArgumentException("Invalid name of field.");
+    private void validateNotEmpty(String validatedField) {
+        if (isEmpty(validatedField)) {
+            throw new IllegalArgumentException("Empty field.");
         }
-
-        return field.toLowerCase();
     }
 
-    private static Set<String> asInner(String... fields) {
-        Set<String> fieldsInner = new LinkedHashSet<>();
-        for (String field : fields) {
-            fieldsInner.add(asInner(field));
+    private void validateContains(String... validatedFields) {
+        for (String validatedField : validatedFields) {
+            validateNotEmpty(validatedField);
+
+            if (!fields.contains(validatedField)) {
+                throw new IllegalArgumentException(format("Field %s not found.", validatedField));
+            }
         }
-        return fieldsInner;
     }
 
 }

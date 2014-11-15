@@ -48,6 +48,8 @@
 
         <jackson.csv.version>2.4.3</jackson.csv.version>
 
+        <commons.lang.version>3.3.2</commons.lang.version>
+
         <slf4j.version>1.7.7</slf4j.version>
         <junit.version>4.11</junit.version>
         <mockito.version>1.10.8</mockito.version>
@@ -71,6 +73,13 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-csv</artifactId>
             <version>${jackson.csv.version}</version>
+        </dependency>
+
+        <!-- Commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang.version}</version>
         </dependency>
 
         <!-- Log -->
