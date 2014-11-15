@@ -44,22 +44,23 @@ Record provides following methods:
 
 Operation   | Usage
 ------------|---------------------------------
-`remove`    | To remove fields from record.
-`rename`    | To rename field in record (field should exist).
-`retain`    | To retain fields in record.
-`copy`      | To create copy of record.
+`contains`  | Check that record contains field.
+`remove`    | Remove fields from record.
+`rename`    | Rename field in record.
+`retain`    | Retain fields in record.
+`copy`      | Create copy of record.
 
 Also, following operations are useful for work with sets of records:
 
 Operation   | Usage
 ------------|---------------------------------
-`load`      | To load records from CSV file.
-`save`      | To save records into CSV file.
-`distinct`  | To get distinct values of field.
-`combine`   | To combine records from different sets into one.
-`merge`     | To merge records from different sets using the value of field as unique key.
-`map`       | To get mapping of records using the value of field as unique key.
-`group`     | To split records into groups using the value of field as key.
+`load`      | Load records from CSV file.
+`save`      | Save records into CSV file.
+`distinct`  | Find distinct values of field.
+`combine`   | Combine records from different sets into one.
+`merge`     | Merge different sets of records using the field as unique key.
+`map`       | Map records using the field as unique key.
+`group`     | Split records into groups using the field as key.
 
 Operations `load` and `save` support the following named arguments:
 

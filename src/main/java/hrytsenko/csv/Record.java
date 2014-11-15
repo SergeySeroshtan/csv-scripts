@@ -119,6 +119,20 @@ public class Record extends GroovyObjectSupport {
     }
 
     /**
+     * Checks that record contains the specified field.
+     * 
+     * @param field
+     *            the field whose presence is checked.
+     * 
+     * @return <code>true</code> if record contains field and <code>false</code> otherwise.
+     */
+    public boolean contains(String field) {
+        validateNotEmpty(field);
+
+        return fields.contains(field);
+    }
+
+    /**
      * Removes all given fields.
      * 
      * @param removedFields
@@ -208,7 +222,7 @@ public class Record extends GroovyObjectSupport {
         for (String validatedField : validatedFields) {
             validateNotEmpty(validatedField);
 
-            if (!fields.contains(validatedField)) {
+            if (!contains(validatedField)) {
                 throw new IllegalArgumentException(format("Field %s not found.", validatedField));
             }
         }

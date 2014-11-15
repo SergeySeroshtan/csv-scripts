@@ -22,8 +22,10 @@ package hrytsenko.csv;
 import static hrytsenko.csv.Records.record;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -64,7 +66,7 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetIfFieldNotNull() {
+    public void testGetIfFieldIsNull() {
         recordForOracle.getAt(null);
     }
 
@@ -83,6 +85,16 @@ public class RecordTest {
 
         recordForOracle.putAt("exchange", "NASDAQ");
         assertEquals("NASDAQ", recordForOracle.getAt("exchange"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPutIfFieldIsNull() {
+        recordForOracle.putAt(null, "");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPutIfFieldIsEmpty() {
+        recordForOracle.putAt("", "");
     }
 
     @Test
@@ -113,9 +125,25 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testPutIfValuesNotDefined() {
+    public void testPutIfValuesIsNull() {
         Record record = new Record();
         record.putAll(null);
+    }
+
+    @Test
+    public void testContains() {
+        assertTrue(recordForOracle.contains("ticker"));
+        assertFalse(recordForOracle.contains("price"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testContainsIfFieldIsNull() {
+        recordForOracle.contains(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testContainsIfFieldIsEmpty() {
+        recordForOracle.contains("");
     }
 
     @Test
