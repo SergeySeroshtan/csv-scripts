@@ -66,7 +66,7 @@ public class IOTest {
 
         writeTempFile(tempFilePath, tempFileData, UTF_8);
 
-        List<Record> records = load(asArgs("path", tempFilePath, "fieldSeparator", "\t"));
+        List<Record> records = load(asArgs("path", tempFilePath, "separator", "\t"));
 
         assertEquals(2, records.size());
         assertEquals("GOOG", records.get(0).getAt("ticker"));

@@ -53,9 +53,9 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
  * <dd>The list of records to be saved.</dd>
  * <dt>charset</dt>
  * <dd>Charset for file, see standard charsets in {@link Charset}, default: UTF-8.</dd>
- * <dt>fieldSeparator</dt>
+ * <dt>separator</dt>
  * <dd>Separator for values of fields, default: comma (',').</dd>
- * <dt>fieldQualifier</dt>
+ * <dt>qualifier</dt>
  * <dd>Qualifier for values of fields, default: double-quote ('"').</dd>
  * </dl>
  * 
@@ -146,25 +146,25 @@ public final class IO {
     }
 
     private static CsvSchema.Builder getSchema(Map<String, ?> args) {
-        CharSequence fieldSeparator = (CharSequence) args.get("fieldSeparator");
-        if (fieldSeparator == null) {
-            fieldSeparator = ",";
+        CharSequence separator = (CharSequence) args.get("separator");
+        if (separator == null) {
+            separator = ",";
         }
-        if (fieldSeparator.length() != 1) {
-            throw new IllegalArgumentException("Use single character as separator for fields.");
+        if (separator.length() != 1) {
+            throw new IllegalArgumentException("Use single character as separator.");
         }
 
-        CharSequence fieldQualifier = (CharSequence) args.get("fieldQualifier");
-        if (fieldQualifier == null) {
-            fieldQualifier = "\"";
+        CharSequence qualifier = (CharSequence) args.get("qualifier");
+        if (qualifier == null) {
+            qualifier = "\"";
         }
-        if (fieldQualifier.length() != 1) {
-            throw new IllegalArgumentException("Use single character as qualifier for fields.");
+        if (qualifier.length() != 1) {
+            throw new IllegalArgumentException("Use single character as qualifier.");
         }
 
         CsvSchema.Builder schema = CsvSchema.builder();
-        schema.setColumnSeparator(fieldSeparator.charAt(0));
-        schema.setQuoteChar(fieldQualifier.charAt(0));
+        schema.setColumnSeparator(separator.charAt(0));
+        schema.setQuoteChar(qualifier.charAt(0));
         return schema;
     }
 
