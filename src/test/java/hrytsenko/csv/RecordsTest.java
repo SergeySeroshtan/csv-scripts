@@ -29,7 +29,6 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -67,11 +66,11 @@ public class RecordsTest {
 
     @Test
     public void testMerge() {
-        List<Record> setWithName = asList(recordForGoogle, recordForOracle);
+        List<Record> setWithName = asList(record("ticker", "GOOG", "name", "Google"),
+                record("ticker", "ORCL", "name", "Oracle"));
 
-        List<Record> setWithExchange = new ArrayList<>();
-        setWithExchange.add(record("ticker", "GOOG", "city", "Mountain View"));
-        setWithExchange.add(record("ticker", "ORCL", "city", "Redwood City"));
+        List<Record> setWithExchange = asList(record("ticker", "GOOG", "exchange", "NASDAQ"),
+                record("ticker", "ORCL", "exchange", "NYSE"));
 
         Collection<Record> mergedSet = merge("ticker", setWithName, setWithExchange);
         assertEquals(2, mergedSet.size());
@@ -79,12 +78,19 @@ public class RecordsTest {
         Record[] mergedRecords = mergedSet.toArray(new Record[mergedSet.size()]);
 
         Record recordForGoogle = mergedRecords[0];
-        assertEquals(4, recordForGoogle.fields().size());
-        assertEquals("Mountain View", recordForGoogle.getAt("city"));
+        assertEquals(3, recordForGoogle.fields().size());
+        assertEquals("Google", recordForGoogle.getAt("name"));
+        assertEquals("NASDAQ", recordForGoogle.getAt("exchange"));
 
         Record recordForOracle = mergedRecords[1];
-        assertEquals(4, recordForOracle.fields().size());
-        assertEquals("Redwood City", recordForOracle.getAt("city"));
+        assertEquals(3, recordForOracle.fields().size());
+        assertEquals("Oracle", recordForOracle.getAt("name"));
+        assertEquals("NYSE", recordForOracle.getAt("exchange"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testMergeKeyNotFound() {
+        merge("symbol", asList(recordForGoogle, recordForOracle));
     }
 
     @Test
@@ -93,6 +99,11 @@ public class RecordsTest {
 
         Collection<String> exchanges = distinct("exchange", set);
         assertArrayEquals(exchanges.toArray(), new String[] { "NASDAQ", "NYSE" });
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDistictKeyNotFound() {
+        distinct("symbol", asList(recordForGoogle, recordForOracle));
     }
 
     @Test
@@ -107,6 +118,11 @@ public class RecordsTest {
         assertEquals(mappedSet.get("ORCL"), recordForOracle);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testMapKeyNotFound() {
+        map("symbol", asList(recordForGoogle, recordForOracle));
+    }
+
     @Test
     public void testGroup() {
         List<Record> set = asList(recordForGoogle, recordForOracle, recordForMicrosoft);
@@ -117,6 +133,11 @@ public class RecordsTest {
 
         assertArrayEquals(new Object[] { recordForGoogle, recordForMicrosoft }, groupedSet.get("NASDAQ").toArray());
         assertArrayEquals(new Object[] { recordForOracle }, groupedSet.get("NYSE").toArray());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGroupKeyNotFound() {
+        group("symbol", asList(recordForGoogle, recordForOracle));
     }
 
 }

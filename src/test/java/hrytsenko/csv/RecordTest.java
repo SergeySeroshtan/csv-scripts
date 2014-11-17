@@ -66,16 +66,16 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetIfFieldIsNull() {
+    public void testGetFieldIsNull() {
         recordForOracle.getAt(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetIfFieldIsEmpty() {
+    public void testGetFieldIsEmpty() {
         recordForOracle.getAt("");
     }
 
-    public void testGetIfFieldNotFound() {
+    public void testGetFieldNotFound() {
         assertNull(recordForOracle.getAt("unknown"));
     }
 
@@ -88,12 +88,12 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testPutIfFieldIsNull() {
+    public void testPutFieldIsNull() {
         recordForOracle.putAt(null, "");
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testPutIfFieldIsEmpty() {
+    public void testPutFieldIsEmpty() {
         recordForOracle.putAt("", "");
     }
 
@@ -107,7 +107,7 @@ public class RecordTest {
     }
 
     @Test
-    public void testPutIfValueIsNull() {
+    public void testPutValueIsNull() {
         recordForOracle.putAt("exchange", null);
         assertEquals("", recordForOracle.getAt("exchange"));
     }
@@ -125,7 +125,7 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testPutIfValuesIsNull() {
+    public void testPutValuesIsNull() {
         Record record = new Record();
         record.putAll(null);
     }
@@ -137,12 +137,12 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testContainsIfFieldIsNull() {
+    public void testContainsFieldIsNull() {
         recordForOracle.contains(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testContainsIfFieldIsEmpty() {
+    public void testContainsFieldIsEmpty() {
         recordForOracle.contains("");
     }
 
@@ -153,7 +153,7 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testRemoveNotFound() {
+    public void testRemoveFieldNotFound() {
         recordForOracle.remove("price");
     }
 
@@ -164,7 +164,7 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testRenameNotFound() {
+    public void testRenameFieldNotFound() {
         recordForOracle.rename("symbol", "ticker");
     }
 
@@ -175,7 +175,7 @@ public class RecordTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testRetainNotFound() {
+    public void testRetainFieldNotFound() {
         recordForOracle.remove("ticker", "price");
     }
 
