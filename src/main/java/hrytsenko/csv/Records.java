@@ -69,9 +69,7 @@ public final class Records {
         Map<String, Record> mergedSet = new LinkedHashMap<>();
         for (Collection<Record> set : sets) {
             for (Record record : set) {
-                if (!record.contains(field)) {
-                    throw new IllegalArgumentException("One or more record has no key.");
-                }
+                validateContainsKey(record, field);
                 String key = record.getAt(field);
 
                 Record mergedRecord = mergedSet.get(key);
@@ -83,7 +81,7 @@ public final class Records {
                 mergedRecord.putAll(record.values());
             }
         }
-        return mergedSet.values();
+        return new ArrayList<>(mergedSet.values());
     }
 
     /**
@@ -99,10 +97,9 @@ public final class Records {
     public static Collection<String> distinct(String field, Collection<Record> set) {
         Set<String> values = new LinkedHashSet<>();
         for (Record record : set) {
-            if (!record.contains(field)) {
-                throw new IllegalArgumentException("One or more record has no key.");
-            }
+            validateContainsKey(record, field);
             String key = record.getAt(field);
+
             values.add(key);
         }
         return values;
@@ -124,10 +121,9 @@ public final class Records {
     public static Map<String, Record> map(String field, Collection<Record> set) {
         Map<String, Record> mappedSet = new LinkedHashMap<>();
         for (Record record : set) {
-            if (!record.contains(field)) {
-                throw new IllegalArgumentException("One or more record has no key.");
-            }
+            validateContainsKey(record, field);
             String key = record.getAt(field);
+
             mappedSet.put(key, record);
         }
         return mappedSet;
@@ -146,9 +142,7 @@ public final class Records {
     public static Map<String, List<Record>> group(String field, Collection<Record> set) {
         Map<String, List<Record>> groupedSet = new LinkedHashMap<>();
         for (Record record : set) {
-            if (!record.contains(field)) {
-                throw new IllegalArgumentException("One or more record has no key.");
-            }
+            validateContainsKey(record, field);
             String key = record.getAt(field);
 
             List<Record> group = groupedSet.get(key);
@@ -190,6 +184,12 @@ public final class Records {
             record.putAt(content[i], content[i + 1]);
         }
         return record;
+    }
+
+    private static void validateContainsKey(Record record, String field) {
+        if (!record.contains(field)) {
+            throw new IllegalArgumentException("One or more record has no key.");
+        }
     }
 
 }
