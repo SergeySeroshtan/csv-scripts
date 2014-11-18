@@ -20,11 +20,13 @@
 package hrytsenko.csv;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.Files.newBufferedReader;
 import static java.nio.file.Files.newBufferedWriter;
+import static java.nio.file.Files.newInputStream;
 import groovy.lang.Closure;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -37,6 +39,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.io.input.BOMInputStream;
 
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -100,7 +104,9 @@ public final class IO {
      *             if file could not be read.
      */
     public static List<Record> load(Map<String, ?> args, Closure<?> closure) throws IOException {
-        try (Reader dataReader = newBufferedReader(getPath(args), getCharset(args))) {
+        try (InputStream dataStream = newInputStream(getPath(args), StandardOpenOption.READ);
+                InputStream bomStream = new BOMInputStream(dataStream);
+                Reader dataReader = new InputStreamReader(bomStream, getCharset(args))) {
             CsvSchema csvSchema = getSchema(args).setUseHeader(true).build();
             CsvMapper csvMapper = new CsvMapper();
             ObjectReader csvReader = csvMapper.reader(Map.class).with(csvSchema);
