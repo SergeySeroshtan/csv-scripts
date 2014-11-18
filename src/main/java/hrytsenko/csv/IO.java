@@ -19,6 +19,7 @@
  */
 package hrytsenko.csv;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.newBufferedReader;
 import static java.nio.file.Files.newBufferedWriter;
 import groovy.lang.Closure;
@@ -164,10 +165,7 @@ public final class IO {
     private static Charset getCharset(Map<String, ?> args) {
         CharSequence charsetName = (CharSequence) args.get("charset");
 
-        if (charsetName == null) {
-            charsetName = "UTF-8";
-        }
-        return Charset.forName(charsetName.toString());
+        return charsetName != null ? Charset.forName(charsetName.toString()) : UTF_8;
     }
 
     private static CsvSchema.Builder getSchema(Map<String, ?> args) {

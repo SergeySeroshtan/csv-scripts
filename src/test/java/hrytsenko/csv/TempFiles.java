@@ -35,11 +35,6 @@ import java.nio.file.StandardOpenOption;
  */
 public final class TempFiles {
 
-    /**
-     * The default character set for temporary files.
-     */
-    public static final Charset UTF_8 = Charset.forName("UTF-8");
-
     private TempFiles() {
     }
 

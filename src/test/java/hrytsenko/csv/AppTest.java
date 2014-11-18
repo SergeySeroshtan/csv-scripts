@@ -20,11 +20,11 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.App.execute;
-import static hrytsenko.csv.TempFiles.UTF_8;
 import static hrytsenko.csv.TempFiles.createTempFile;
 import static hrytsenko.csv.TempFiles.writeTempFile;
 import static java.lang.System.arraycopy;
 import static java.lang.Thread.currentThread;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.net.URI;
 import java.nio.file.Path;

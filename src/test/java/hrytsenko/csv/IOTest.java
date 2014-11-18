@@ -22,10 +22,10 @@ package hrytsenko.csv;
 import static hrytsenko.csv.IO.load;
 import static hrytsenko.csv.IO.save;
 import static hrytsenko.csv.Records.record;
-import static hrytsenko.csv.TempFiles.UTF_8;
 import static hrytsenko.csv.TempFiles.createTempFile;
 import static hrytsenko.csv.TempFiles.readTempFile;
 import static hrytsenko.csv.TempFiles.writeTempFile;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
