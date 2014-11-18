@@ -42,17 +42,25 @@ import org.junit.Test;
  */
 public class AppTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testEmptyArgs() throws Exception {
-        execute(new String[] {});
-    }
-
     @Test
     public void testArgs() throws Exception {
         String tempFilePath = createTempFile();
         String tempFileData = "ticker,exchange\nGOOG,NASDAQ\nORCL,NYSE\nMSFT,NASDAQ";
         writeTempFile(tempFilePath, tempFileData, UTF_8);
         executeScript("Args.groovy", tempFilePath, "NASDAQ", "2");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testArgsScriptNotDefined() throws Exception {
+        execute(new String[] {});
+    }
+
+    @Test
+    public void testLoad() throws Exception {
+        String tempFilePath = createTempFile();
+        String tempFileData = "TICKER,EXCHANGE\nGOOG,NASDAQ\nORCL,NYSE\nMSFT,NASDAQ";
+        writeTempFile(tempFilePath, tempFileData, UTF_8);
+        executeScript("Load.groovy", tempFilePath);
     }
 
     @Test

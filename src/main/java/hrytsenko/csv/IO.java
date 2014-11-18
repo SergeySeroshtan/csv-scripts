@@ -21,6 +21,7 @@ package hrytsenko.csv;
 
 import static java.nio.file.Files.newBufferedReader;
 import static java.nio.file.Files.newBufferedWriter;
+import groovy.lang.Closure;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -78,6 +79,26 @@ public final class IO {
      *             if file could not be read.
      */
     public static List<Record> load(Map<String, ?> args) throws IOException {
+        return load(args, null);
+    }
+
+    /**
+     * Gets records from file.
+     * 
+     * <p>
+     * If closure is given, then it will be applied to each record.
+     * 
+     * @param args
+     *            the named arguments {@link IO}.
+     * @param closure
+     *            the closure to be applied to each record.
+     * 
+     * @return the loaded records.
+     * 
+     * @throws IOException
+     *             if file could not be read.
+     */
+    public static List<Record> load(Map<String, ?> args, Closure<?> closure) throws IOException {
         try (Reader dataReader = newBufferedReader(getPath(args), getCharset(args))) {
             CsvSchema csvSchema = getSchema(args).setUseHeader(true).build();
             CsvMapper csvMapper = new CsvMapper();
@@ -90,6 +111,10 @@ public final class IO {
                 Record record = new Record();
                 record.putAll(row);
                 records.add(record);
+
+                if (closure != null) {
+                    closure.call(record);
+                }
             }
             return records;
         }
