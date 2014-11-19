@@ -3,18 +3,16 @@
 
 # Summary
 
-This application is intended to help automate processing of CSV files via scripts.
+This application is intended to help automate processing of CSV files via scripts in Groovy.
 Such scripts are useful for prototyping and rapid implementation of custom logic.
-Application provides set of classes and methods to simplify writing of scripts.
-
-This application uses Groovy as scripting language.
+Application provides set of classes and methods to simplify writing of such scripts.
 
 # Scripts
 
-Assume that CSV file contains ordered set of records.
+Application assumes that CSV file contains ordered set of records.
 And each record contains ordered set of fields and their values.
 
-To access fields of record you can use overloaded operator [] or properties:
+To access fields of record you can use operator [] or properties:
 
 ```groovy
 def record = record(ticker: 'ORCL', name: 'Oracle')
@@ -22,8 +20,9 @@ def record = record(ticker: 'ORCL', name: 'Oracle')
 assert record.ticker == record['ticker']
 ```
 
-You can use any object to update value of field.
-As a result, field will contain the string representation of this object.
+Application allows to use any object to update value of field.
+But, as the result, field will contain the string representation of this object.
+And in case of `null` value, field will contain empty string.
 
 ```groovy
 def record = record(ticker: 'ORCL', name: 'Oracle')
@@ -40,7 +39,7 @@ record.remove('exchange')
 assert record.exchange == null
 ```
 
-Record provides following methods:
+Each record provides the following convenience methods:
 
 Operation   | Usage
 ------------|---------------------------------
@@ -49,8 +48,10 @@ Operation   | Usage
 `rename`    | Rename field in record.
 `retain`    | Retain fields in record.
 `copy`      | Create copy of record.
+`fields`    | Get list of fields.
+`values`    | Get map of fields and values.
 
-Also, following operations are useful for work with sets of records:
+Addionally, application provides following methods that are useful for work with sets of records:
 
 Operation   | Usage
 ------------|---------------------------------
@@ -70,11 +71,22 @@ Operations `load` and `save` support the following named arguments:
 * `separator` - the separator for fields, default: comma.
 * `qualifier` - the qualifier for fields, default: double-quote.
 
+You can easily pre-process records during `load`.
+Following example converts names of fields to lowercase during load:
+
+```groovy
+def records = load(path: args[0]) { record ->
+    record.fields().each { field ->
+        record.rename(field, field.toLowerCase())
+    }
+}
+```
+
 Additionally, you can use operation `log` to add custom message into the log of script.
 
 # Examples
 
-Script that merges records from several CSV files:
+Merge records from several CSV files by identifier:
 
 ```groovy
 def all = []
@@ -86,7 +98,7 @@ log "Save ${all.size()} records into ${args[0]}."
 save(path: args[0], records: all)
 ```
 
-Script that finds records that were added in new version of CSV file:
+Find records that were added in new version of CSV file:
 
 ```groovy
 def previous = distinct('id', load(path: args[0]))
