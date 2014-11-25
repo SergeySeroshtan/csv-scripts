@@ -12,12 +12,14 @@ Application provides set of classes and methods to simplify writing of such scri
 Application assumes that CSV file contains ordered set of records.
 And each record contains ordered set of fields and their values.
 
-To access fields of record you can use operator [] or properties:
+To access fields by name you can use operator [] or properties.
+Also, you can access fields by index using operator [].
 
 ```groovy
 def record = record(ticker: 'ORCL', name: 'Oracle')
 
 assert record.ticker == record['ticker']
+assert record.ticker == record[0]
 ```
 
 Application allows to use any object to update value of field.

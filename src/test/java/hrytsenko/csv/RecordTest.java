@@ -58,6 +58,16 @@ public class RecordTest {
     }
 
     @Test
+    public void testGetByIndex() {
+        assertEquals("ORCL", recordForOracle.getAt(0));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetIndexIsNegative() {
+        recordForOracle.getAt(-1);
+    }
+
+    @Test
     public void testGetUsingProperty() {
         Record record = spy(recordForOracle);
         assertEquals("ORCL", record.getProperty("ticker"));
@@ -87,14 +97,17 @@ public class RecordTest {
         assertEquals("NASDAQ", recordForOracle.getAt("exchange"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testPutFieldIsNull() {
-        recordForOracle.putAt(null, "");
+    @Test
+    public void testPutByIndex() {
+        assertEquals("NYSE", recordForOracle.getAt(2));
+
+        recordForOracle.putAt(2, "NASDAQ");
+        assertEquals("NASDAQ", recordForOracle.getAt(2));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testPutFieldIsEmpty() {
-        recordForOracle.putAt("", "");
+    public void testPutIndexIsNegative() {
+        recordForOracle.getAt(-1);
     }
 
     @Test
@@ -104,6 +117,16 @@ public class RecordTest {
         assertEquals("NASDAQ", record.getAt("exchange"));
 
         verify(record).putAt("exchange", "NASDAQ");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPutFieldIsNull() {
+        recordForOracle.putAt(null, "");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPutFieldIsEmpty() {
+        recordForOracle.putAt("", "");
     }
 
     @Test

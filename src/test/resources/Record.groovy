@@ -1,6 +1,7 @@
 def record = record(ticker : 'ORCL', name : 'Oracle')
 
 assert record.ticker == record['ticker']
+assert record.ticker == record[0]
 
 record.exchange = 'NYSE'
 assert record.exchange == 'NYSE'

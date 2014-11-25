@@ -72,6 +72,21 @@ public class Record extends GroovyObjectSupport {
         return values.get(field);
     }
 
+    /**
+     * Returns value of field by index.
+     * 
+     * @param i
+     *            the index of field.
+     * 
+     * @return the value of field of <code>null</code> if it not found.
+     */
+    public String getAt(int i) {
+        validateIndex(i);
+
+        String field = fields.get(i);
+        return values.get(field);
+    }
+
     @Override
     public Object getProperty(String propertyName) {
         return getAt(propertyName);
@@ -95,6 +110,23 @@ public class Record extends GroovyObjectSupport {
             fields.add(field);
         }
         values.put(field, value == null ? EMPTY : value.toString());
+    }
+
+    /**
+     * Sets the value of field by index. The value is the string representation of given object.
+     * 
+     * <p>
+     * If value is <code>null</code>, then {@link StringUtils#EMPTY} used.
+     * 
+     * @param i
+     *            the index of field.
+     * @param value
+     *            the new value for field.
+     */
+    public void putAt(int i, Object value) {
+        validateIndex(i);
+
+        putAt(fields.get(i), value);
     }
 
     @Override
@@ -225,6 +257,15 @@ public class Record extends GroovyObjectSupport {
             if (!contains(validatedField)) {
                 throw new IllegalArgumentException(format("Field %s not found.", validatedField));
             }
+        }
+    }
+
+    private void validateIndex(int i) {
+        if (i < 0) {
+            throw new IllegalArgumentException("Negative indices not allowed.");
+        }
+        if (i >= fields.size()) {
+            throw new IllegalArgumentException("No field with such index.");
         }
     }
 
