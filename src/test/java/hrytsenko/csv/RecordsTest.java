@@ -19,7 +19,6 @@
  */
 package hrytsenko.csv;
 
-import static hrytsenko.csv.Records.combine;
 import static hrytsenko.csv.Records.distinct;
 import static hrytsenko.csv.Records.group;
 import static hrytsenko.csv.Records.map;
@@ -52,16 +51,6 @@ public class RecordsTest {
         recordForGoogle = record("ticker", "GOOG", "name", "Google", "exchange", "NASDAQ");
         recordForMicrosoft = record("ticker", "MSFT", "name", "Microsoft", "exchange", "NASDAQ");
         recordForOracle = record("ticker", "ORCL", "name", "Oracle", "exchange", "NYSE");
-    }
-
-    @Test
-    public void testCombine() {
-        List<Record> setForNYSE = asList(recordForGoogle);
-        List<Record> setForNASDAQ = asList(recordForOracle, recordForMicrosoft);
-
-        Collection<Record> result = combine(setForNYSE, setForNASDAQ);
-
-        assertEquals(3, result.size());
     }
 
     @Test

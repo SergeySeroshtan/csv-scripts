@@ -38,23 +38,6 @@ public final class Records {
     }
 
     /**
-     * Combines records from one or more sets,
-     * 
-     * @param sets
-     *            the sets of records to be combined.
-     * 
-     * @return the resulting set of records.
-     */
-    @SafeVarargs
-    public static Collection<Record> combine(Collection<Record>... sets) {
-        List<Record> combinedSet = new ArrayList<>();
-        for (Collection<Record> set : sets) {
-            combinedSet.addAll(set);
-        }
-        return combinedSet;
-    }
-
-    /**
      * Merges records from one or more sets.
      * 
      * @param field
