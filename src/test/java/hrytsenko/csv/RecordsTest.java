@@ -79,7 +79,7 @@ public class RecordsTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testMergeKeyNotFound() {
-        merge("symbol", asList(recordForGoogle, recordForOracle));
+        merge("symbol", asList(recordForGoogle), asList(recordForOracle));
     }
 
     @Test

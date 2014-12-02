@@ -204,10 +204,28 @@ public class RecordTest {
 
     @Test
     public void testCopy() {
-        Record copy = recordForOracle.copy();
+        Record result = recordForOracle.copy();
 
-        assertNotSame(recordForOracle, copy);
-        assertEquals(recordForOracle.values(), copy.values());
+        assertNotSame(recordForOracle, result);
+        assertEquals(recordForOracle.values(), result.values());
+    }
+
+    @Test
+    public void testMerge() {
+        Record recordWithName = record("ticker", "ORCL", "name", "Oracle");
+        Record recordWithExchange = record("ticker", "ORCL", "exchange", "NYSE");
+        Record result = recordWithName.merge(recordWithExchange);
+
+        assertNotSame(recordWithName, result);
+        assertEquals(recordForOracle.values(), result.values());
+    }
+
+    @Test
+    public void testMergeWithNull() {
+        Record result = recordForOracle.merge(null);
+
+        assertNotSame(recordForOracle, result);
+        assertEquals(recordForOracle.values(), result.values());
     }
 
     private static void assertFields(Record record, String... expectedFields) {

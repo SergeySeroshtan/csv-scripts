@@ -19,6 +19,8 @@
  */
 package hrytsenko.csv;
 
+import groovy.lang.Closure;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -26,6 +28,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.codehaus.groovy.runtime.InvokerHelper;
 
 /**
  * Methods for processing records.
@@ -38,33 +42,59 @@ public final class Records {
     }
 
     /**
-     * Merges records from one or more sets.
+     * Merges records by key using closure.
      * 
      * @param field
      *            the field to be used as unique key.
-     * @param sets
-     *            the sets of records to be merged.
+     * @param set
+     *            the original set of records.
+     * @param otherSet
+     *            the other set with records to be merged.
+     * @param closure
+     *            the closure that merges records.
      * 
-     * @return the resulting set of records.
+     * 
+     * @return the resulting set.
      */
-    @SafeVarargs
-    public static Collection<Record> merge(String field, Collection<Record>... sets) {
-        Map<String, Record> mergedSet = new LinkedHashMap<>();
-        for (Collection<Record> set : sets) {
-            for (Record record : set) {
-                validateContainsKey(record, field);
-                String key = record.getAt(field);
+    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet,
+            Closure<Record> closure) {
+        List<Record> resultSet = new ArrayList<>();
+        Map<String, Record> mergedSet = map(field, otherSet);
+        for (Record record : set) {
+            validateContainsKey(record, field);
 
-                Record mergedRecord = mergedSet.get(key);
-                if (mergedRecord == null) {
-                    mergedRecord = new Record();
-                    mergedSet.put(key, mergedRecord);
-                }
+            String key = record.getAt(field);
+            Record mergedRecord = mergedSet.get(key);
 
-                mergedRecord.putAll(record.values());
-            }
+            Record resultRecord = closure.call(record, mergedRecord);
+            resultSet.add(resultRecord);
         }
-        return new ArrayList<>(mergedSet.values());
+        return resultSet;
+    }
+
+    /**
+     * Merges records by key using {@link Record#merge(Record)}.
+     * 
+     * @param field
+     *            the field to be used as unique key.
+     * @param set
+     *            the original set of records.
+     * @param otherSet
+     *            the set to be merged.
+     * 
+     * @return the resulting set.
+     */
+    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet) {
+        return merge(field, set, otherSet, new Closure<Record>(Records.class) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Record call(Object... args) {
+                return (Record) InvokerHelper.invokeMethod(args[0], "merge", args[1]);
+            }
+
+        });
     }
 
     /**
@@ -73,7 +103,7 @@ public final class Records {
      * @param field
      *            the name of field.
      * @param set
-     *            the distinct values of field.
+     *            the set of records.
      * 
      * @return the distinct values of field.
      */

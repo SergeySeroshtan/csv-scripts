@@ -60,9 +60,9 @@ Operation   | Usage
 `load`      | Load records from CSV file.
 `save`      | Save records into CSV file.
 `distinct`  | Find distinct values of field.
-`merge`     | Merge different sets of records using the field as unique key.
-`map`       | Map records using the field as unique key.
-`group`     | Split records into groups using the field as key.
+`merge`     | Merge the records using the field as unique key.
+`map`       | Map the records using the field as unique key.
+`group`     | Split the records into groups using the field as key.
 
 Operations `load` and `save` support the following named arguments:
 

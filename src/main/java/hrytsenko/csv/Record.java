@@ -237,11 +237,31 @@ public class Record extends GroovyObjectSupport {
      * @return the copy of record.
      */
     public Record copy() {
-        Record copy = new Record();
-        for (String field : fields) {
-            copy.putAt(field, values.get(field));
+        Record result = new Record();
+        copyAll(result, this);
+        return result;
+    }
+
+    /**
+     * Merges record with other one.
+     * 
+     * @param other
+     *            the record to be merged.
+     * 
+     * @return the merged record.
+     */
+    public Record merge(Record other) {
+        Record result = copy();
+        if (other != null) {
+            copyAll(result, other);
         }
-        return copy;
+        return result;
+    }
+
+    private static void copyAll(Record target, Record source) {
+        for (String field : source.fields) {
+            target.putAt(field, source.values.get(field));
+        }
     }
 
     private void validateNotEmpty(String validatedField) {
