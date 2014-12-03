@@ -42,62 +42,6 @@ public final class Records {
     }
 
     /**
-     * Merges records by key using closure.
-     * 
-     * @param field
-     *            the field to be used as unique key.
-     * @param set
-     *            the original set of records.
-     * @param otherSet
-     *            the other set with records to be merged.
-     * @param closure
-     *            the closure that merges records.
-     * 
-     * 
-     * @return the resulting set.
-     */
-    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet,
-            Closure<Record> closure) {
-        List<Record> resultSet = new ArrayList<>();
-        Map<String, Record> mergedSet = map(field, otherSet);
-        for (Record record : set) {
-            validateContainsKey(record, field);
-
-            String key = record.getAt(field);
-            Record mergedRecord = mergedSet.get(key);
-
-            Record resultRecord = closure.call(record, mergedRecord);
-            resultSet.add(resultRecord);
-        }
-        return resultSet;
-    }
-
-    /**
-     * Merges records by key using {@link Record#merge(Record)}.
-     * 
-     * @param field
-     *            the field to be used as unique key.
-     * @param set
-     *            the original set of records.
-     * @param otherSet
-     *            the set to be merged.
-     * 
-     * @return the resulting set.
-     */
-    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet) {
-        return merge(field, set, otherSet, new Closure<Record>(Records.class) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public Record call(Object... args) {
-                return (Record) InvokerHelper.invokeMethod(args[0], "merge", args[1]);
-            }
-
-        });
-    }
-
-    /**
      * Gets distinct values of field.
      * 
      * @param field
@@ -167,6 +111,62 @@ public final class Records {
             group.add(record);
         }
         return groupedSet;
+    }
+
+    /**
+     * Merges records by key using closure.
+     * 
+     * @param field
+     *            the field to be used as unique key.
+     * @param set
+     *            the original set of records.
+     * @param otherSet
+     *            the other set with records to be merged.
+     * @param closure
+     *            the closure that merges records.
+     * 
+     * 
+     * @return the resulting set.
+     */
+    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet,
+            Closure<Record> closure) {
+        List<Record> resultSet = new ArrayList<>();
+        Map<String, Record> mergedSet = map(field, otherSet);
+        for (Record record : set) {
+            validateContainsKey(record, field);
+
+            String key = record.getAt(field);
+            Record mergedRecord = mergedSet.get(key);
+
+            Record resultRecord = closure.call(record, mergedRecord);
+            resultSet.add(resultRecord);
+        }
+        return resultSet;
+    }
+
+    /**
+     * Merges records by key using {@link Record#merge(Record)}.
+     * 
+     * @param field
+     *            the field to be used as unique key.
+     * @param set
+     *            the original set of records.
+     * @param otherSet
+     *            the set to be merged.
+     * 
+     * @return the resulting set.
+     */
+    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet) {
+        return merge(field, set, otherSet, new Closure<Record>(Records.class) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Record call(Object... args) {
+                return (Record) InvokerHelper.invokeMethod(args[0], "merge", args[1]);
+            }
+
+        });
     }
 
     /**

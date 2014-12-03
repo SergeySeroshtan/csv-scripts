@@ -53,26 +53,27 @@ Operation   | Usage
 `fields`    | Get list of fields.
 `values`    | Get map of fields and values.
 
-Addionally, application provides following methods that are useful for work with sets of records:
+Additionally, application provides following methods that are useful for work with sets of records:
 
 Operation   | Usage
 ------------|---------------------------------
 `load`      | Load records from CSV file.
 `save`      | Save records into CSV file.
 `distinct`  | Find distinct values of field.
-`merge`     | Merge the records using the field as unique key.
 `map`       | Map the records using the field as unique key.
 `group`     | Split the records into groups using the field as key.
+`merge`     | Merge the records using the field as unique key.
+`record`    | Create record with given values.
 
 Operations `load` and `save` support the following named arguments:
 
 * `path` - the path to file.
 * `records` - the list of records to be saved.
-* `charset` - the charset for file, default: UTF-8.
+* `charset` - the character set for file, default: UTF-8.
 * `separator` - the separator for fields, default: comma.
 * `qualifier` - the qualifier for fields, default: double-quote.
 
-You can easily pre-process records during `load`.
+You can easily process records during `load`.
 Following example converts names of fields to lowercase during load:
 
 ```groovy
@@ -102,12 +103,12 @@ save(path: args[0], records: all)
 Find records that were added in new version of CSV file:
 
 ```groovy
-def previous = distinct('id', load(path: args[0]))
-def current = load(path: args[1])
+def prev = distinct('id', load(path: args[0]))
+def last = load(path: args[1])
 def diff = []
 
-current.each {
-    if (!previous.contains(it.id)) {
+last.each {
+    if (!prev.contains(it.id)) {
         diff << it
     }
 }
