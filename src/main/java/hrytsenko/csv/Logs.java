@@ -40,8 +40,8 @@ public final class Logs {
      * @param message
      *            the message to be added.
      */
-    public static void log(String message) {
-        LOGGER.info(message);
+    public static void log(CharSequence message) {
+        LOGGER.info(message.toString());
     }
 
 }
