@@ -51,7 +51,7 @@ public final class Records {
      * 
      * @return the distinct values of field.
      */
-    public static Collection<String> distinct(String field, Collection<Record> set) {
+    public static List<String> distinct(String field, Collection<Record> set) {
         Set<String> values = new LinkedHashSet<>();
         for (Record record : set) {
             validateContainsKey(record, field);
@@ -59,7 +59,7 @@ public final class Records {
 
             values.add(key);
         }
-        return values;
+        return new ArrayList<>(values);
     }
 
     /**
@@ -128,7 +128,7 @@ public final class Records {
      * 
      * @return the resulting set.
      */
-    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet,
+    public static List<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet,
             Closure<Record> closure) {
         List<Record> resultSet = new ArrayList<>();
         Map<String, Record> mergedSet = map(field, otherSet);
@@ -156,7 +156,7 @@ public final class Records {
      * 
      * @return the resulting set.
      */
-    public static Collection<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet) {
+    public static List<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet) {
         return merge(field, set, otherSet, new Closure<Record>(Records.class) {
 
             private static final long serialVersionUID = 1L;

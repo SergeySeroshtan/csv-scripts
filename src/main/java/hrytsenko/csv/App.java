@@ -20,6 +20,8 @@
 package hrytsenko.csv;
 
 import static java.lang.System.exit;
+import static java.lang.Thread.currentThread;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.newBufferedReader;
 import static java.util.Arrays.copyOfRange;
 import static java.util.Collections.singletonMap;
@@ -27,8 +29,6 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -78,16 +78,17 @@ public final class App {
      * @param args
      *            arguments for execution.
      */
-    protected static void execute(String[] args) throws IOException {
+    protected static void execute(String[] args) throws Exception {
         if (args.length == 0) {
             throw new IllegalArgumentException("Path to script not defined.");
         }
 
         String path = args[0];
-        try (BufferedReader reader = newBufferedReader(Paths.get(path), Charset.forName("UTF-8"))) {
+        try (BufferedReader reader = newBufferedReader(Paths.get(path), UTF_8)) {
             Binding binding = new Binding(singletonMap("args", copyOfRange(args, 1, args.length)));
             GroovyShell shell = new GroovyShell(binding, configuration());
 
+            shell.evaluate(currentThread().getContextClassLoader().getResource("ext/Collections.groovy").toURI());
             shell.evaluate(reader);
         }
     }

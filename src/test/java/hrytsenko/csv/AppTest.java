@@ -51,8 +51,13 @@ public class AppTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testArgsScriptNotDefined() throws Exception {
+    public void testArgsEmpty() throws Exception {
         execute(new String[] {});
+    }
+
+    @Test
+    public void testList() throws Exception {
+        executeScript("List.groovy");
     }
 
     @Test

@@ -4,6 +4,6 @@ def records = load(path: args[0]) { record ->
     }
 }
 
-records.each { record ->
-    assert record.contains("ticker")
+records.each {
+    assert it.contains('ticker')
 }
