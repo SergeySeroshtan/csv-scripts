@@ -65,6 +65,18 @@ Operation   | Usage
 `merge`     | Merge the records using the field as unique key.
 `record`    | Create record with given values.
 
+Operations `distinct`, `map` and `group` can be applied to any collection:
+
+```groovy
+def records = [
+    record(ticker: 'ORCL', exchange: 'NYSE'),
+    record(ticker: 'GOOG', exchange: 'NASDAQ'),
+    record(ticker: 'MSFT', exchange: 'NASDAQ')
+]
+
+assert records.distinct('exchange') == distinct('exchange', records)
+```
+
 Operations `load` and `save` support the following named arguments:
 
 * `path` - the path to file.
@@ -83,6 +95,8 @@ def records = load(path: args[0]) { record ->
     }
 }
 ```
+
+Operation `merge` allow to use closure as optional argument.
 
 Additionally, you can use operation `log` to add custom message into the log of script.
 
