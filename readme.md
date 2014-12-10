@@ -131,17 +131,21 @@ log "Found ${diff.size()} new records."
 save(path: args[2], records: diff)
 ```
 
-# Execution
+# Usage
 
-To execute script in command-line mode:
+This application is intended for executing scripts in command-line mode.
+For example, following command executes script `stocks.groovy`:
 
 ```
-java -jar csv-scripts.jar filter_stocks.groovy stocks.csv NASDAQ
+java -jar csv-scripts.jar -s stocks.groovy -v stocks.csv NASDAQ
 ```
 
-In this case `filter_stocks.groovy` is the name of script to be executed.
-Arguments `stocks.csv` and `NASDAQ` will be passed into this script.
-They accessible through variable `args`, as `args[0]` and `args[1]` respectively.
+Option `-s` specifies list of scripts to be executed.
+In this case the filename of script is `stocks.groovy`.
+
+Option `-v` specifies list of values to be passed to scripts.
+In this case values `stocks.csv` and `NASDAQ` will be passed into script.
+They will be accessible through variable `args`, as `args[0]` and `args[1]` respectively.
 
 # Dependencies
 

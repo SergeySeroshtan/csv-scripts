@@ -19,11 +19,11 @@
  */
 package hrytsenko.csv;
 
+import static hrytsenko.csv.Args.parseArgs;
 import static java.lang.System.exit;
 import static java.lang.Thread.currentThread;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.newBufferedReader;
-import static java.util.Arrays.copyOfRange;
 import static java.util.Collections.singletonMap;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -82,14 +82,17 @@ public final class App {
         if (args.length == 0) {
             throw new IllegalArgumentException("Path to script not defined.");
         }
+        Args parsedArgs = parseArgs(args);
 
-        String path = args[0];
-        try (BufferedReader reader = newBufferedReader(Paths.get(path), UTF_8)) {
-            Binding binding = new Binding(singletonMap("args", copyOfRange(args, 1, args.length)));
-            GroovyShell shell = new GroovyShell(binding, configuration());
+        Binding binding = new Binding(singletonMap("args", parsedArgs.getValues()));
+        GroovyShell shell = new GroovyShell(binding, configuration());
 
-            shell.evaluate(currentThread().getContextClassLoader().getResource("ext/Collections.groovy").toURI());
-            shell.evaluate(reader);
+        shell.evaluate(currentThread().getContextClassLoader().getResource("ext/Collections.groovy").toURI());
+
+        for (String scriptFilename : parsedArgs.getScripts()) {
+            try (BufferedReader scriptReader = newBufferedReader(Paths.get(scriptFilename), UTF_8)) {
+                shell.evaluate(scriptReader);
+            }
         }
     }
 

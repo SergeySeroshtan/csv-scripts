@@ -20,15 +20,19 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.App.execute;
+import static hrytsenko.csv.Args.SCRIPTS_ARG_NAME;
+import static hrytsenko.csv.Args.VALUES_ARG_NAME;
 import static hrytsenko.csv.TempFiles.createTempFile;
 import static hrytsenko.csv.TempFiles.writeTempFile;
-import static java.lang.System.arraycopy;
 import static java.lang.Thread.currentThread;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -42,17 +46,17 @@ import org.junit.Test;
  */
 public class AppTest {
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testArgsEmpty() throws Exception {
+        execute(new String[] {});
+    }
+
     @Test
     public void testArgs() throws Exception {
         String tempFilePath = createTempFile();
         String tempFileData = "ticker,exchange\nGOOG,NASDAQ\nORCL,NYSE\nMSFT,NASDAQ";
         writeTempFile(tempFilePath, tempFileData, UTF_8);
         executeScript("Args.groovy", tempFilePath, "NASDAQ", "2");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testArgsEmpty() throws Exception {
-        execute(new String[] {});
     }
 
     @Test
@@ -75,13 +79,17 @@ public class AppTest {
 
     private void executeScript(String scriptFilename, String... scriptArgs) throws Exception {
         URI uri = currentThread().getContextClassLoader().getResource(scriptFilename).toURI();
-        Path path = Paths.get(uri);
+        Path path = Paths.get(uri).toAbsolutePath();
 
-        String[] args = new String[scriptArgs.length + 1];
-        args[0] = path.toAbsolutePath().toString();
-        arraycopy(scriptArgs, 0, args, 1, scriptArgs.length);
+        List<String> args = new ArrayList<>();
+        args.add("-" + SCRIPTS_ARG_NAME);
+        args.add(path.toString());
+        if (scriptArgs.length > 0) {
+            args.add("-" + VALUES_ARG_NAME);
+            args.addAll(asList(scriptArgs));
+        }
 
-        execute(args);
+        execute(args.toArray(new String[args.size()]));
     }
 
 }
