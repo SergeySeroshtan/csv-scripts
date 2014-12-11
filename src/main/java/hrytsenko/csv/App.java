@@ -29,8 +29,11 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
+import org.apache.commons.cli.ParseException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.slf4j.Logger;
@@ -78,7 +81,7 @@ public final class App {
      * @param args
      *            arguments for execution.
      */
-    protected static void execute(String[] args) throws Exception {
+    protected static void execute(String[] args) throws ParseException, URISyntaxException, IOException {
         if (args.length == 0) {
             throw new IllegalArgumentException("Path to script not defined.");
         }
