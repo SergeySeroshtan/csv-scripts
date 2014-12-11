@@ -102,7 +102,7 @@ Additionally, you can use operation `log` to add custom message into the log of 
 
 # Examples
 
-Merge records from several CSV files by identifier:
+Merge records from several files by identifier:
 
 ```groovy
 def all = []
@@ -114,18 +114,13 @@ log "Save ${all.size()} records into ${args[0]}."
 save(path: args[0], records: all)
 ```
 
-Find records that were added in new version of CSV file:
+Find records that were added in new version of file:
 
 ```groovy
-def prev = distinct('id', load(path: args[0]))
+def prev = load(path: args[0]).distinct('id')
 def last = load(path: args[1])
-def diff = []
 
-last.each {
-    if (!prev.contains(it.id)) {
-        diff << it
-    }
-}
+def diff = last.findAll { !prev.contains(it.id) }
 
 log "Found ${diff.size()} new records."
 save(path: args[2], records: diff)
