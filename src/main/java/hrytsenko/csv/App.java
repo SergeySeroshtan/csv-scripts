@@ -20,6 +20,7 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.Args.parseArgs;
+import static hrytsenko.csv.Args.printHelp;
 import static java.lang.System.exit;
 import static java.lang.Thread.currentThread;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -31,6 +32,7 @@ import groovy.lang.GroovyShell;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.cli.ParseException;
@@ -64,7 +66,7 @@ public final class App {
         try {
             execute(args);
         } catch (ParseException exception) {
-            Args.printHelp();
+            printHelp();
             exit(-1);
         } catch (Exception exception) {
             LOGGER.error("Could not execute script.", exception);
@@ -92,9 +94,11 @@ public final class App {
 
         shell.evaluate(currentThread().getContextClassLoader().getResource("ext/Collections.groovy").toURI());
 
-        for (String scriptFilename : parsedArgs.getScripts()) {
-            try (BufferedReader scriptReader = newBufferedReader(Paths.get(scriptFilename), UTF_8)) {
-                shell.evaluate(scriptReader);
+        for (String script : parsedArgs.getScripts()) {
+            Path path = Paths.get(script);
+            LOGGER.info("Execute script: {}.", path.getFileName());
+            try (BufferedReader reader = newBufferedReader(path, UTF_8)) {
+                shell.evaluate(reader);
             }
         }
     }
