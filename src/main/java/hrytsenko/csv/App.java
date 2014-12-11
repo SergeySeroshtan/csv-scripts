@@ -63,6 +63,9 @@ public final class App {
     public static void main(String[] args) {
         try {
             execute(args);
+        } catch (ParseException exception) {
+            Args.printHelp();
+            exit(-1);
         } catch (Exception exception) {
             LOGGER.error("Could not execute script.", exception);
             exit(-1);
@@ -82,9 +85,6 @@ public final class App {
      *            arguments for execution.
      */
     protected static void execute(String[] args) throws ParseException, URISyntaxException, IOException {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("Path to script not defined.");
-        }
         Args parsedArgs = parseArgs(args);
 
         Binding binding = new Binding(singletonMap("args", parsedArgs.getValues()));

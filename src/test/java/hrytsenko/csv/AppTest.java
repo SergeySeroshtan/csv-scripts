@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 
 /**
@@ -46,7 +47,7 @@ import org.junit.Test;
  */
 public class AppTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ParseException.class)
     public void testArgsEmpty() throws Exception {
         execute(new String[] {});
     }

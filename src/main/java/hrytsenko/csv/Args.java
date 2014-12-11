@@ -25,6 +25,7 @@ import static org.apache.commons.cli.Option.UNLIMITED_VALUES;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -91,12 +92,8 @@ public class Args {
      *             if command-line arguments could not be parsed.
      */
     public static Args parseArgs(String[] args) throws ParseException {
-        Options options = new Options();
-        options.addOption(newOptionWithValues(SCRIPTS_ARG_NAME, "filenames of scripts to execute"));
-        options.addOption(newOptionWithValues(VALUES_ARG_NAME, "values to be passed into scripts"));
-
         CommandLineParser parser = new BasicParser();
-        CommandLine line = parser.parse(options, args);
+        CommandLine line = parser.parse(getOptions(), args);
 
         String[] scripts = getOptionValues(line, SCRIPTS_ARG_NAME);
         String[] values = getOptionValues(line, VALUES_ARG_NAME);
@@ -104,14 +101,30 @@ public class Args {
         return new Args(scripts, values);
     }
 
-    private static Option newOptionWithValues(String name, String description) {
+    private static Options getOptions() {
+        Options options = new Options();
+        options.addOption(newOptionWithValues(SCRIPTS_ARG_NAME, "filenames of scripts to execute", true));
+        options.addOption(newOptionWithValues(VALUES_ARG_NAME, "values to be passed into scripts", false));
+        return options;
+    }
+
+    private static Option newOptionWithValues(String name, String description, boolean required) {
         Option option = new Option(name, true, description);
         option.setArgs(UNLIMITED_VALUES);
+        option.setRequired(required);
         return option;
     }
 
     private static String[] getOptionValues(CommandLine line, String name) {
         return line.hasOption(name) ? line.getOptionValues(name) : new String[0];
+    }
+
+    /**
+     * Prints help for application.
+     */
+    public static void printHelp() {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("csv-scripts", getOptions());
     }
 
 }
