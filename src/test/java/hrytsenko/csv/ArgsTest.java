@@ -21,7 +21,6 @@ package hrytsenko.csv;
 
 import static hrytsenko.csv.Args.parseArgs;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
@@ -35,9 +34,7 @@ public class ArgsTest {
 
     @Test(expected = ParseException.class)
     public void testEmpty() throws Exception {
-        Args args = parseArgs(new String[] {});
-        assertTrue(args.getScripts().length == 0);
-        assertTrue(args.getValues().length == 0);
+        parseArgs(new String[] {});
     }
 
     @Test

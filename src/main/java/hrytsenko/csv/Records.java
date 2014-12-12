@@ -125,7 +125,6 @@ public final class Records {
      * @param closure
      *            the closure that merges records.
      * 
-     * 
      * @return the resulting set.
      */
     public static List<Record> merge(String field, Collection<Record> set, Collection<Record> otherSet,

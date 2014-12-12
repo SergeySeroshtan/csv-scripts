@@ -165,6 +165,10 @@ public final class IO {
 
     private static Path getPath(Map<String, ?> args) {
         CharSequence path = (CharSequence) args.get("path");
+        if (path == null) {
+            throw new IllegalArgumentException("Path not defined.");
+        }
+
         return Paths.get(path.toString());
     }
 
