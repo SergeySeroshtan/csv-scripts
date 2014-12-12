@@ -163,7 +163,7 @@ public final class IO {
         }
     }
 
-    private static Path getPath(Map<String, ?> args) {
+    static Path getPath(Map<String, ?> args) {
         CharSequence path = (CharSequence) args.get("path");
         if (path == null) {
             throw new IllegalArgumentException("Path not defined.");
@@ -172,13 +172,13 @@ public final class IO {
         return Paths.get(path.toString());
     }
 
-    private static Charset getCharset(Map<String, ?> args) {
+    static Charset getCharset(Map<String, ?> args) {
         CharSequence charsetName = (CharSequence) args.get("charset");
 
         return charsetName != null ? Charset.forName(charsetName.toString()) : UTF_8;
     }
 
-    private static CsvSchema.Builder getSchema(Map<String, ?> args) {
+    static CsvSchema.Builder getSchema(Map<String, ?> args) {
         CharSequence separator = (CharSequence) args.get("separator");
         if (separator == null) {
             separator = ",";

@@ -19,6 +19,9 @@
  */
 package hrytsenko.csv;
 
+import static hrytsenko.csv.IO.getCharset;
+import static hrytsenko.csv.IO.getPath;
+import static hrytsenko.csv.IO.getSchema;
 import static hrytsenko.csv.IO.load;
 import static hrytsenko.csv.IO.save;
 import static hrytsenko.csv.Records.record;
@@ -36,6 +39,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+
 /**
  * Tests of methods for input/output.
  * 
@@ -45,6 +50,50 @@ import org.junit.Test;
  * @author hrytsenko.anton
  */
 public class IOTest {
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPathNotDefined() {
+        getPath(asArgs());
+    }
+
+    @Test
+    public void testGetCharsetDefault() {
+        assertEquals(UTF_8, getCharset(asArgs()));
+    }
+
+    @Test
+    public void testGetSchemaDefault() {
+        CsvSchema schema = getSchema(asArgs()).build();
+        assertEquals(',', schema.getColumnSeparator());
+        assertEquals('"', schema.getQuoteChar());
+    }
+
+    @Test
+    public void testGetSchema() {
+        CsvSchema schema = getSchema(asArgs("separator", "\t", "qualifier", "`")).build();
+        assertEquals('\t', schema.getColumnSeparator());
+        assertEquals('`', schema.getQuoteChar());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSchemaSeparatorEmpty() {
+        getSchema(asArgs("separator", ""));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSchemaSeparatorInvalid() {
+        getSchema(asArgs("separator", ", "));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSchemaQualifierEmpty() {
+        getSchema(asArgs("qualifier", ""));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSchemaQualifierInvalid() {
+        getSchema(asArgs("qualifier", "//"));
+    }
 
     @Test
     public void testSave() throws IOException {
