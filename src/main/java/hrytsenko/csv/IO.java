@@ -41,6 +41,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.input.BOMInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -68,6 +70,8 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
  * @author hrytsenko.anton
  */
 public final class IO {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("APP");
 
     private IO() {
     }
@@ -104,7 +108,10 @@ public final class IO {
      *             if file could not be read.
      */
     public static List<Record> load(Map<String, ?> args, Closure<?> closure) throws IOException {
-        try (InputStream dataStream = newInputStream(getPath(args), StandardOpenOption.READ);
+        Path path = getPath(args);
+        LOGGER.info("Load data from file '{}'.", path.getFileName());
+
+        try (InputStream dataStream = newInputStream(path, StandardOpenOption.READ);
                 InputStream bomStream = new BOMInputStream(dataStream);
                 Reader dataReader = new InputStreamReader(bomStream, getCharset(args))) {
             CsvSchema csvSchema = getSchema(args).setUseHeader(true).build();
@@ -143,7 +150,10 @@ public final class IO {
         @SuppressWarnings("unchecked")
         Iterable<Record> records = (Iterable<Record>) args.get("records");
 
-        try (Writer dataWriter = newBufferedWriter(getPath(args), getCharset(args), StandardOpenOption.CREATE,
+        Path path = getPath(args);
+        LOGGER.info("Save data into file '{}'.", path.getFileName());
+
+        try (Writer dataWriter = newBufferedWriter(path, getCharset(args), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
             Set<String> columns = new LinkedHashSet<>();
             List<Map<String, String>> rows = new ArrayList<>();
