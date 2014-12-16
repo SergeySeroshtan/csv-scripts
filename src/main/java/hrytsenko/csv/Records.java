@@ -63,30 +63,6 @@ public final class Records {
     }
 
     /**
-     * Get mapping of records with the specified unique key.
-     * 
-     * <p>
-     * If several records has the same value of key, then the last of them will be added to mapping.
-     * 
-     * @param field
-     *            the field to be used as unique key.
-     * @param set
-     *            the set of records for mapping.
-     * 
-     * @return the mapped records.
-     */
-    public static Map<String, Record> map(String field, Collection<Record> set) {
-        Map<String, Record> mappedSet = new LinkedHashMap<>();
-        for (Record record : set) {
-            validateContainsKey(record, field);
-            String key = record.getAt(field);
-
-            mappedSet.put(key, record);
-        }
-        return mappedSet;
-    }
-
-    /**
      * Splits records into groups with the specified key.
      * 
      * @param field
@@ -111,6 +87,30 @@ public final class Records {
             group.add(record);
         }
         return groupedSet;
+    }
+
+    /**
+     * Get mapping of records with the specified unique key.
+     * 
+     * <p>
+     * If several records has the same value of key, then the last of them will be added to mapping.
+     * 
+     * @param field
+     *            the field to be used as unique key.
+     * @param set
+     *            the set of records for mapping.
+     * 
+     * @return the mapped records.
+     */
+    public static Map<String, Record> map(String field, Collection<Record> set) {
+        Map<String, Record> mappedSet = new LinkedHashMap<>();
+        for (Record record : set) {
+            validateContainsKey(record, field);
+            String key = record.getAt(field);
+
+            mappedSet.put(key, record);
+        }
+        return mappedSet;
     }
 
     /**
