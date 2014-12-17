@@ -30,6 +30,8 @@ import static hrytsenko.csv.TempFiles.readTempFile;
 import static hrytsenko.csv.TempFiles.writeTempFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -106,6 +108,18 @@ public class IOTest {
         String tempFileData = readTempFile(tempFilePath, UTF_8);
 
         assertEquals("ticker,name\nGOOG,Google\nORCL,Oracle\n", tempFileData);
+    }
+
+    @Test
+    public void testSaveNothing() throws IOException {
+        List<Record> records = emptyList();
+
+        String tempFilePath = createTempFile();
+        save(asArgs("path", tempFilePath, "records", records));
+
+        String tempFileData = readTempFile(tempFilePath, UTF_8);
+
+        assertEquals(EMPTY, tempFileData);
     }
 
     @Test

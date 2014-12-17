@@ -34,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -147,11 +148,15 @@ public final class IO {
      *             if file could not be written.
      */
     public static void save(Map<String, ?> args) throws IOException {
-        @SuppressWarnings("unchecked")
-        Iterable<Record> records = (Iterable<Record>) args.get("records");
-
         Path path = getPath(args);
         LOGGER.info("Save data into file '{}'.", path.getFileName());
+
+        @SuppressWarnings("unchecked")
+        Collection<Record> records = (Collection<Record>) args.get("records");
+        if (records.isEmpty()) {
+            LOGGER.info("No records to save.");
+            return;
+        }
 
         try (Writer dataWriter = newBufferedWriter(path, getCharset(args), StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING)) {
