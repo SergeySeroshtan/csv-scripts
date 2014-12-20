@@ -126,6 +126,22 @@ log "Found ${diff.size()} new records."
 save(path: args[2], records: diff)
 ```
 
+Get number of records of each type (and sort results by count):
+
+```groovy
+def grouped = load(path : args[0]).group('message')
+
+def ordered = grouped.collect {
+    [type: it.key, count: it.value.size()]
+}.sort { a, b ->
+    b.count <=> a.count
+}
+
+ordered.each {
+    log "$it.type - $it.count"
+}
+```
+
 # Usage
 
 This application is intended for executing scripts in command-line mode.
