@@ -110,7 +110,7 @@ public final class IO {
      */
     public static List<Record> load(Map<String, ?> args, Closure<?> closure) throws IOException {
         Path path = getPath(args);
-        LOGGER.info("Load data from file '{}'.", path.getFileName());
+        LOGGER.info("Load: {}.", path.getFileName());
 
         try (InputStream dataStream = newInputStream(path, StandardOpenOption.READ);
                 InputStream bomStream = new BOMInputStream(dataStream);
@@ -149,7 +149,7 @@ public final class IO {
      */
     public static void save(Map<String, ?> args) throws IOException {
         Path path = getPath(args);
-        LOGGER.info("Save data into file '{}'.", path.getFileName());
+        LOGGER.info("Save: {}.", path.getFileName());
 
         @SuppressWarnings("unchecked")
         Collection<Record> records = (Collection<Record>) args.get("records");

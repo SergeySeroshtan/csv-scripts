@@ -96,7 +96,7 @@ public final class App {
 
         for (String script : parsedArgs.getScripts()) {
             Path path = Paths.get(script);
-            LOGGER.info("Execute script: {}.", path.getFileName());
+            LOGGER.info("Execute: {}.", path.getFileName());
             try (BufferedReader reader = newBufferedReader(path, UTF_8)) {
                 shell.evaluate(reader);
             }
