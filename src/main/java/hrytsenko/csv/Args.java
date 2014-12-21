@@ -101,6 +101,10 @@ public class Args {
         return new Args(scripts, values);
     }
 
+    private static String[] getOptionValues(CommandLine line, String name) {
+        return line.hasOption(name) ? line.getOptionValues(name) : new String[0];
+    }
+
     private static Options getOptions() {
         Options options = new Options();
         options.addOption(newOptionWithValues(SCRIPTS_ARG_NAME, "filenames of scripts to execute", true));
@@ -113,10 +117,6 @@ public class Args {
         option.setArgs(UNLIMITED_VALUES);
         option.setRequired(required);
         return option;
-    }
-
-    private static String[] getOptionValues(CommandLine line, String name) {
-        return line.hasOption(name) ? line.getOptionValues(name) : new String[0];
     }
 
     /**
