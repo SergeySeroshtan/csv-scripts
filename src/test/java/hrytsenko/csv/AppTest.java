@@ -20,8 +20,8 @@
 package hrytsenko.csv;
 
 import static hrytsenko.csv.App.execute;
-import static hrytsenko.csv.Args.SCRIPTS_ARG_NAME;
-import static hrytsenko.csv.Args.VALUES_ARG_NAME;
+import static hrytsenko.csv.Args.SCRIPTS_OPT_NAME;
+import static hrytsenko.csv.Args.VALUES_OPT_NAME;
 import static hrytsenko.csv.TempFiles.createTempFile;
 import static hrytsenko.csv.TempFiles.writeTempFile;
 import static java.lang.Thread.currentThread;
@@ -57,37 +57,37 @@ public class AppTest {
         String tempFilePath = createTempFile();
         String tempFileData = "ticker,exchange\nGOOG,NASDAQ\nORCL,NYSE\nMSFT,NASDAQ";
         writeTempFile(tempFilePath, tempFileData, UTF_8);
-        executeScript("Args.groovy", tempFilePath, "NASDAQ", "2");
+        executeScript("ArgsTest.groovy", tempFilePath, "NASDAQ", "2");
     }
 
     @Test
-    public void testList() throws Exception {
-        executeScript("List.groovy");
+    public void testCollections() throws Exception {
+        executeScript("CollectionsTest.groovy");
     }
 
     @Test
-    public void testLoad() throws Exception {
+    public void testFiles() throws Exception {
         String tempFilePath = createTempFile();
         String tempFileData = "TICKER,EXCHANGE\nGOOG,NASDAQ\nORCL,NYSE\nMSFT,NASDAQ";
         writeTempFile(tempFilePath, tempFileData, UTF_8);
-        executeScript("Load.groovy", tempFilePath);
+        executeScript("FilesTest.groovy", tempFilePath);
     }
 
     @Test
-    public void testRecord() throws Exception {
-        executeScript("Record.groovy");
+    public void testRecords() throws Exception {
+        executeScript("RecordsTest.groovy");
     }
 
-    private void executeScript(String scriptFilename, String... scriptArgs) throws Exception {
-        URI uri = currentThread().getContextClassLoader().getResource(scriptFilename).toURI();
+    private void executeScript(String script, String... values) throws Exception {
+        URI uri = currentThread().getContextClassLoader().getResource(script).toURI();
         Path path = Paths.get(uri).toAbsolutePath();
 
         List<String> args = new ArrayList<>();
-        args.add("-" + SCRIPTS_ARG_NAME);
+        args.add("-" + SCRIPTS_OPT_NAME);
         args.add(path.toString());
-        if (scriptArgs.length > 0) {
-            args.add("-" + VALUES_ARG_NAME);
-            args.addAll(asList(scriptArgs));
+        if (values.length > 0) {
+            args.add("-" + VALUES_OPT_NAME);
+            args.addAll(asList(values));
         }
 
         execute(args.toArray(new String[args.size()]));

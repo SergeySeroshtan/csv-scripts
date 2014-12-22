@@ -86,13 +86,13 @@ public final class App {
      * @param args
      *            arguments for execution.
      */
-    protected static void execute(String[] args) throws ParseException, URISyntaxException, IOException {
+    protected static void execute(String[] args) throws ParseException, IOException {
         Args parsedArgs = parseArgs(args);
 
         Binding binding = new Binding(singletonMap("args", parsedArgs.getValues()));
         GroovyShell shell = new GroovyShell(binding, configuration());
 
-        shell.evaluate(currentThread().getContextClassLoader().getResource("ext/Collections.groovy").toURI());
+        executeEmbeddedScripts(shell);
 
         for (String script : parsedArgs.getScripts()) {
             Path path = Paths.get(script);
@@ -100,6 +100,14 @@ public final class App {
             try (BufferedReader reader = newBufferedReader(path, UTF_8)) {
                 shell.evaluate(reader);
             }
+        }
+    }
+
+    private static void executeEmbeddedScripts(GroovyShell shell) throws IOException {
+        try {
+            shell.evaluate(currentThread().getContextClassLoader().getResource("ext/Collections.groovy").toURI());
+        } catch (URISyntaxException exception) {
+            throw new IOException("Invalid path for embedded script.", exception);
         }
     }
 

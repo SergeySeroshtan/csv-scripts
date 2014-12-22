@@ -40,11 +40,11 @@ public class Args {
     /**
      * The short name of argument that contains list of scripts.
      */
-    public static final String SCRIPTS_ARG_NAME = "s";
+    public static final String SCRIPTS_OPT_NAME = "s";
     /**
      * The short name of argument that contains list of values.
      */
-    public static final String VALUES_ARG_NAME = "v";
+    public static final String VALUES_OPT_NAME = "v";
 
     private final String[] scripts;
     private final String[] values;
@@ -95,24 +95,24 @@ public class Args {
         CommandLineParser parser = new BasicParser();
         CommandLine line = parser.parse(getOptions(), args);
 
-        String[] scripts = getOptionValues(line, SCRIPTS_ARG_NAME);
-        String[] values = getOptionValues(line, VALUES_ARG_NAME);
+        String[] scripts = getValues(line, SCRIPTS_OPT_NAME);
+        String[] values = getValues(line, VALUES_OPT_NAME);
 
         return new Args(scripts, values);
     }
 
-    private static String[] getOptionValues(CommandLine line, String name) {
-        return line.hasOption(name) ? line.getOptionValues(name) : new String[0];
+    private static String[] getValues(CommandLine line, String option) {
+        return line.hasOption(option) ? line.getOptionValues(option) : new String[0];
     }
 
     private static Options getOptions() {
         Options options = new Options();
-        options.addOption(newOptionWithValues(SCRIPTS_ARG_NAME, "filenames of scripts to execute", true));
-        options.addOption(newOptionWithValues(VALUES_ARG_NAME, "values to be passed into scripts", false));
+        options.addOption(newOption(SCRIPTS_OPT_NAME, "filenames of scripts to execute", true));
+        options.addOption(newOption(VALUES_OPT_NAME, "values to be passed into scripts", false));
         return options;
     }
 
-    private static Option newOptionWithValues(String name, String description, boolean required) {
+    private static Option newOption(String name, String description, boolean required) {
         Option option = new Option(name, true, description);
         option.setArgs(UNLIMITED_VALUES);
         option.setRequired(required);
