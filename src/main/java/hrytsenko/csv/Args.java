@@ -19,8 +19,11 @@
  */
 package hrytsenko.csv;
 
-import static java.util.Arrays.copyOf;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.cli.Option.UNLIMITED_VALUES;
+
+import java.util.List;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -46,8 +49,8 @@ public class Args {
      */
     public static final String VALUES_OPT_NAME = "v";
 
-    private final String[] scripts;
-    private final String[] values;
+    private final List<String> scripts;
+    private final List<String> values;
 
     /**
      * Create arguments.
@@ -58,8 +61,8 @@ public class Args {
      *            the list of string values.
      */
     public Args(String[] scripts, String[] values) {
-        this.scripts = copyOf(scripts, scripts.length);
-        this.values = copyOf(values, values.length);
+        this.scripts = asList(scripts);
+        this.values = asList(values);
     }
 
     /**
@@ -67,8 +70,8 @@ public class Args {
      * 
      * @return the list of filenames.
      */
-    public String[] getScripts() {
-        return copyOf(scripts, scripts.length);
+    public List<String> getScripts() {
+        return unmodifiableList(scripts);
     }
 
     /**
@@ -76,8 +79,8 @@ public class Args {
      * 
      * @return the list of string values.
      */
-    public String[] getValues() {
-        return copyOf(values, values.length);
+    public List<String> getValues() {
+        return unmodifiableList(values);
     }
 
     /**

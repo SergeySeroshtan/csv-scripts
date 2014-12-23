@@ -40,8 +40,8 @@ public class ArgsTest {
     @Test
     public void testArgs() throws Exception {
         Args args = parseArgs(new String[] { "-s", "stocks.groovy", "-v", "stocks.csv", "NASDAQ" });
-        assertArrayEquals(new String[] { "stocks.groovy" }, args.getScripts());
-        assertArrayEquals(new String[] { "stocks.csv", "NASDAQ" }, args.getValues());
+        assertArrayEquals(new String[] { "stocks.groovy" }, args.getScripts().toArray());
+        assertArrayEquals(new String[] { "stocks.csv", "NASDAQ" }, args.getValues().toArray());
     }
 
 }
