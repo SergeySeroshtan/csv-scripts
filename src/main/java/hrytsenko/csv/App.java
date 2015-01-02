@@ -69,7 +69,7 @@ public final class App {
             printHelp();
             exit(-1);
         } catch (Exception exception) {
-            LOGGER.error("Could not execute script.", exception);
+            LOGGER.error("Error: ({}) {}", exception.getClass().getCanonicalName(), exception.getMessage());
             exit(-1);
         }
 

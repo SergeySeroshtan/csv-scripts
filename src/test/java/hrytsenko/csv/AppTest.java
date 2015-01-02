@@ -29,6 +29,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -58,6 +59,12 @@ public class AppTest {
     }
 
     @Test
+    public void testUncaughtException() throws Exception {
+        exit.expectSystemExitWithStatus(-1);
+        main(new String[] { "-s", getPath("ExceptionTest.groovy") });
+    }
+
+    @Test
     public void testArgs() throws Exception {
         String tempFilePath = createTempFile();
         String tempFileData = "ticker,exchange\nGOOG,NASDAQ\nORCL,NYSE\nMSFT,NASDAQ";
@@ -84,12 +91,9 @@ public class AppTest {
     }
 
     private void executeScript(String script, String... values) throws Exception {
-        URI uri = currentThread().getContextClassLoader().getResource(script).toURI();
-        Path path = Paths.get(uri).toAbsolutePath();
-
         List<String> args = new ArrayList<>();
         args.add("-" + SCRIPTS_OPT_NAME);
-        args.add(path.toString());
+        args.add(getPath(script));
         if (values.length > 0) {
             args.add("-" + VALUES_OPT_NAME);
             args.addAll(asList(values));
@@ -97,6 +101,12 @@ public class AppTest {
 
         exit.expectSystemExitWithStatus(0);
         main(args.toArray(new String[args.size()]));
+    }
+
+    private String getPath(String script) throws URISyntaxException {
+        URI uri = currentThread().getContextClassLoader().getResource(script).toURI();
+        Path path = Paths.get(uri).toAbsolutePath();
+        return path.toString();
     }
 
 }
