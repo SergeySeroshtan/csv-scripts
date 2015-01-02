@@ -19,7 +19,7 @@
  */
 package hrytsenko.csv;
 
-import static hrytsenko.csv.App.execute;
+import static hrytsenko.csv.App.main;
 import static hrytsenko.csv.Args.SCRIPTS_OPT_NAME;
 import static hrytsenko.csv.Args.VALUES_OPT_NAME;
 import static hrytsenko.csv.TempFiles.createTempFile;
@@ -34,8 +34,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.ParseException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 
 /**
  * Tests for application based on Groovy scripts.
@@ -47,9 +48,13 @@ import org.junit.Test;
  */
 public class AppTest {
 
-    @Test(expected = ParseException.class)
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
+    @Test
     public void testArgsEmpty() throws Exception {
-        execute(new String[] {});
+        exit.expectSystemExitWithStatus(-1);
+        main(new String[] {});
     }
 
     @Test
@@ -90,7 +95,8 @@ public class AppTest {
             args.addAll(asList(values));
         }
 
-        execute(args.toArray(new String[args.size()]));
+        exit.expectSystemExitWithStatus(0);
+        main(args.toArray(new String[args.size()]));
     }
 
 }

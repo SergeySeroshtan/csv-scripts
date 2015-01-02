@@ -86,7 +86,7 @@ public final class App {
      * @param args
      *            arguments for execution.
      */
-    protected static void execute(String[] args) throws ParseException, IOException {
+    private static void execute(String[] args) throws ParseException, IOException {
         Args parsedArgs = parseArgs(args);
 
         Binding binding = new Binding(singletonMap("args", parsedArgs.getValues()));
